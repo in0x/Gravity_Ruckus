@@ -28,6 +28,7 @@ public class Projectile : MonoBehaviour
 
         foreach (Collider hit in colliders)
         {
+            Debug.Log(hit.GetType());
             Rigidbody rb = hit.GetComponent<Rigidbody>();
 
             if (rb != null)
