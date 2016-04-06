@@ -70,6 +70,8 @@ public class ShootOnClick : MonoBehaviour
             currentWeapon.MoveNext();
             currentWeapon.Current.enable();
         }
+
+        //Debug.Log(GetComponentsInChildren<Collider>().Length);
     }
 
     void FixedUpdate()

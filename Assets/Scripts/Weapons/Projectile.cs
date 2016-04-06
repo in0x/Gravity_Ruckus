@@ -19,7 +19,6 @@ public class Projectile : MonoBehaviour
     
     void OnCollisionEnter(Collision collision)
     {
-        // Disable this for pogo fun
         Destroy(gameObject);
 
         Vector3 explosionPos = transform.position;
@@ -28,7 +27,6 @@ public class Projectile : MonoBehaviour
 
         foreach (Collider hit in colliders)
         {
-            Debug.Log(hit.GetType());
             Rigidbody rb = hit.GetComponent<Rigidbody>();
 
             if (rb != null)

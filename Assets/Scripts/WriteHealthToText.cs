@@ -1,15 +1,24 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
-public class WriteHealthToText : MonoBehaviour {
+public class WriteHealthToText : MonoBehaviour
+{
+    public GameObject player;
 
-	// Use this for initialization
-	void Start () {
-	
+    HealthController health;
+    Text text;
+    string playerName;
+
+	void Start ()
+    {
+        health = player.GetComponent<HealthController>();
+        playerName = player.name;
+
+        text = GetComponent<Text>();
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+	void Update ()
+    {
+        text.text = playerName + " Health: " + health.Health.ToString();
 	}
 }
