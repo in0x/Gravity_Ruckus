@@ -25,8 +25,10 @@ public class GravityHandler : MonoBehaviour
 	    if (Input.GetKeyDown(KeyCode.Return) || Input.GetButtonDown("PAD1_B_BUTTON"))
 	    {
             Vector3 newGravity = ReduceVector3(cam.forward);
-	        if (gravity == newGravity)
+
+            if (gravity == newGravity)
 	            return;
+
 	        if ((gravity + newGravity) == Vector3.zero)
 	        {
                 rotationTime = 0;
@@ -37,9 +39,11 @@ public class GravityHandler : MonoBehaviour
 	        {
                 rotationTime = 0;
                 print(transform.localRotation.eulerAngles);
+
                 float newX = Mathf.Round(transform.localRotation.eulerAngles.x / 90) * 90;
                 float newY = Mathf.Round(transform.localRotation.eulerAngles.y / 90) * 90;
                 float newZ = Mathf.Round(transform.localRotation.eulerAngles.z/90)*90;
+
                 transform.localRotation = Quaternion.Euler(newX, newY,newZ  );
                 newRotation = transform.localRotation * Quaternion.Euler(-90, 0, 0);
 	        }
@@ -53,6 +57,7 @@ public class GravityHandler : MonoBehaviour
     void FixedUpdate()
     {
         rb.AddForce(gravity*100, ForceMode.Acceleration);
+
         if (rotationTime <= 1.1f)
         {
             transform.localRotation = Quaternion.Slerp(oldRotation, newRotation, rotationTime);
@@ -68,15 +73,27 @@ public class GravityHandler : MonoBehaviour
     private Vector3 ReduceVector3(Vector3 input)
     {
         if (Mathf.Abs(input.x) > Mathf.Abs(input.y))
+        {
             if (Mathf.Abs(input.x) > Mathf.Abs(input.z))
-                return new Vector3(Mathf.Sign(input.x) , 0 , 0);
+            {
+                return new Vector3(Mathf.Sign(input.x), 0, 0);
+            }
             else
-                return new Vector3(0 , 0 , Mathf.Sign(input.z));
+            {
+                return new Vector3(0, 0, Mathf.Sign(input.z));
+            }
+        }
         else
+        {
             if (Mathf.Abs(input.y) > Mathf.Abs(input.z))
-                return new Vector3(0 , Mathf.Sign(input.y) , 0);
+            {
+                return new Vector3(0, Mathf.Sign(input.y), 0);
+            }
             else
-                return new Vector3(0 , 0 , Mathf.Sign(input.z));
+            {
+                return new Vector3(0, 0, Mathf.Sign(input.z));
+            }
+        }
 
     }
 }

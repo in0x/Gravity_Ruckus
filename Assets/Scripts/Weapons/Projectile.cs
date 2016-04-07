@@ -39,7 +39,8 @@ public class Projectile : MonoBehaviour
 
             if (rb != null)
             {
-                rb.AddExplosionForce(m_fExplPower, explosionPos, m_fExplRadius, 3.0F);
+                //rb.AddExplosionForce(m_fExplPower, explosionPos, m_fExplRadius, 3.0F);
+                rb.AddForce(new Vector3(0f, 100f, 0f), ForceMode.Impulse);
             }
 
         }
