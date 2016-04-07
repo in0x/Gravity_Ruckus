@@ -20,6 +20,8 @@ public class ProjectileShoot : MonoBehaviour, ICanShoot
 
         parentCollider = transform.parent.GetComponent<CapsuleCollider>();
 
+        if (parentCollider != null) Debug.Log("Found");
+
         projectileCollider = projectilePrefab.GetComponent<SphereCollider>();    
     }
 

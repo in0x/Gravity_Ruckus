@@ -19,20 +19,29 @@ public class Projectile : MonoBehaviour
     
     void OnCollisionEnter(Collision collision)
     {
+        // Also expensive
         Destroy(gameObject);
 
         Vector3 explosionPos = transform.position;
         
+        // Also expensive
         Collider[] colliders = Physics.OverlapSphere(explosionPos, m_fExplRadius);
 
         foreach (Collider hit in colliders)
         {
+            // Also expensive
             Rigidbody rb = hit.GetComponent<Rigidbody>();
+
+            // Careful, this is expensive as it uses reflection
+            // This, however should only trigger on colliders that also have IDamageRecievers in their hierarchy level, meaning that
+            // the players main capsule collider will not be affected
+            hit.gameObject.SendMessage("RecieveDamage", 1f, SendMessageOptions.DontRequireReceiver);
 
             if (rb != null)
             {
                 rb.AddExplosionForce(m_fExplPower, explosionPos, m_fExplRadius, 3.0F);
             }
+
         }
     }
     
