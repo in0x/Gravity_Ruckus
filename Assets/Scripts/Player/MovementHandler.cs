@@ -36,7 +36,7 @@ public class MovementHandler : MonoBehaviour
 
         if (wantsToJump)
         {
-            if (!jumpController.isJumping)
+            if (jumpController.canJump())
             {
                 m_posInput.y += fJumpHeight;
             }

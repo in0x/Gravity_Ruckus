@@ -8,16 +8,22 @@ public class JumpController : MonoBehaviour
     public bool isJumping
     {
         get
-        {   if (!m_isJumping)
-            {
-                m_isJumping = true;
-                return false;
-            }
-
-            return true;
+        {
+            return m_isJumping; 
         }
 
         private set { m_isJumping = value; }
+    }
+
+    public bool canJump()
+    {
+        if (!m_isJumping)
+        {
+            m_isJumping = true;
+            return true;
+        }
+
+        return false;
     }
 
     void OnCollisionEnter(Collision collision)
