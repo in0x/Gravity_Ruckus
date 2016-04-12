@@ -58,7 +58,7 @@ public class HitScanShoot : MonoBehaviour, ICanShoot
             rayRenderer.SetPosition(1, collisionInfo.point);
 
             // Careful, this is expensive as it uses reflection
-            collisionInfo.collider.gameObject.SendMessage("RecieveDamage", 10f, SendMessageOptions.DontRequireReceiver);
+            collisionInfo.collider.gameObject.SendMessage("RecieveDamage", 50f, SendMessageOptions.DontRequireReceiver);
         }
         else
         {

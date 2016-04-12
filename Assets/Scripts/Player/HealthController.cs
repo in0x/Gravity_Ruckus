@@ -5,6 +5,8 @@ public class HealthController : MonoBehaviour
 {
     private float m_health = 100f;
 
+    DeathController deathController;
+
     public float Health
     {
         get
@@ -25,6 +27,8 @@ public class HealthController : MonoBehaviour
         {
             reciever.HealthController = this;
         }
+
+        deathController = GetComponent<DeathController>();
     }
 
     void Start ()
@@ -33,7 +37,7 @@ public class HealthController : MonoBehaviour
 	}
 	void Update ()
     {
-	
+        if (m_health <= 0) deathController.Die();
 	}
 
     public void ApplyDamage(float dmg)
