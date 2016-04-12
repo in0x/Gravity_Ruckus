@@ -10,6 +10,20 @@ public class GravityHandler : MonoBehaviour
     private Quaternion newRotation;
     private Quaternion oldRotation;
 
+    // This is used for spawning in non-default rotations
+    public Vector3 Gravity
+    {
+        get
+        {
+            return gravity;
+        }
+        set
+        {
+            // We can do validation here
+            gravity = value;
+        }
+    }
+
 	// Use this for initialization
 	void Start ()
 	{
