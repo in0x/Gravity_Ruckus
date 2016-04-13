@@ -35,7 +35,7 @@ public class ProjectileShoot : MonoBehaviour, ICanShoot
 
         GameObject projectile = (GameObject)Instantiate(projectilePrefab, origin, parentCamera.rotation);
 
-        Vector3 projectile_vel = fwd * m_fInherentProjectileVel + transform.parent.GetComponent<Rigidbody>().velocity;
+        Vector3 projectile_vel = fwd * m_fInherentProjectileVel; //+ transform.parent.GetComponent<Rigidbody>().velocity;
 
         projectile.GetComponent<Rigidbody>().velocity = projectile_vel;
     }

@@ -52,11 +52,13 @@ public class HitScanShoot : MonoBehaviour, ICanShoot
         rayRenderer.SetPosition(0, origin);
 
         // Raycast into the scene
-        if (Physics.Raycast(parentCamera.transform.position, fwd, out collisionInfo, m_fRange))
+        if (Physics.Raycast(parentCamera.transform.position, fwd, out collisionInfo, m_fRange, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
         {
             // Draw the ray to the point of collision
-            print("Hit");
             rayRenderer.SetPosition(1, collisionInfo.point);
+
+            // Careful, this is expensive as it uses reflection
+            collisionInfo.collider.gameObject.SendMessage("RecieveDamage", 50f, SendMessageOptions.DontRequireReceiver);
         }
         else
         {

@@ -11,6 +11,20 @@ public class GravityHandler : MonoBehaviour, IInputObserver
     private Quaternion newRotation;
     private Quaternion oldRotation;
 
+    // This is used for spawning in non-default rotations
+    public Vector3 Gravity
+    {
+        get
+        {
+            return gravity;
+        }
+        set
+        {
+            // We can do validation here
+            gravity = value;
+        }
+    }
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -28,6 +42,7 @@ public class GravityHandler : MonoBehaviour, IInputObserver
             Vector3 newGravity = ReduceVector3(transform.forward);
 	        if (gravity == newGravity)
 	            return;
+
 	        if ((gravity + newGravity) == Vector3.zero)
 	        {
                 rotationTime = 0;
@@ -38,9 +53,11 @@ public class GravityHandler : MonoBehaviour, IInputObserver
 	        {
                 rotationTime = 0;
                 print(transform.localRotation.eulerAngles);
+
                 float newX = Mathf.Round(transform.localRotation.eulerAngles.x / 90) * 90;
                 float newY = Mathf.Round(transform.localRotation.eulerAngles.y / 90) * 90;
                 float newZ = Mathf.Round(transform.localRotation.eulerAngles.z/90)*90;
+
                 transform.localRotation = Quaternion.Euler(newX, newY,newZ  );
                 newRotation = transform.localRotation * Quaternion.Euler(-90, 0, 0);
 	        }
@@ -132,6 +149,7 @@ public class GravityHandler : MonoBehaviour, IInputObserver
     void FixedUpdate()
     {
         rb.AddForce(gravity*100, ForceMode.Acceleration);
+
         if (rotationTime <= 1.1f)
         {
             transform.localRotation = Quaternion.Slerp(oldRotation, newRotation, rotationTime);
@@ -147,15 +165,27 @@ public class GravityHandler : MonoBehaviour, IInputObserver
     private Vector3 ReduceVector3(Vector3 input)
     {
         if (Mathf.Abs(input.x) > Mathf.Abs(input.y))
+        {
             if (Mathf.Abs(input.x) > Mathf.Abs(input.z))
-                return new Vector3(Mathf.Sign(input.x) , 0 , 0);
+            {
+                return new Vector3(Mathf.Sign(input.x), 0, 0);
+            }
             else
-                return new Vector3(0 , 0 , Mathf.Sign(input.z));
+            {
+                return new Vector3(0, 0, Mathf.Sign(input.z));
+            }
+        }
         else
+        {
             if (Mathf.Abs(input.y) > Mathf.Abs(input.z))
-                return new Vector3(0 , Mathf.Sign(input.y) , 0);
+            {
+                return new Vector3(0, Mathf.Sign(input.y), 0);
+            }
             else
-                return new Vector3(0 , 0 , Mathf.Sign(input.z));
+            {
+                return new Vector3(0, 0, Mathf.Sign(input.z));
+            }
+        }
 
     }
 }
