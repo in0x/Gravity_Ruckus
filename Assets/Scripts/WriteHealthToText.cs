@@ -19,6 +19,6 @@ public class WriteHealthToText : MonoBehaviour
 	}
 	void Update ()
     {
-        text.text = playerName + " Health: " + health.Health.ToString();
+        text.text = "HP: " + health.Health.ToString();
 	}
 }
