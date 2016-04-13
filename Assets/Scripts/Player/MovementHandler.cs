@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MovementHandler : MonoBehaviour
+public class MovementHandler : MonoBehaviour, IInputObserver
 {
-    public float fJumpHeight = 10f;
-    public float xLookMul = 1f;
-    public float yLookMul = 1f;
-    public float moveSpeed = 150;
+    public PlayerInput PlayerInputRef { get; set; }
+    public float m_fJumpHeight = 10f;
+    public float m_xLookMul = 1f;
+    public float m_yLookMul = 1f;
+    public float m_moveSpeed = 150;
 
     Vector3 m_posInput;
     float m_xRotInput;
@@ -15,6 +16,29 @@ public class MovementHandler : MonoBehaviour
     Rigidbody m_RigidBody;
     JumpController jumpController;
     Transform cam;
+
+    void FixedUpdate()
+    {
+        Vector3 moveInput;
+        Vector3 rotInput;
+        bool jump = false;
+
+        float h = PlayerInputRef.GetAxis("MoveHor");
+        float v = PlayerInputRef.GetAxis("MoveVert");
+
+        float x = PlayerInputRef.GetAxis("LookHor");
+        float y = PlayerInputRef.GetAxis("LookVert"); ;
+
+        // Jump currently has no cooldown.
+        if (PlayerInputRef.GetAxis("Jump") != 0)
+        {
+            jump = true;
+        }
+
+        moveInput = new Vector3(h, 0, v);
+        rotInput = new Vector3(x, y, 0);
+        MoveInput(moveInput, rotInput, jump);
+    }
 
     void Start()
     {
@@ -38,7 +62,7 @@ public class MovementHandler : MonoBehaviour
         {
             if (jumpController.canJump())
             {
-                m_posInput.y += fJumpHeight;
+                m_posInput.y += m_fJumpHeight;
             }
         }
 
@@ -47,10 +71,10 @@ public class MovementHandler : MonoBehaviour
 
     void ActualMove()
     {
-        m_RigidBody.AddRelativeForce(m_posInput * moveSpeed);
+        m_RigidBody.AddRelativeForce(m_posInput * m_moveSpeed);
 
-        transform.localRotation *= Quaternion.Euler(0, m_xRotInput * xLookMul, 0);
-        Quaternion quat = Quaternion.Euler(m_yRotInput * yLookMul, 0, 0);
+        transform.localRotation *= Quaternion.Euler(0, m_xRotInput * m_xLookMul, 0);
+        Quaternion quat = Quaternion.Euler(m_yRotInput * m_yLookMul, 0, 0);
 
         if (cam.localRotation.eulerAngles.x > 80 && cam.localRotation.eulerAngles.x < 180 && quat.x < 0) // > 60 && < 180 && < 0
         {

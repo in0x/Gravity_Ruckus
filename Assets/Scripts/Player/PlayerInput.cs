@@ -1,48 +1,59 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.IO;
 using System.Runtime.InteropServices;
+using System.Security.Policy;
+using SimpleJSON;
 
 public class PlayerInput : MonoBehaviour
 {
+    public int playerNumber = 1;
+
     MovementHandler mHand;
 
-    Vector3 moveInput;
-    Vector3 rotInput;
 
-    bool jump = false;
-    
+    private JSONNode json;
+
     void Start ()
-	{
-        Cursor.lockState = CursorLockMode.Locked;
+    {
+        foreach (var obs in GetComponents<IInputObserver>())
+        {
+            obs.PlayerInputRef = this;
+        }
+
+        StreamReader file = new StreamReader(@"Assets/Scripts/InputBindings.json");
+        string rawData = file.ReadToEnd();
+
+        json = JSON.Parse(rawData);
+
+        //Cursor.lockState = CursorLockMode.Locked;
 	    mHand = GetComponent<MovementHandler>();
 
-        string[] padNames = Input.GetJoystickNames();
+        //string[] padNames = Input.GetJoystickNames();
 
-        foreach (string s in padNames) Debug.Log(s);
+        //foreach (string s in padNames) Debug.Log(s);
 
     }
 	
 	void Update ()
 	{
-	    float h = Input.GetAxis("Horizontal");
-	    float v = Input.GetAxis("Vertical");
-
-        float x = Input.GetAxisRaw("PAD1_Y_AXIS_HOR");
-        float y = Input.GetAxisRaw("PAD1_Y_AXIS_VER");
-
-        // Jump currently has no cooldown.
-        if (Input.GetAxis("PAD1_LT") != 0)
-        {
-            jump = true;
-        }
-        
-        moveInput = new Vector3(h,0,v);
-        rotInput = new Vector3(x, y, 0);
+	    
 	}
 
     void FixedUpdate()
     {   
-        mHand.MoveInput(moveInput, rotInput, jump);
-        jump = false;
     }
+
+    public float GetAxis(string name)
+    {
+        //if(name == "Jump")
+        //Debug.Log(json[name] + playerNumber + " : "+ Input.GetAxis(json[name] + playerNumber));
+        return Input.GetAxis(json[name]+playerNumber);
+    }
+
+    public bool GetButtonDown(string name)
+    {
+        return Input.GetButtonDown(json[name] + playerNumber);
+    }
+
 }
