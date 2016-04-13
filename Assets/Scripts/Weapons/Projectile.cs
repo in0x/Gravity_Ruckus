@@ -31,17 +31,17 @@ public class Projectile : MonoBehaviour
         {
             // Also expensive
             Rigidbody rb = hit.GetComponent<Rigidbody>();
-
-            float distance = 1f / Vector3.Distance(transform.position, rb.transform.position);
-            Debug.Log(distance);
-
-            // Careful, this is expensive as it uses reflection
-            // This, however should only trigger on colliders that also have IDamageRecievers in their hierarchy level, meaning that
-            // the players main capsule collider will not be affected
-            hit.gameObject.SendMessage("RecieveDamage", 1f, SendMessageOptions.DontRequireReceiver);
-
+            
             if (rb != null)
             {
+                float distance = 1f / Vector3.Distance(transform.position, rb.transform.position);
+                Debug.Log(distance);
+
+                // Careful, this is expensive as it uses reflection
+                // This, however should only trigger on colliders that also have IDamageRecievers in their hierarchy level, meaning that
+                // the players main capsule collider will not be affected
+                hit.gameObject.SendMessage("RecieveDamage", 1f, SendMessageOptions.DontRequireReceiver);
+
                 //rb.AddExplosionForce(m_fExplPower, explosionPos, m_fExplRadius, 3.0F);
                 rb.AddForce(new Vector3(0f, 100f, 0f), ForceMode.Impulse);
             }

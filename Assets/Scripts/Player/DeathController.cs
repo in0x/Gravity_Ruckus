@@ -10,9 +10,30 @@ public class DeathController : MonoBehaviour
         spawnController = FindObjectOfType<PlayerSpawnController>();
     }
 
+    void Update()
+    {
+        if (Input.GetKeyDown("d")) Die();
+    }
+
     public void Die()
     {
-        this.gameObject.SetActive(false);
+        foreach (Transform tf in gameObject.transform)
+        {
+            GameObject child = tf.gameObject;
+            
+            if (child.name == "SceneCamera")
+            {
+                Debug.Log("Activated: " + child.name);
+                child.SetActive(true);
+            }
+            else
+            {
+                Debug.Log("Dectivated: " + child.name);
+                child.SetActive(false);
+            }
+                     
+        }
+
         spawnController.registerAsDead(this.gameObject);
     }
 }

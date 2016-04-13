@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class PlayerSpawnController : MonoBehaviour
 {
+    public GameObject spawnPointGroup;
+
     List<GameObject> activePlayers = new List<GameObject>();
     List<GameObject> deadPlayers = new List<GameObject>();
     List<SpawnPoint> spawnPoints = new List<SpawnPoint>();
@@ -16,20 +18,20 @@ public class PlayerSpawnController : MonoBehaviour
         foreach (Object obj in FindObjectsOfType<HealthController>())
         {
             //deadPlayers.Add((obj as HealthController).gameObject);
+            activePlayers.Add((obj as HealthController).gameObject);
         }
-        
-        foreach (var spawnPoint in FindObjectsOfType<SpawnPoint>())
+
+        foreach (SpawnPoint spawn in spawnPointGroup.GetComponentsInChildren<SpawnPoint>())
         {
-            spawnPoints.Add(spawnPoint);
-            spawnPoints.Last().gameObject.SetActive(false);
+            spawnPoints.Add(spawn);
+            spawn.gameObject.SetActive(false);
         }
-        
     }
     void Update()
     {
         if (deadPlayers.Count == 0) return;
 
-        foreach (var player in deadPlayers) Spawn(player);
+        foreach (var player in deadPlayers.ToArray()) Spawn(player);
     }
 
     public void registerAsDead(GameObject player)
@@ -50,10 +52,27 @@ public class PlayerSpawnController : MonoBehaviour
         player.transform.position = spawn.GetPosition();
         player.transform.rotation = spawn.GetRotation();
         player.GetComponent<GravityHandler>().Gravity = spawn.GetGravity();
-        player.gameObject.SetActive(true);
+        
+        foreach (Transform tf in player.gameObject.transform)
+        {
+            GameObject child = tf.gameObject;
+
+            if (child.name == "SceneCamera")
+            {
+                Debug.Log("Dectivated: " + child.name);
+                child.SetActive(false);
+            }
+            else
+            {
+                Debug.Log("Activated: " + child.name);
+                child.SetActive(true);
+            }
+        }
 
         deadPlayers.Remove(player);
         activePlayers.Add(player);
+
+        Debug.Log("Spawned: " + player.name);
     }
 
 }
