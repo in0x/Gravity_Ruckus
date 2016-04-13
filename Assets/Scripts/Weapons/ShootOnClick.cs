@@ -3,10 +3,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class ShootOnClick : MonoBehaviour
+public class ShootOnClick : MonoBehaviour, IInputObserver
 {
+    public PlayerInput PlayerInputRef { get; set; }
+
     public float m_fShootCD = 0.5f;
-    public string shootBinding;
 
     List<ICanShoot> m_weapons;
     CustomListEnumerator<ICanShoot> currentWeapon;
@@ -16,6 +17,7 @@ public class ShootOnClick : MonoBehaviour
 
     float m_CDtime = 0;
     bool m_isOnCD = false;
+
 
     void Start()
     {
@@ -47,7 +49,7 @@ public class ShootOnClick : MonoBehaviour
 
         if (!m_isOnCD)
         {
-            if (Input.GetMouseButtonDown(left) || Input.GetAxis(shootBinding) != 0)
+            if (PlayerInputRef.GetAxis("Shoot")>0.1)
             {
                 m_isShooting = true;
             }
@@ -58,13 +60,13 @@ public class ShootOnClick : MonoBehaviour
 
     void WeaponSwitch()
     {
-        if (Input.GetButtonDown("PAD1_LB"))
+        if (PlayerInputRef.GetButtonDown("WeaponSwitchPrev"))
         {
             currentWeapon.Current.disable();
             currentWeapon.MoveBack();
             currentWeapon.Current.enable();
         }
-        else if (Input.GetButtonDown("PAD1_RB"))
+        else if (PlayerInputRef.GetButtonDown("WeaponSwitchNext"))
         {
             currentWeapon.Current.disable();
             currentWeapon.MoveNext();

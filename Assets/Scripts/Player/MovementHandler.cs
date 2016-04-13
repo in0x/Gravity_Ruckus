@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MovementHandler : MonoBehaviour
+public class MovementHandler : MonoBehaviour, IInputObserver
 {
+    public PlayerInput PlayerInputRef { get; set; }
     public float m_fJumpHeight = 10f;
     public float m_xLookMul = 1f;
     public float m_yLookMul = 1f;
@@ -14,6 +15,29 @@ public class MovementHandler : MonoBehaviour
     float speed = 150;
     Rigidbody m_RigidBody;
     Transform cam;
+
+    void FixedUpdate()
+    {
+        Vector3 moveInput;
+        Vector3 rotInput;
+        bool jump = false;
+
+        float h = PlayerInputRef.GetAxis("MoveHor");
+        float v = PlayerInputRef.GetAxis("MoveVert");
+
+        float x = PlayerInputRef.GetAxis("LookHor");
+        float y = PlayerInputRef.GetAxis("LookVert"); ;
+
+        // Jump currently has no cooldown.
+        if (PlayerInputRef.GetAxis("Jump") != 0)
+        {
+            jump = true;
+        }
+
+        moveInput = new Vector3(h, 0, v);
+        rotInput = new Vector3(x, y, 0);
+        MoveInput(moveInput, rotInput, jump);
+    }
 
     void Start()
     {

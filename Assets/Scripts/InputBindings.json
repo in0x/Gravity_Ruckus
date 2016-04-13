@@ -1,0 +1,20 @@
+{
+  "A": "A_",
+  "B": "B_",
+  "Back": "Back_",
+  "GravityHor": "DPad_XAxis_",
+  "GravityVert": "DPad_YAxis_",
+  "Jump": "TriggersL_",
+  "LookClick": "RS_",
+  "LookHor": "R_XAxis_",
+  "LookVert": "R_YAxis_",
+  "MoveClick": "LS_",
+  "MoveHor": "L_XAxis_",
+  "MoveVert": "L_YAxis_",
+  "Shoot": "TriggersR_",
+  "Start": "Start_",
+  "WeaponSwitchNext": "RB_",
+  "WeaponSwitchPrev": "LB_",
+  "X": "X_",
+  "Y": "Y_"
+}
