@@ -37,12 +37,24 @@ public class HealthController : MonoBehaviour
 	}
 	void Update ()
     {
+        if (Input.GetKeyDown("d")) m_health -= 10; // For health pickup debugging purposes.
         if (m_health <= 0) deathController.Die();
 	}
 
     public void ApplyDamage(float dmg)
     {
         m_health -= dmg;
+    }
+
+    // No we are not using negative damage for healing.
+    public bool Heal(float hp)
+    {
+        if (m_health == 100) return false;
+
+        m_health += hp;
+        if (m_health > 100) m_health = 100;
+
+        return true;
     }
 
     public void Refill()
