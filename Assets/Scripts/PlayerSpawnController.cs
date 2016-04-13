@@ -69,6 +69,7 @@ public class PlayerSpawnController : MonoBehaviour
             }
         }
 
+        player.GetComponent<HealthController>().Refill();
         deadPlayers.Remove(player);
         activePlayers.Add(player);
 

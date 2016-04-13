@@ -7,7 +7,7 @@ public class MovementHandler : MonoBehaviour, IInputObserver
     public float m_fJumpHeight = 10f;
     public float m_xLookMul = 1f;
     public float m_yLookMul = 1f;
-    public float m_moveSpeed = 150;
+    public float m_moveSpeed = 250;
 
     Vector3 m_posInput;
     float m_xRotInput;

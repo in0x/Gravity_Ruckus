@@ -44,5 +44,9 @@ public class HealthController : MonoBehaviour
     {
         m_health -= dmg;
     }
-    
+
+    public void Refill()
+    {
+        m_health = 100;
+    }
 }

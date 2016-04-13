@@ -10,6 +10,7 @@ public class GravityHandler : MonoBehaviour, IInputObserver
     private float rotationTime;
     private Quaternion newRotation;
     private Quaternion oldRotation;
+    public float gravity_mult = 2.5f;
 
     // This is used for spawning in non-default rotations
     public Vector3 Gravity
@@ -30,7 +31,7 @@ public class GravityHandler : MonoBehaviour, IInputObserver
 	{
 	    rotationTime = 1;
 	    rb = GetComponent<Rigidbody>();
-	    gravity = new Vector3(0, -1, 0);
+	    gravity = new Vector3(0, -1, 0)*gravity_mult;
 	    cam = transform.GetChild(0);
 	}
 	
@@ -39,17 +40,7 @@ public class GravityHandler : MonoBehaviour, IInputObserver
 	{
 	    if (PlayerInputRef.GetAxis("GravityVert")>0.1)
 	    {
-            Vector3 newGravity = ReduceVector3(transform.forward);
-	        if (gravity == newGravity)
-	            return;
-
-	        if ((gravity + newGravity) == Vector3.zero)
-	        {
-                rotationTime = 0;
-	            newRotation = transform.localRotation*Quaternion.Euler(-180, 0, 0);
-	        }
-	        //rb.MoveRotation(rb.rotation*Quaternion.Euler(-180, 0, 0));
-	        else
+            Vector3 newGravity = ReduceVector3(transform.forward) *gravity_mult;
 	        {
                 rotationTime = 0;
                 print(transform.localRotation.eulerAngles);
@@ -68,16 +59,7 @@ public class GravityHandler : MonoBehaviour, IInputObserver
 	    }
         else if (PlayerInputRef.GetAxis("GravityVert") < -0.1)
         {
-            Vector3 newGravity = ReduceVector3(-transform.forward);
-            if (gravity == newGravity)
-                return;
-            if ((gravity + newGravity) == Vector3.zero)
-            {
-                rotationTime = 0;
-                newRotation = transform.localRotation * Quaternion.Euler(-180, 0, 0);
-            }
-            //rb.MoveRotation(rb.rotation*Quaternion.Euler(-180, 0, 0));
-            else
+            Vector3 newGravity = ReduceVector3(-transform.forward) * gravity_mult;
             {
                 rotationTime = 0;
                 print(transform.localRotation.eulerAngles);
@@ -94,16 +76,7 @@ public class GravityHandler : MonoBehaviour, IInputObserver
         }
         else if (PlayerInputRef.GetAxis("GravityHor") > 0.1)
         {
-            Vector3 newGravity = ReduceVector3(transform.right);
-            if (gravity == newGravity)
-                return;
-            /*if ((gravity + newGravity) == Vector3.zero)
-            {
-                rotationTime = 0;
-                newRotation = transform.localRotation * Quaternion.Euler(-180, 0, 0);
-            }
-            //rb.MoveRotation(rb.rotation*Quaternion.Euler(-180, 0, 0));
-            else*/
+            Vector3 newGravity = ReduceVector3(transform.right) * gravity_mult;
             {
                 rotationTime = 0;
                 print(transform.localRotation.eulerAngles);
@@ -120,16 +93,7 @@ public class GravityHandler : MonoBehaviour, IInputObserver
         }
         else if (PlayerInputRef.GetAxis("GravityHor") < -0.1)
         {
-            Vector3 newGravity = ReduceVector3(-transform.right);
-            if (gravity == newGravity)
-                return;
-            /*if ((gravity + newGravity) == Vector3.zero)
-            {
-                rotationTime = 0;
-                newRotation = transform.localRotation * Quaternion.Euler(-180, 0, 0);
-            }
-            //rb.MoveRotation(rb.rotation*Quaternion.Euler(-180, 0, 0));
-            else*/
+            Vector3 newGravity = ReduceVector3(-transform.right) * gravity_mult;
             {
                 rotationTime = 0;
                 print(transform.localRotation.eulerAngles);
