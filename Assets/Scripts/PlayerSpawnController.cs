@@ -2,6 +2,10 @@
 using System.Linq;
 using System.Collections.Generic;
 
+/*\
+|*| This class is responsible for controlling when players respawn
+|*| aswell as selecting their respawn points.
+\*/
 public class PlayerSpawnController : MonoBehaviour
 {
     public GameObject spawnPointGroup;
@@ -14,10 +18,9 @@ public class PlayerSpawnController : MonoBehaviour
 
     void Start()
     {
-        // Find all player gameobjects in the scene and add them to the spawn list
+        // Find all player gameobjects in the scene and add them to the spawn list.
         foreach (Object obj in FindObjectsOfType<HealthController>())
         {
-            //deadPlayers.Add((obj as HealthController).gameObject);
             activePlayers.Add((obj as HealthController).gameObject);
         }
 
@@ -27,6 +30,8 @@ public class PlayerSpawnController : MonoBehaviour
             spawn.gameObject.SetActive(false);
         }
     }
+
+    // Check if there are any inactive players, if yes, respawn them.
     void Update()
     {
         if (deadPlayers.Count == 0) return;
@@ -34,7 +39,8 @@ public class PlayerSpawnController : MonoBehaviour
         foreach (var player in deadPlayers.ToArray()) Spawn(player);
     }
 
-    public void registerAsDead(GameObject player)
+    // Move player from active to inactive list.
+    public void RegisterAsDead(GameObject player)
     {
         if (activePlayers.IndexOf(player) != -1)
         {
@@ -43,33 +49,16 @@ public class PlayerSpawnController : MonoBehaviour
         }     
     }
 
+    // Select a random respawn point, parse the information to the player's 
+    // DeathController and move them from the inactive to the active list.
     void Spawn(GameObject player)
     {
         int idx = rand.Next(spawnPoints.Count);
 
         SpawnPoint spawn = spawnPoints[idx];
 
-        player.transform.position = spawn.GetPosition();
-        player.transform.rotation = spawn.GetRotation();
-        player.GetComponent<GravityHandler>().Gravity = spawn.GetGravity();
-        
-        foreach (Transform tf in player.gameObject.transform)
-        {
-            GameObject child = tf.gameObject;
-
-            if (child.name == "SceneCamera")
-            {
-                Debug.Log("Dectivated: " + child.name);
-                child.SetActive(false);
-            }
-            else
-            {
-                Debug.Log("Activated: " + child.name);
-                child.SetActive(true);
-            }
-        }
-
-        player.GetComponent<HealthController>().Refill();
+        player.GetComponent<DeathController>().Respawn(spawn.GetPosition(), spawn.GetRotation(), spawn.GetGravity());
+ 
         deadPlayers.Remove(player);
         activePlayers.Add(player);
 

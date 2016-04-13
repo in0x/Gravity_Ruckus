@@ -1,18 +1,47 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/*\
+|*| This class is responsible for organising player deaths and respawns.
+|*| It deactivates and activates the appropriate components sets all 
+|*| required attributes, such as position and gravity on respawn. 
+\*/
 public class DeathController : MonoBehaviour
 {
-    PlayerSpawnController spawnController;
+    GravityHandler m_gravHandler;
+    HealthController m_health;
+
+    PlayerSpawnController m_spawnController;
+
+    string lastWeaponUsed;
 
     void Start()
     {
-        spawnController = FindObjectOfType<PlayerSpawnController>();
+        m_spawnController = FindObjectOfType<PlayerSpawnController>();
+        m_gravHandler = GetComponent<GravityHandler>();
+        m_health = GetComponent<HealthController>();
     }
-
-    void Update()
+    
+    public void Respawn(Vector3 position, Quaternion rotation, Vector3 gravity)
     {
-        if (Input.GetKeyDown("d")) Die();
+        foreach (Transform tf in gameObject.transform)
+        {
+            GameObject child = tf.gameObject;
+
+            if (child.tag == "Weapon")
+            {
+                // Skip all other weapons, otherwise every weapon would be active
+                if (child.name != lastWeaponUsed) continue;
+            }
+
+            child.SetActive(true);
+        }
+
+        m_gravHandler.Gravity = gravity;
+        m_health.Refill();
+
+        transform.position = position;
+        transform.rotation = rotation;
     }
 
     public void Die()
@@ -20,20 +49,15 @@ public class DeathController : MonoBehaviour
         foreach (Transform tf in gameObject.transform)
         {
             GameObject child = tf.gameObject;
-            
-            if (child.name == "SceneCamera")
+
+            if (child.tag == "Weapon")
             {
-                Debug.Log("Activated: " + child.name);
-                child.SetActive(true);
+                if (child.active) lastWeaponUsed = child.name;
             }
-            else
-            {
-                Debug.Log("Dectivated: " + child.name);
-                child.SetActive(false);
-            }
-                     
+
+            child.SetActive(false);                     
         }
 
-        spawnController.registerAsDead(this.gameObject);
+        m_spawnController.RegisterAsDead(this.gameObject);
     }
 }

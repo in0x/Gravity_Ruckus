@@ -20,7 +20,6 @@ public class HitScanShoot : MonoBehaviour, ICanShoot
         // Find the transform of the parents camera component
         foreach (Transform child in transform.parent.transform)
         {
-            print(child.tag);
             if (child.tag == "MainCamera") parentCamera = child;
         }
     }
