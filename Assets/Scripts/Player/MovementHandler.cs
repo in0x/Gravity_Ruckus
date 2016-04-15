@@ -27,7 +27,7 @@ public class MovementHandler : MonoBehaviour, IInputObserver
         float v = PlayerInputRef.GetAxis("MoveVert");
 
         float x = PlayerInputRef.GetAxis("LookHor");
-        float y = PlayerInputRef.GetAxis("LookVert"); ;
+        float y = -PlayerInputRef.GetAxis("LookVert"); 
 
         // Jump currently has no cooldown.
         if (PlayerInputRef.GetAxis("Jump") != 0)

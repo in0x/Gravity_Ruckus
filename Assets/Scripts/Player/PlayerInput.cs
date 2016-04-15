@@ -62,7 +62,7 @@ public class PlayerInput : MonoBehaviour
             }
         }
         
-        controllerID = (XboxController)playerNumber;
+        controllerID = (XboxController)playerNumber;     
     }
     
     public float GetAxis(string name)
