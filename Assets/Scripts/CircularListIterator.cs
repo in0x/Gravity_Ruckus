@@ -6,7 +6,7 @@ using System.Collections.Generic;
 // If possible still always IEnumerator<T>, only use this one 
 // if a circular traversal make sense such as with
 // the players current weapons.
-public class CustomListEnumerator<T>
+public class CircularListIterator<T>
 {
     List<T> m_list;
     int m_Index = 0;
@@ -20,7 +20,7 @@ public class CustomListEnumerator<T>
         private set { }
     }
 
-    public CustomListEnumerator(List<T> list)
+    public CircularListIterator(List<T> list)
     {
         m_list = list;
     }
@@ -43,5 +43,17 @@ public class CustomListEnumerator<T>
         {
             m_Index = m_list.Count - 1;
         }
+    }
+
+    public static CircularListIterator<T> operator ++(CircularListIterator<T> iter)
+    {
+        iter.MoveNext();
+        return iter;
+    }
+
+    public static CircularListIterator<T> operator --(CircularListIterator<T> iter)
+    {
+        iter.MoveBack();
+        return iter;
     }
 }

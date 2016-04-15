@@ -15,6 +15,7 @@ public class Projectile : MonoBehaviour
     void Start()
     {
         body = GetComponent<Rigidbody>();
+        body.velocity *= speed;
 	}
     
     void OnCollisionEnter(Collision collision)

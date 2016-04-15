@@ -10,7 +10,7 @@ public class ShootOnClick : MonoBehaviour, IInputObserver
     public float m_fShootCD = 0.5f;
 
     List<ICanShoot> m_weapons;
-    CustomListEnumerator<ICanShoot> currentWeapon;
+    CircularListIterator<ICanShoot> currentWeapon;
 
     bool m_isShooting = false;
     const int left = 0;
@@ -31,7 +31,7 @@ public class ShootOnClick : MonoBehaviour, IInputObserver
             }
         }
         
-        currentWeapon = new CustomListEnumerator<ICanShoot>(m_weapons);
+        currentWeapon = new CircularListIterator<ICanShoot>(m_weapons);
         currentWeapon.Current.enable();
     }
 
