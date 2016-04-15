@@ -61,12 +61,16 @@ public class PlayerInput : MonoBehaviour
                 buttonBindings.Add(node.Key, enumVal);
             }
         }
-
+        
         controllerID = (XboxController)playerNumber;
     }
     
     public float GetAxis(string name)
     {
+        if (XCI.GetAxis(axisBindings[name], controllerID) != 0)
+        {
+            Debug.Log(axisBindings[name]);
+        }
         return XCI.GetAxis(axisBindings[name], controllerID);
     }
 
