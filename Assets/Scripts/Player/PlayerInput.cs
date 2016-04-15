@@ -1,59 +1,82 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System;
 using System.IO;
-using System.Runtime.InteropServices;
-using System.Security.Policy;
 using SimpleJSON;
+using XboxCtrlrInput;
+using System.Collections.Generic;
 
 public class PlayerInput : MonoBehaviour
 {
-    public int playerNumber = 1;
+    public int playerNumber;
+    
+    //All = 0, First = 1, Second = 2, Third = 3, Fourth = 4
+    XboxController controllerID;
 
-    MovementHandler mHand;
-
-
-    private JSONNode json;
+    Dictionary<string, XboxAxis> axisBindings;
+    Dictionary<string, XboxButton> buttonBindings;
+    Dictionary<string, XboxDPad> dpadBindings;
 
     void Start ()
     {
+        // Set reference to self for polling in all InputObservers
         foreach (var obs in GetComponents<IInputObserver>())
         {
             obs.PlayerInputRef = this;
         }
 
-        StreamReader file = new StreamReader(@"Assets/Scripts/InputBindings.json");
-        string rawData = file.ReadToEnd();
+        axisBindings = new Dictionary<string, XboxAxis>();
+        buttonBindings = new Dictionary<string, XboxButton>();
+        dpadBindings = new Dictionary<string, XboxDPad>();
 
-        json = JSON.Parse(rawData);
+        // Get the abstract name to XboxCtrl Enum bindings for later usage
+        using (StreamReader file = new StreamReader(@"Assets/Scripts/XboxBindings.json"))
+        {
+            string rawData = file.ReadToEnd();
+            JSONClass json = JSON.Parse(rawData) as JSONClass;
 
-        //Cursor.lockState = CursorLockMode.Locked;
-	    mHand = GetComponent<MovementHandler>();
+            foreach (var node in (json["Axis"].AsObject.m_Dict))
+            {
+                string valueStr = node.Value.ToString().Trim();
+                valueStr = valueStr.Replace("\"", string.Empty).Replace("'", string.Empty);
 
-        //string[] padNames = Input.GetJoystickNames();
+                XboxAxis enumVal = (XboxAxis)Enum.Parse(typeof(XboxAxis), valueStr);
+                axisBindings.Add(node.Key, enumVal);
+            }
+            
+            foreach (var node in (json["DPad"].AsObject.m_Dict))
+            {
+                string valueStr = node.Value.ToString().Trim();
+                valueStr = valueStr.Replace("\"", string.Empty).Replace("'", string.Empty);
 
-        //foreach (string s in padNames) Debug.Log(s);
+                XboxDPad enumVal = (XboxDPad)Enum.Parse(typeof(XboxDPad), valueStr);
+                dpadBindings.Add(node.Key, enumVal);
+            }
 
+            foreach (var node in (json["Buttons"].AsObject.m_Dict))
+            {
+                string valueStr = node.Value.ToString().Trim();
+                valueStr = valueStr.Replace("\"", string.Empty).Replace("'", string.Empty);
+
+                XboxButton enumVal = (XboxButton)Enum.Parse(typeof(XboxButton), valueStr);
+                buttonBindings.Add(node.Key, enumVal);
+            }
+        }
+
+        controllerID = (XboxController)playerNumber;
     }
-	
-	void Update ()
-	{
-	    
-	}
-
-    void FixedUpdate()
-    {   
-    }
-
+    
     public float GetAxis(string name)
     {
-        //if(name == "Jump")
-        //Debug.Log(json[name] + playerNumber + " : "+ Input.GetAxis(json[name] + playerNumber));
-        return Input.GetAxis(json[name]+playerNumber);
+        return XCI.GetAxis(axisBindings[name], controllerID);
     }
 
     public bool GetButtonDown(string name)
     {
-        return Input.GetButtonDown(json[name] + playerNumber);
+        return XCI.GetButtonDown(buttonBindings[name], controllerID);
     }
 
+    public bool GetDPad(string name)
+    {
+        return XCI.GetDPadDown(dpadBindings[name], controllerID);
+    }
 }

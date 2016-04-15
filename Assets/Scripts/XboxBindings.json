@@ -1,0 +1,31 @@
+{
+  "Axis":
+  {
+    "Jump": "LeftTrigger",
+    "LookHor": "RightStickX",
+    "LookVert": "RightStickY",
+    "MoveHor": "LeftStickX",
+    "MoveVert": "LeftStickY",
+    "Shoot": "RightTrigger"
+  },
+  "DPad":
+  {
+      "GravityDown": "Up",
+      "GravityLeft": "Left",
+      "GravityRight": "Right",
+      "GravityUp": "Down"
+  },
+  "Buttons":
+  {
+      "A": "A",
+      "B": "B",
+      "Back": "Back",
+      "LookClick": "RightStick",
+      "MoveClick": "LeftStick",
+      "Start": "Start",
+      "WeaponSwitchNext": "RightBumper",
+      "WeaponSwitchPrev": "LeftBumper",
+      "X": "X",
+      "Y": "Y"
+  }
+}

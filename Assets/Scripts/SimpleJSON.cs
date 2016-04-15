@@ -583,6 +583,17 @@ namespace SimpleJSON
     public class JSONArray : JSONNode, IEnumerable
     {
         private List<JSONNode> m_List = new List<JSONNode>();
+
+        public string GetKey(string value)
+        {
+            //foreach (JSONNode node in m_List)
+            //{
+            //    if (node.Value == value) return 
+            //}
+
+            return null;
+        }
+
         public override JSONNode this[int aIndex]
         {
             get
@@ -676,7 +687,7 @@ namespace SimpleJSON
  
     public class JSONClass : JSONNode, IEnumerable
     {
-        private Dictionary<string,JSONNode> m_Dict = new Dictionary<string,JSONNode>();
+        public Dictionary<string,JSONNode> m_Dict = new Dictionary<string,JSONNode>();
         public override JSONNode this[string aKey]
         {
             get

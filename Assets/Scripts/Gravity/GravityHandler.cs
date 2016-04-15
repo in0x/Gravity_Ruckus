@@ -38,7 +38,8 @@ public class GravityHandler : MonoBehaviour, IInputObserver
 	// Update is called once per frame
 	void Update ()
 	{
-	    if (PlayerInputRef.GetAxis("GravityVert")>0.1)
+	    //if (PlayerInputRef.GetAxis("GravityVert")>0.1)
+        if (PlayerInputRef.GetDPad("GravityUp"))
 	    {
             Vector3 newGravity = ReduceVector3(transform.forward) *gravity_mult;
 	        {
@@ -57,7 +58,8 @@ public class GravityHandler : MonoBehaviour, IInputObserver
             oldRotation = transform.localRotation;
 	        gravity = newGravity;
 	    }
-        else if (PlayerInputRef.GetAxis("GravityVert") < -0.1)
+        //else if (PlayerInputRef.GetAxis("GravityVert") < -0.1)
+        if (PlayerInputRef.GetDPad("GravityDown"))
         {
             Vector3 newGravity = ReduceVector3(-transform.forward) * gravity_mult;
             {
@@ -74,7 +76,8 @@ public class GravityHandler : MonoBehaviour, IInputObserver
             oldRotation = transform.localRotation;
             gravity = newGravity;
         }
-        else if (PlayerInputRef.GetAxis("GravityHor") > 0.1)
+        //else if (PlayerInputRef.GetAxis("GravityHor") > 0.1)
+        if (PlayerInputRef.GetDPad("GravityRight"))
         {
             Vector3 newGravity = ReduceVector3(transform.right) * gravity_mult;
             {
@@ -91,7 +94,8 @@ public class GravityHandler : MonoBehaviour, IInputObserver
             oldRotation = transform.localRotation;
             gravity = newGravity;
         }
-        else if (PlayerInputRef.GetAxis("GravityHor") < -0.1)
+        //else if (PlayerInputRef.GetAxis("GravityHor") < -0.1)
+        if (PlayerInputRef.GetDPad("GravityLeft"))
         {
             Vector3 newGravity = ReduceVector3(-transform.right) * gravity_mult;
             {
