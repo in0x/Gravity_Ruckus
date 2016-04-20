@@ -1,0 +1,14 @@
+{
+	"Prefabs": [
+		["Prefab/SphereProjectile", 10],
+	],
+
+	"Usage": [
+		"This file defines the path to all GameObject prefabs which should",
+		"have GoPools created for them on startup.",
+    "[Path, Instances]",
+		"Path: A string that defines the prefabs location relative to Assets/Prefab.",
+		"Instances: An integer that defines the amount of Prefab Instances that should be allocated.",
+    "This may be omitted. In this case, 8 instances will be allocated."
+	]
+}

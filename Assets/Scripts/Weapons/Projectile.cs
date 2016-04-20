@@ -21,7 +21,7 @@ public class Projectile : MonoBehaviour
     void OnCollisionEnter(Collision collision)
     {
         // Also expensive
-        Destroy(gameObject);
+        //Destroy(gameObject);
 
         Vector3 explosionPos = transform.position;
         
