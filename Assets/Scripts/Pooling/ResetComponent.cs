@@ -9,9 +9,19 @@
 \*/
 public class ResetComponent : MonoBehaviour
 {
+    Rigidbody rigidBody;
+
+    void Start()
+    {
+        rigidBody = GetComponent<Rigidbody>();
+    }
+
     public virtual void Reset()
     {
         gameObject.transform.position = new Vector3();
         gameObject.transform.rotation = Quaternion.identity;
+   
+        rigidBody.velocity = Vector3.zero;
+        rigidBody.angularVelocity = Vector3.zero;
     }
 }

@@ -8,7 +8,7 @@ public class PoolTest : MonoBehaviour
     List<PooledGameObject> objs = new List<PooledGameObject>();
 
     // Examplary use of the Pooling system
-	void Start()
+	void Update()
     {
         //var man = ObjectPoolManager.Get();
 

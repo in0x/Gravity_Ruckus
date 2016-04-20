@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
-using System.Collections;
+using System.Linq;
+using System.Collections.Generic;
 
 public class ProjectileShoot : MonoBehaviour, ICanShoot
 {
@@ -9,6 +10,9 @@ public class ProjectileShoot : MonoBehaviour, ICanShoot
     Transform parentCamera;
     CapsuleCollider parentCollider;
     SphereCollider projectileCollider;
+
+    ObjectPoolManager poolManager;
+    List<PooledGameObject> shotProjectiles;
 
     void Start ()
     {
@@ -20,7 +24,23 @@ public class ProjectileShoot : MonoBehaviour, ICanShoot
 
         parentCollider = transform.parent.GetComponent<CapsuleCollider>();
 
-        projectileCollider = projectilePrefab.GetComponent<SphereCollider>();    
+        projectileCollider = projectilePrefab.GetComponent<SphereCollider>();
+
+        poolManager = ObjectPoolManager.Get();
+        shotProjectiles = new List<PooledGameObject>();
+    }
+
+    void Update()
+    {
+        shotProjectiles.RemoveAll((pooledObject => 
+        {
+            if (pooledObject.Instance.active == false)
+            {
+                pooledObject.Release();
+                return true;
+            }
+            return false;
+         }));
     }
 
     public void shoot()
@@ -33,7 +53,12 @@ public class ProjectileShoot : MonoBehaviour, ICanShoot
         fwd_cpy *= (parentCollider.height / 2 + (projectileCollider.radius / 2));
         origin += fwd_cpy;
 
-        GameObject projectile = (GameObject)Instantiate(projectilePrefab, origin, parentCamera.rotation);
+        var pooled = poolManager.Request(projectilePrefab);
+        shotProjectiles.Add(pooled);
+
+        var projectile = pooled.Instance;
+        projectile.transform.position = origin;
+        projectile.transform.rotation = parentCamera.rotation;
 
         Vector3 projectile_vel = fwd * m_fInherentProjectileVel; //+ transform.parent.GetComponent<Rigidbody>().velocity;
 

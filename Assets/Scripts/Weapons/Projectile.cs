@@ -46,6 +46,8 @@ public class Projectile : MonoBehaviour
             }
 
         }
+
+        gameObject.SetActive(false);
     }
     
 }
