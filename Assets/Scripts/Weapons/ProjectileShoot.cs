@@ -2,11 +2,6 @@
 using System.Linq;
 using System.Collections.Generic;
 
-/*\
-|*| Base class for projectile weapons. Fulfills the ICanShoot contract,
-|*| acquires and releases pooled projectiles and shoots a single projectile.
-|*| This class can be extended to implement a custom shooting behaviour.
-\*/
 public class ProjectileShoot : MonoBehaviour, ICanShoot
 {
     // Prefab of the projectile to be launched.
@@ -16,13 +11,13 @@ public class ProjectileShoot : MonoBehaviour, ICanShoot
     [SerializeField]
     float m_cooldown = 0.5f;
 
-    protected Transform m_parentCamera;
-    protected CapsuleCollider m_parentCollider;
-    protected SphereCollider m_projectileCollider;
+    Transform m_parentCamera;
+    CapsuleCollider m_parentCollider;
+    private SphereCollider m_projectileCollider;
 
-    protected List<PooledGameObject> m_shotProjectiles; 
-    protected ObjectPoolManager m_poolManager;
     // List to keep track of owned projectiles.
+    List<PooledGameObject> m_shotProjectiles = new List<PooledGameObject>(); 
+    ObjectPoolManager m_poolManager;
 
     public float Cooldown
     {
@@ -60,7 +55,7 @@ public class ProjectileShoot : MonoBehaviour, ICanShoot
          }));
     }
 
-    public virtual void Shoot()
+    public void Shoot()
     {
         Vector3 origin = m_parentCamera.transform.position;
         

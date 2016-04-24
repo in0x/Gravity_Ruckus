@@ -67,10 +67,6 @@ public class PlayerInput : MonoBehaviour
     
     public float GetAxis(string name)
     {
-        if (XCI.GetAxis(axisBindings[name], controllerID) != 0)
-        {
-            Debug.Log(axisBindings[name]);
-        }
         return XCI.GetAxis(axisBindings[name], controllerID);
     }
 
