@@ -18,7 +18,7 @@ public class BounceProjectile : MonoBehaviour
     {
         if (m_bounces > 0)
         {
-            body.velocity = Vector3.Reflect(body.velocity, collision.other.transform.up);
+            body.velocity = Vector3.Reflect(body.velocity, collision.transform.up);
         }
     }
 }
