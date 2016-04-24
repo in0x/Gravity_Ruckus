@@ -13,6 +13,9 @@ public class ProjectileShoot : MonoBehaviour, ICanShoot
     public GameObject m_projectilePrefab;
     public float m_fInherentProjectileVel = 300;
 
+    [SerializeField]
+    float m_cooldown = 0.5f;
+
     protected Transform m_parentCamera;
     protected CapsuleCollider m_parentCollider;
     protected SphereCollider m_projectileCollider;
@@ -20,6 +23,12 @@ public class ProjectileShoot : MonoBehaviour, ICanShoot
     protected List<PooledGameObject> m_shotProjectiles; 
     protected ObjectPoolManager m_poolManager;
     // List to keep track of owned projectiles.
+
+    public float Cooldown
+    {
+        get { return m_cooldown; }
+        set{}
+    }
     
     void Start()
     {

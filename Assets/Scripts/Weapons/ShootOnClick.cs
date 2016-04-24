@@ -6,9 +6,7 @@ using System.Collections.Generic;
 public class ShootOnClick : MonoBehaviour, IInputObserver
 {
     public PlayerInput PlayerInputRef { get; set; }
-
-    public float m_fShootCD = 0.5f;
-
+    
     List<ICanShoot> m_weapons;
     CircularListIterator<ICanShoot> currentWeapon;
 
@@ -40,7 +38,7 @@ public class ShootOnClick : MonoBehaviour, IInputObserver
         if (m_isOnCD)
         {
             m_CDtime += Time.deltaTime;
-            if (m_CDtime >= m_fShootCD)
+            if (m_CDtime >= currentWeapon.Current.Cooldown)
             {
                 m_isOnCD = false;
                 m_CDtime = 0;
@@ -72,8 +70,6 @@ public class ShootOnClick : MonoBehaviour, IInputObserver
             currentWeapon.MoveNext();
             currentWeapon.Current.Enable();
         }
-
-        //Debug.Log(GetComponentsInChildren<Collider>().Length);
     }
 
     void FixedUpdate()

@@ -6,6 +6,14 @@ public class HitScanShoot : MonoBehaviour, ICanShoot
     public float m_fRange = 0;
     public float m_fTimeToDrawRay = 0;
 
+    [SerializeField]
+    float m_cooldown = 2f; 
+    public float Cooldown
+    {
+        get { return m_cooldown; }
+        set { }
+    }
+
     float m_TimeSinceShot = 0;
 
     LineRenderer rayRenderer;
