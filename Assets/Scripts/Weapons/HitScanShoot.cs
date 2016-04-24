@@ -39,7 +39,7 @@ public class HitScanShoot : MonoBehaviour, ICanShoot
         }
     }
 
-    public void shoot()
+    public void Shoot()
     {
         // Get origin of shooter and look direction via camera transform
         Vector3 origin = parentCamera.transform.position;
@@ -68,12 +68,12 @@ public class HitScanShoot : MonoBehaviour, ICanShoot
         rayRenderer.enabled = true;
     }
 
-    public void enable()
+    public void Enable()
     {
         gameObject.SetActive(true);
     }
 
-    public void disable()
+    public void Disable()
     {
         gameObject.SetActive(false);
     }

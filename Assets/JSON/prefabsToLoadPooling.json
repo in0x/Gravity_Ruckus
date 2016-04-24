@@ -1,6 +1,6 @@
 {
 	"Prefabs": [
-		["Prefab/SphereProjectile", 10],
+		["Prefab/SphereProjectile", 30],
 	],
 
 	"Usage": [

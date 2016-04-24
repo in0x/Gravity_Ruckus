@@ -29,7 +29,7 @@ public class PlayerInput : MonoBehaviour
         dpadBindings = new Dictionary<string, XboxDPad>();
 
         // Get the abstract name to XboxCtrl Enum bindings for later usage
-        using (StreamReader file = new StreamReader(@"Assets/Scripts/XboxBindings.json"))
+        using (StreamReader file = new StreamReader(@"Assets/JSON/XboxBindings.json"))
         {
             string rawData = file.ReadToEnd();
             JSONClass json = JSON.Parse(rawData) as JSONClass;

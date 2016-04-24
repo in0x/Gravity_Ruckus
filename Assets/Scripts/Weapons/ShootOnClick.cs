@@ -32,7 +32,7 @@ public class ShootOnClick : MonoBehaviour, IInputObserver
         }
         
         currentWeapon = new CircularListIterator<ICanShoot>(m_weapons);
-        currentWeapon.Current.enable();
+        currentWeapon.Current.Enable();
     }
 
     void Update()
@@ -62,15 +62,15 @@ public class ShootOnClick : MonoBehaviour, IInputObserver
     {
         if (PlayerInputRef.GetButtonDown("WeaponSwitchPrev"))
         {
-            currentWeapon.Current.disable();
+            currentWeapon.Current.Disable();
             currentWeapon.MoveBack();
-            currentWeapon.Current.enable();
+            currentWeapon.Current.Enable();
         }
         else if (PlayerInputRef.GetButtonDown("WeaponSwitchNext"))
         {
-            currentWeapon.Current.disable();
+            currentWeapon.Current.Disable();
             currentWeapon.MoveNext();
-            currentWeapon.Current.enable();
+            currentWeapon.Current.Enable();
         }
 
         //Debug.Log(GetComponentsInChildren<Collider>().Length);
@@ -83,7 +83,7 @@ public class ShootOnClick : MonoBehaviour, IInputObserver
             m_isShooting = false;
             
             // Neat.
-            (currentWeapon.Current as ICanShoot).shoot();
+            (currentWeapon.Current as ICanShoot).Shoot();
 
             m_isOnCD = true;
         }

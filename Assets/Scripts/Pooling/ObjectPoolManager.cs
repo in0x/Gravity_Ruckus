@@ -23,7 +23,7 @@ public class ObjectPoolManager
     {
         m_objectPools = new Dictionary<GameObject, ObjectPool>();
 
-        using (StreamReader file = new StreamReader(@"Assets/prefabsToLoadPooling.json"))
+        using (StreamReader file = new StreamReader(@"Assets/JSON/prefabsToLoadPooling.json"))
         {
             string rawData = file.ReadToEnd();
             JSONClass json = JSON.Parse(rawData) as JSONClass;
