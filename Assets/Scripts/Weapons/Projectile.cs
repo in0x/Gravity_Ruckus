@@ -3,9 +3,10 @@ using System.Collections;
 
 public class Projectile : MonoBehaviour
 {
-    public Vector3 m_Velocity;
-    public Vector3 m_Target;
-    public float speed = 1000;
+    public float speed;
+
+    public float impactDmg = 35f;
+    public float splashDmg = 10f;
 
     public float m_fExplRadius = 5.0f;
     public float m_fExplPower = 1000.0f;
@@ -20,9 +21,6 @@ public class Projectile : MonoBehaviour
     
     void OnCollisionEnter(Collision collision)
     {
-        // Also expensive
-        Destroy(gameObject);
-
         Vector3 explosionPos = transform.position;
         
         // Also expensive
@@ -31,7 +29,7 @@ public class Projectile : MonoBehaviour
         // Careful, this is expensive as it uses reflection
         // This, will however only trigger on colliders that also have IDamageRecievers in their hierarchy level, meaning that
         // the players main capsule collider will not be affected
-        collision.collider.gameObject.SendMessageUpwards("RecieveDamage", 35f, SendMessageOptions.DontRequireReceiver);
+        collision.collider.gameObject.SendMessageUpwards("RecieveDamage", impactDmg, SendMessageOptions.DontRequireReceiver);
 
         foreach (Collider hit in colliders)
         {
@@ -40,12 +38,12 @@ public class Projectile : MonoBehaviour
 
             if (rb != null)
             {
-                rb.gameObject.SendMessageUpwards("RecieveDamage", 10f, SendMessageOptions.DontRequireReceiver);           
+                rb.gameObject.SendMessageUpwards("RecieveDamage", splashDmg, SendMessageOptions.DontRequireReceiver);           
                 rb.AddExplosionForce(m_fExplPower, explosionPos, m_fExplRadius, 3.0F);
-                //rb.AddForce(new Vector3(0f, 100f, 0f));
             }
-
         }
+
+        gameObject.SetActive(false);
     }
     
 }

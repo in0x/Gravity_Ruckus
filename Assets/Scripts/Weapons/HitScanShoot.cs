@@ -6,6 +6,14 @@ public class HitScanShoot : MonoBehaviour, ICanShoot
     public float m_fRange = 0;
     public float m_fTimeToDrawRay = 0;
 
+    [SerializeField]
+    float m_cooldown = 2f; 
+    public float Cooldown
+    {
+        get { return m_cooldown; }
+        set { }
+    }
+
     float m_TimeSinceShot = 0;
 
     LineRenderer rayRenderer;
@@ -39,7 +47,7 @@ public class HitScanShoot : MonoBehaviour, ICanShoot
         }
     }
 
-    public void shoot()
+    public void Shoot()
     {
         // Get origin of shooter and look direction via camera transform
         Vector3 origin = parentCamera.transform.position;
@@ -68,12 +76,12 @@ public class HitScanShoot : MonoBehaviour, ICanShoot
         rayRenderer.enabled = true;
     }
 
-    public void enable()
+    public void Enable()
     {
         gameObject.SetActive(true);
     }
 
-    public void disable()
+    public void Disable()
     {
         gameObject.SetActive(false);
     }
