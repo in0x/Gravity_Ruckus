@@ -10,10 +10,10 @@
   },
   "DPad":
   {
-      "GravityDown": "Up",
+      "GravityDown": "Down",
       "GravityLeft": "Left",
       "GravityRight": "Right",
-      "GravityUp": "Down"
+      "GravityUp": "Up"
   },
   "Buttons":
   {
