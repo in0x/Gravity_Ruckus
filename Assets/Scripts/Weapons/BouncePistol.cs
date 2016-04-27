@@ -77,7 +77,9 @@ public class BouncePistol : MonoBehaviour, ICanShoot
                 var pooled = m_poolManager.Request(m_projectilePrefab);
                 m_shotProjectiles.Add(pooled);
 
-                pooled.Instance.transform.rotation *= m_parentCamera.rotation;
+                pooled.Instance.transform.rotation = Quaternion.LookRotation(fwd); //m_parentCamera.rotation;
+                pooled.Instance.transform.localRotation = Quaternion.Euler(90, 0, 0);
+
                 pooled.Instance.transform.position = origin + new Vector3(x * m_projectileCollider.radius * 2, y * m_projectileCollider.radius * 2, 0);
 
                 // This may be a big slowdown and should be optimised later.

@@ -15,13 +15,12 @@ public class BounceProjectile : MonoBehaviour
     void OnEnable()
     {
         if (m_body == null) m_body = GetComponent<Rigidbody>();
-        
+
         /*
             Note that the speed multiplier is currently being added by the gun that fires the projectile,
             as multiplying it here would just mean it being overwritten when the gun sets the projectiles
             velocity. A solution would be to move bullet velocity and speed mult into the same object.
         */
-
         m_currentBounces = m_bounces;
     }
 
@@ -33,7 +32,16 @@ public class BounceProjectile : MonoBehaviour
     void OnCollisionExit(Collision collision)
     {
         collision.collider.gameObject.SendMessageUpwards("RecieveDamage", m_dmg, SendMessageOptions.DontRequireReceiver);
-        m_currentBounces--;
+
+        if (collision.collider.gameObject.tag == "Player")
+        {
+            m_currentBounces = 0;
+        }
+        else
+        {
+            m_currentBounces--;
+            gameObject.transform.rotation = Quaternion.LookRotation(m_body.velocity) * Quaternion.Euler(90, 0, 0);
+        }
     }
     
 }
