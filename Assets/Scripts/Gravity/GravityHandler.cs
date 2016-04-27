@@ -100,7 +100,6 @@ public class GravityHandler : MonoBehaviour, IInputObserver
             Vector3 newGravity = ReduceVector3(-transform.right) * gravity_mult;
             {
                 rotationTime = 0;
-                print(transform.localRotation.eulerAngles);
                 float newX = Mathf.Round(transform.localRotation.eulerAngles.x / 90) * 90;
                 float newY = Mathf.Round(transform.localRotation.eulerAngles.y / 90) * 90;
                 float newZ = Mathf.Round(transform.localRotation.eulerAngles.z / 90) * 90;

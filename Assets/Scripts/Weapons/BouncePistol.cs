@@ -10,6 +10,8 @@ public class BouncePistol : MonoBehaviour, ICanShoot
     [SerializeField]
     float m_cooldown = 0.5f;
 
+    float m_projectileSpeedMul;
+
     Transform m_parentCamera;
     CapsuleCollider m_parentCollider;
     CapsuleCollider m_projectileCollider;
@@ -36,6 +38,7 @@ public class BouncePistol : MonoBehaviour, ICanShoot
         m_projectileCollider = m_projectilePrefab.GetComponent<CapsuleCollider>();
         m_poolManager = ObjectPoolManager.Get();
         m_shotProjectiles = new List<PooledGameObject>();
+        m_projectileSpeedMul = m_projectilePrefab.GetComponent<BounceProjectile>().m_speed;
     }
 
     void Update()
@@ -45,7 +48,7 @@ public class BouncePistol : MonoBehaviour, ICanShoot
         // the list of active projectiles.
         m_shotProjectiles.RemoveAll((pooledObject =>
         {
-            if (pooledObject.Instance.active == false)
+            if (pooledObject.Instance.activeSelf == false)
             {
                 pooledObject.Release();
                 return true;
@@ -65,22 +68,22 @@ public class BouncePistol : MonoBehaviour, ICanShoot
         Vector3 fwd_cpy = fwd.normalized;
         fwd_cpy *= (m_parentCollider.height / 2 + (m_projectileCollider.radius / 2));
         origin += fwd_cpy;
-   
+  
         // Acquire 9 projectiles and shoot them in a grid
-        for (int x = -1; x < 1; x++)
+        for (int x = -1; x <= 1; x++)
         {
-            for (int y = -1; y < 1; y++)
+            for (int y = -1; y <= 1; y++)
             {
                 var pooled = m_poolManager.Request(m_projectilePrefab);
                 m_shotProjectiles.Add(pooled);
-                
-                pooled.Instance.transform.position = origin + new Vector3(x * 0.5f, y * 0.5f, 0);
-                pooled.Instance.transform.rotation = m_parentCamera.rotation;
+
+                pooled.Instance.transform.rotation *= m_parentCamera.rotation;
+                pooled.Instance.transform.position = origin + new Vector3(x * m_projectileCollider.radius * 2, y * m_projectileCollider.radius * 2, 0);
 
                 // This may be a big slowdown and should be optimised later.
-                pooled.Instance.GetComponent<Rigidbody>().velocity = fwd * m_fInherentProjectileVel;
+                pooled.Instance.GetComponent<Rigidbody>().velocity = fwd * m_fInherentProjectileVel * m_projectileSpeedMul;
             }
-        }  
+        }
     }
 
     public void Enable()
