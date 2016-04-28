@@ -7,6 +7,7 @@ public class ProjectileShoot : MonoBehaviour, ICanShoot
     // Prefab of the projectile to be launched.
     public GameObject m_projectilePrefab;
     public float m_fInherentProjectileVel = 300;
+    public int m_ammoUsedOnShot = 1;
 
     [SerializeField]
     float m_cooldown = 0.5f;
@@ -18,6 +19,9 @@ public class ProjectileShoot : MonoBehaviour, ICanShoot
     // List to keep track of owned projectiles.
     List<PooledGameObject> m_shotProjectiles; 
     ObjectPoolManager m_poolManager;
+
+    // Used to track ammo of weapon
+    AmmoComponent ammoComp;
 
     public float Cooldown
     {
@@ -37,6 +41,8 @@ public class ProjectileShoot : MonoBehaviour, ICanShoot
         m_projectileCollider = m_projectilePrefab.GetComponent<SphereCollider>();
         m_poolManager = ObjectPoolManager.Get();
         m_shotProjectiles = new List<PooledGameObject>();
+
+        ammoComp = GetComponent<AmmoComponent>();
     }
 
     void Update()
@@ -57,6 +63,12 @@ public class ProjectileShoot : MonoBehaviour, ICanShoot
 
     public void Shoot()
     {
+        if (ammoComp.UseAmmo(m_ammoUsedOnShot) == 0)
+        {
+            Debug.Log("Out of ammo");
+            return;
+        };
+
         Vector3 origin = m_parentCamera.transform.position;
         
         Vector3 fwd = m_parentCamera.transform.forward;
@@ -79,6 +91,14 @@ public class ProjectileShoot : MonoBehaviour, ICanShoot
 
         projectile.GetComponent<Rigidbody>().velocity = projectile_vel;
     }
+
+    public void GetAmmoState(out int currentAmmo, out int maxAmmo)
+    {
+        var ammoComp = GetComponent<AmmoComponent>();
+        maxAmmo = ammoComp.m_maxAmmo;
+        currentAmmo = ammoComp.CurrentAmmo;
+    }
+
     public void Enable()
     {
         gameObject.SetActive(true);

@@ -6,6 +6,7 @@ public class WriteHealthToText : MonoBehaviour
 {
     public GameObject player;
 
+    ShootOnClick weaponController;
     HealthController health;
     Text text;
     string playerName;
@@ -15,10 +16,15 @@ public class WriteHealthToText : MonoBehaviour
         health = player.GetComponent<HealthController>();
         playerName = player.name;
 
+        weaponController = player.GetComponent<ShootOnClick>();
+
         text = GetComponent<Text>();
 	}
 	void Update ()
     {
-        text.text = "HP: " + health.Health.ToString();
+        int curAmmo, maxAmmo;
+        weaponController.GetCurrentAmmoCount(out curAmmo, out maxAmmo);
+
+        text.text = "HP: " + health.Health.ToString() + " Ammo: " + curAmmo + "/" + maxAmmo;
 	}
 }

@@ -7,7 +7,21 @@ public class AmmoComponent : MonoBehaviour
 
     // Currently availible capacity.
     int m_currentAmmo;
-    
+    public int CurrentAmmo
+    {
+        get
+        {
+            return m_currentAmmo;
+        }
+
+        private set {}
+    }
+
+    void Start()
+    {
+        m_currentAmmo = m_maxAmmo;
+    }
+
     // Replenish ammo completely.
     public void RefillComplete()
     {
@@ -15,10 +29,13 @@ public class AmmoComponent : MonoBehaviour
     }
 
     // Refill count units, up to max.
-    public void Refill(int count)
+    public bool Refill(int count)
     {
+        if (m_currentAmmo == m_maxAmmo) return false;
+       
         m_currentAmmo += count;
         m_currentAmmo = Mathf.Min(m_currentAmmo, m_maxAmmo);
+        return true;
     }
     
     // Internal. Tries to use a single ammo unit. True on success (ammo was availible).

@@ -7,6 +7,7 @@ public class BouncePistol : MonoBehaviour, ICanShoot
     public GameObject m_projectilePrefab;
     public float m_fInherentProjectileVel = 300;
     public float m_cooldown = 0.5f;
+    public int m_ammoUsedOnShot = 9;
 
     float m_projectileSpeedMul;
 
@@ -17,6 +18,9 @@ public class BouncePistol : MonoBehaviour, ICanShoot
     // List to keep track of owned projectiles.
     List<PooledGameObject> m_shotProjectiles = new List<PooledGameObject>();
     ObjectPoolManager m_poolManager;
+
+    // Used to track ammo of weapon
+    AmmoComponent ammoComp;
 
     public float Cooldown
     {
@@ -37,6 +41,7 @@ public class BouncePistol : MonoBehaviour, ICanShoot
         m_poolManager = ObjectPoolManager.Get();
         m_shotProjectiles = new List<PooledGameObject>();
         m_projectileSpeedMul = m_projectilePrefab.GetComponent<BounceProjectile>().m_speed;
+        ammoComp = GetComponent<AmmoComponent>();
     }
 
     void Update()
@@ -55,8 +60,21 @@ public class BouncePistol : MonoBehaviour, ICanShoot
         }));
     }
 
+    public void GetAmmoState(out int currentAmmo, out int maxAmmo)
+    {
+        var ammoComp = GetComponent<AmmoComponent>();
+        maxAmmo = ammoComp.m_maxAmmo;
+        currentAmmo = ammoComp.CurrentAmmo;
+    }
+
     public void Shoot()
     {
+        if (ammoComp.UseAmmo(m_ammoUsedOnShot) == 0)
+        {
+            Debug.Log("Out of ammo");
+            return;
+        };
+
         Vector3 origin = m_parentCamera.transform.position;
 
         Vector3 fwd = m_parentCamera.transform.forward;

@@ -16,7 +16,6 @@ public class ShootOnClick : MonoBehaviour, IInputObserver
     float m_CDtime = 0;
     bool m_isOnCD = false;
 
-
     void Start()
     {
         m_weapons = new List<ICanShoot>();
@@ -28,6 +27,8 @@ public class ShootOnClick : MonoBehaviour, IInputObserver
                 m_weapons.Add(child.GetComponent<ICanShoot>());
             }
         }
+
+        foreach (var weapon in m_weapons) weapon.Disable();   
         
         currentWeapon = new CircularListIterator<ICanShoot>(m_weapons);
         currentWeapon.Current.Enable();
@@ -70,6 +71,11 @@ public class ShootOnClick : MonoBehaviour, IInputObserver
             currentWeapon.MoveNext();
             currentWeapon.Current.Enable();
         }
+    }
+
+    public void GetCurrentAmmoCount(out int currentAmmo, out int maxAmmo)
+    {
+        currentWeapon.Current.GetAmmoState(out currentAmmo, out maxAmmo);
     }
 
     void FixedUpdate()

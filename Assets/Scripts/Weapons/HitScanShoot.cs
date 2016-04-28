@@ -5,6 +5,7 @@ public class HitScanShoot : MonoBehaviour, ICanShoot
 {
     public float m_fRange = 0;
     public float m_fTimeToDrawRay = 0;
+    public int m_ammoUsedOnShot = 1;
 
     [SerializeField]
     float m_cooldown = 2f; 
@@ -19,6 +20,9 @@ public class HitScanShoot : MonoBehaviour, ICanShoot
     LineRenderer rayRenderer;
     Transform parentCamera;
 
+    // Used to track ammo of weapon
+    AmmoComponent ammoComp;
+
     public void Start()
     {
         rayRenderer = GetComponent<LineRenderer>();
@@ -30,6 +34,8 @@ public class HitScanShoot : MonoBehaviour, ICanShoot
         {
             if (child.tag == "MainCamera") parentCamera = child;
         }
+
+        ammoComp = GetComponent<AmmoComponent>();
     }
 
     public void Update()
@@ -49,6 +55,12 @@ public class HitScanShoot : MonoBehaviour, ICanShoot
 
     public void Shoot()
     {
+        if (ammoComp.UseAmmo(m_ammoUsedOnShot) == 0)
+        {
+            Debug.Log("Out of ammo");
+            return;
+        };
+
         // Get origin of shooter and look direction via camera transform
         Vector3 origin = parentCamera.transform.position;
         Vector3 fwd = parentCamera.transform.forward;
@@ -74,6 +86,13 @@ public class HitScanShoot : MonoBehaviour, ICanShoot
         }
 
         rayRenderer.enabled = true;
+    }
+
+    public void GetAmmoState(out int currentAmmo, out int maxAmmo)
+    {
+        var ammoComp = GetComponent<AmmoComponent>();
+        maxAmmo = ammoComp.m_maxAmmo;
+        currentAmmo = ammoComp.CurrentAmmo;
     }
 
     public void Enable()

@@ -9,17 +9,17 @@ using System.Collections.Generic;
 public class PickupController : MonoBehaviour
 {
     public GameObject pickUpGo;
-    List<HealOnCollision> deactivated;
+    List<ActionOnPickUpComponent> deactivated;
 
     void Start()
     {
-        deactivated = new List<HealOnCollision>();
+        deactivated = new List<ActionOnPickUpComponent>();
 
         // Add reference to self to each pickup so they can notify the controller when they have been
         // picked up.
-        foreach (HealOnCollision healthPickup in pickUpGo.GetComponentsInChildren<HealOnCollision>())
+        foreach (ActionOnPickUpComponent pickup in pickUpGo.GetComponentsInChildren<ActionOnPickUpComponent>())
         {
-            healthPickup.pickUpController = this;
+            pickup.pickUpController = this;
         }
     }
 
@@ -31,7 +31,7 @@ public class PickupController : MonoBehaviour
         }
     }
 
-    public void AddDeactivated(HealOnCollision pickUp)
+    public void AddDeactivated(ActionOnPickUpComponent pickUp)
     {
         deactivated.Add(pickUp);
     }

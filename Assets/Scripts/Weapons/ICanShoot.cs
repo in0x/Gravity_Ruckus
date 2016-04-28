@@ -5,4 +5,5 @@
     void Shoot();
     void Enable();
     void Disable();
+    void GetAmmoState(out int currentAmmo, out int maxAmmo);
 }
