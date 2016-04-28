@@ -16,7 +16,7 @@ public class ProjectileShoot : MonoBehaviour, ICanShoot
     private SphereCollider m_projectileCollider;
 
     // List to keep track of owned projectiles.
-    List<PooledGameObject> m_shotProjectiles = new List<PooledGameObject>(); 
+    List<PooledGameObject> m_shotProjectiles; 
     ObjectPoolManager m_poolManager;
 
     public float Cooldown
@@ -46,7 +46,7 @@ public class ProjectileShoot : MonoBehaviour, ICanShoot
         // the list of active projectiles.
         m_shotProjectiles.RemoveAll((pooledObject => 
         {
-            if (pooledObject.Instance.active == false)
+            if (pooledObject.Instance.activeSelf == false)
             {
                 pooledObject.Release();
                 return true;
