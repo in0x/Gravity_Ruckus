@@ -6,9 +6,7 @@ public class BouncePistol : MonoBehaviour, ICanShoot
     // Prefab of the projectile to be shoot.
     public GameObject m_projectilePrefab;
     public float m_fInherentProjectileVel = 300;
-
-    [SerializeField]
-    float m_cooldown = 0.5f;
+    public float m_cooldown = 0.5f;
 
     float m_projectileSpeedMul;
 
@@ -77,13 +75,16 @@ public class BouncePistol : MonoBehaviour, ICanShoot
                 var pooled = m_poolManager.Request(m_projectilePrefab);
                 m_shotProjectiles.Add(pooled);
 
-                pooled.Instance.transform.rotation = Quaternion.LookRotation(fwd); //m_parentCamera.rotation;
-                pooled.Instance.transform.localRotation = Quaternion.Euler(90, 0, 0);
+                //pooled.Instance.transform.rotation = Quaternion.LookRotation(fwd); //m_parentCamera.rotation;
+                //pooled.Instance.transform.localRotation = Quaternion.Euler(90, 0, 0);
+                
+                // This may be a big slowdown and should be optimised later.
+                Rigidbody instanceRB = pooled.Instance.GetComponent<Rigidbody>();
+                instanceRB.velocity = fwd * m_fInherentProjectileVel * m_projectileSpeedMul;
+
+                pooled.Instance.transform.rotation = Quaternion.Euler(90, 0, 0) * Quaternion.LookRotation(instanceRB.velocity);
 
                 pooled.Instance.transform.position = origin + new Vector3(x * m_projectileCollider.radius * 2, y * m_projectileCollider.radius * 2, 0);
-
-                // This may be a big slowdown and should be optimised later.
-                pooled.Instance.GetComponent<Rigidbody>().velocity = fwd * m_fInherentProjectileVel * m_projectileSpeedMul;
             }
         }
     }
