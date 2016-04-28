@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class GravityHandler : MonoBehaviour, IInputObserver
 {
@@ -11,6 +12,7 @@ public class GravityHandler : MonoBehaviour, IInputObserver
     private Quaternion newRotation;
     private Quaternion oldRotation;
     public float gravity_mult = 2.5f;
+    private List<IGravityObserver> observers; 
 
     // This is used for spawning in non-default rotations
     public Vector3 Gravity
@@ -33,83 +35,56 @@ public class GravityHandler : MonoBehaviour, IInputObserver
 	    rb = GetComponent<Rigidbody>();
 	    gravity = new Vector3(0, -1, 0)*gravity_mult;
 	    cam = transform.GetChild(0);
+        observers = new List<IGravityObserver>();
+        observers.AddRange((GetComponentsInChildren<IGravityObserver>(true)));
 	}
 	
 	// Update is called once per frame
 	void Update ()
 	{
 	    //if (PlayerInputRef.GetAxis("GravityVert")>0.1)
+        Vector3 newGravity = Vector3.zero;
+        Vector3 switchVector = Vector3.zero;
         if (PlayerInputRef.GetDPad("GravityUp"))
 	    {
-            Vector3 newGravity = ReduceVector3(transform.forward) *gravity_mult;
-	        {
-                rotationTime = 0;
-                print(transform.localRotation.eulerAngles);
-
-                float newX = Mathf.Round(transform.localRotation.eulerAngles.x / 90) * 90;
-                float newY = Mathf.Round(transform.localRotation.eulerAngles.y / 90) * 90;
-                float newZ = Mathf.Round(transform.localRotation.eulerAngles.z/90)*90;
-
-                transform.localRotation = Quaternion.Euler(newX, newY,newZ  );
-                newRotation = transform.localRotation * Quaternion.Euler(-90, 0, 0);
-	        }
-            //rb.MoveRotation(rb.rotation*Quaternion.Euler(-90, 0, 0));
-
-            oldRotation = transform.localRotation;
-	        gravity = newGravity;
+            newGravity = ReduceVector3(transform.forward) *gravity_mult;
+            switchVector = new Vector3(-90, 0, 0);
 	    }
         //else if (PlayerInputRef.GetAxis("GravityVert") < -0.1)
-        if (PlayerInputRef.GetDPad("GravityDown"))
+        else if (PlayerInputRef.GetDPad("GravityDown"))
         {
-            Vector3 newGravity = ReduceVector3(-transform.forward) * gravity_mult;
-            {
-                rotationTime = 0;
-                print(transform.localRotation.eulerAngles);
-                float newX = Mathf.Round(transform.localRotation.eulerAngles.x / 90) * 90;
-                float newY = Mathf.Round(transform.localRotation.eulerAngles.y / 90) * 90;
-                float newZ = Mathf.Round(transform.localRotation.eulerAngles.z / 90) * 90;
-                transform.localRotation = Quaternion.Euler(newX, newY, newZ);
-                newRotation = transform.localRotation * Quaternion.Euler(90, 0, 0);
-            }
-            //rb.MoveRotation(rb.rotation*Quaternion.Euler(-90, 0, 0));
-
-            oldRotation = transform.localRotation;
-            gravity = newGravity;
+            newGravity = ReduceVector3(-transform.forward) * gravity_mult;
+            switchVector = new Vector3(90, 0, 0);
         }
         //else if (PlayerInputRef.GetAxis("GravityHor") > 0.1)
-        if (PlayerInputRef.GetDPad("GravityRight"))
+        else if (PlayerInputRef.GetDPad("GravityRight"))
         {
-            Vector3 newGravity = ReduceVector3(transform.right) * gravity_mult;
-            {
-                rotationTime = 0;
-                print(transform.localRotation.eulerAngles);
-                float newX = Mathf.Round(transform.localRotation.eulerAngles.x / 90) * 90;
-                float newY = Mathf.Round(transform.localRotation.eulerAngles.y / 90) * 90;
-                float newZ = Mathf.Round(transform.localRotation.eulerAngles.z / 90) * 90;
-                transform.localRotation = Quaternion.Euler(newX, newY, newZ);
-                newRotation = transform.localRotation * Quaternion.Euler(0, 0, 90);
-            }
-            //rb.MoveRotation(rb.rotation*Quaternion.Euler(-90, 0, 0));
-
-            oldRotation = transform.localRotation;
-            gravity = newGravity;
+            newGravity = ReduceVector3(transform.right) * gravity_mult;
+            switchVector = new Vector3(0, 0, 90);
         }
         //else if (PlayerInputRef.GetAxis("GravityHor") < -0.1)
-        if (PlayerInputRef.GetDPad("GravityLeft"))
+        else if (PlayerInputRef.GetDPad("GravityLeft"))
         {
-            Vector3 newGravity = ReduceVector3(-transform.right) * gravity_mult;
-            {
-                rotationTime = 0;
-                float newX = Mathf.Round(transform.localRotation.eulerAngles.x / 90) * 90;
-                float newY = Mathf.Round(transform.localRotation.eulerAngles.y / 90) * 90;
-                float newZ = Mathf.Round(transform.localRotation.eulerAngles.z / 90) * 90;
-                transform.localRotation = Quaternion.Euler(newX, newY, newZ);
-                newRotation = transform.localRotation * Quaternion.Euler(0, 0, -90);
-            }
-            //rb.MoveRotation(rb.rotation*Quaternion.Euler(-90, 0, 0));
+            newGravity = ReduceVector3(-transform.right) * gravity_mult;
+            switchVector = new Vector3(0, 0, -90);
+        }
+	    if (switchVector != Vector3.zero)
+	    {
+            rotationTime = 0;
+            //print(transform.localRotation.eulerAngles);
 
+            float newX = Mathf.Round(transform.localRotation.eulerAngles.x / 90) * 90;
+            float newY = Mathf.Round(transform.localRotation.eulerAngles.y / 90) * 90;
+            float newZ = Mathf.Round(transform.localRotation.eulerAngles.z / 90) * 90;
+
+            transform.localRotation = Quaternion.Euler(newX, newY, newZ);
+            newRotation = transform.localRotation * Quaternion.Euler(switchVector);
             oldRotation = transform.localRotation;
             gravity = newGravity;
+            foreach (var observer in observers)
+	        {
+	            observer.GravitySwitch(newGravity);
+	        }
         }
     }
 
