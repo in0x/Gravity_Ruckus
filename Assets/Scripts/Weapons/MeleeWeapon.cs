@@ -97,4 +97,11 @@ public class MeleeWeapon : MonoBehaviour, ICanShoot
     {
         gameObject.SetActive(false);
     }
+
+    public void GetAmmoState(out int currentAmmo, out int maxAmmo)
+    {
+        var ammoComp = GetComponent<AmmoComponent>();
+        maxAmmo = ammoComp.m_maxAmmo;
+        currentAmmo = ammoComp.CurrentAmmo;
+    }
 }

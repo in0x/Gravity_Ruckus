@@ -7,6 +7,7 @@ public class GravityLauncher : MonoBehaviour, ICanShoot, IGravityObserver
     // Prefab of the projectile to be launched.
     public GameObject m_projectilePrefab;
     public float m_fInherentProjectileVel = 300;
+    public int m_ammoUsedOnShot = 1;
 
     [SerializeField]
     float m_cooldown = 0.5f;
@@ -25,6 +26,8 @@ public class GravityLauncher : MonoBehaviour, ICanShoot, IGravityObserver
         set { }
     }
 
+    AmmoComponent ammoComp;
+
     void Start()
     {
         // Find the transform of the parents camera component.
@@ -37,6 +40,7 @@ public class GravityLauncher : MonoBehaviour, ICanShoot, IGravityObserver
         m_projectileCollider = m_projectilePrefab.GetComponent<SphereCollider>();
         m_poolManager = ObjectPoolManager.Get();
         m_shotProjectiles = new List<PooledGameObject>();
+        ammoComp = GetComponent<AmmoComponent>();
     }
 
     void Update()
@@ -57,6 +61,12 @@ public class GravityLauncher : MonoBehaviour, ICanShoot, IGravityObserver
 
     public void Shoot()
     {
+        if (ammoComp.UseAmmo(m_ammoUsedOnShot) == 0)
+        {
+            Debug.Log("Out of ammo");
+            return;
+        };
+
         Vector3 origin = m_parentCamera.transform.position;
 
         Vector3 fwd = m_parentCamera.transform.forward;
@@ -86,6 +96,13 @@ public class GravityLauncher : MonoBehaviour, ICanShoot, IGravityObserver
     public void Disable()
     {
         gameObject.SetActive(false);
+    }
+
+    public void GetAmmoState(out int currentAmmo, out int maxAmmo)
+    {
+        var ammoComp = GetComponent<AmmoComponent>();
+        maxAmmo = ammoComp.m_maxAmmo;
+        currentAmmo = ammoComp.CurrentAmmo;
     }
 
     public void GravitySwitch(Vector3 grav)
