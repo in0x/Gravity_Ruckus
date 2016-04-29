@@ -12,6 +12,7 @@ public class WeaponRotator : MonoBehaviour
         {
             if (child.tag == "MainCamera") cameraTransform = child;
         }
+        
     }
 	
 	void Update ()
