@@ -5,10 +5,11 @@ public class LimbDamageReciever : MonoBehaviour, IDamageReciever
 {
     public HealthController HealthController { get; set; }
 
-    public void RecieveDamage(float dmg)
+    public void RecieveDamage(DamageInfo damageInfo)
     {
         Debug.Log("Limb Dmg");
-        HealthController.ApplyDamage(dmg * 0.5f);
+        damageInfo.fDamage = 0.5f;
+        HealthController.ApplyDamage(damageInfo);
     }
 
     // Use this for initialization

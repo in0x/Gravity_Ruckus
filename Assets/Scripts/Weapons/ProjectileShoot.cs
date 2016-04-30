@@ -90,6 +90,7 @@ public class ProjectileShoot : MonoBehaviour, ICanShoot
         Vector3 projectile_vel = fwd * m_fInherentProjectileVel; //+ transform.parent.GetComponent<Rigidbody>().velocity;
 
         projectile.GetComponent<Rigidbody>().velocity = projectile_vel;
+        projectile.GetComponent<IDamageSender>().SourceWeapon = gameObject;
     }
 
     public void GetAmmoState(out int currentAmmo, out int maxAmmo)

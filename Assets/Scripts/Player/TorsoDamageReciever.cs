@@ -6,10 +6,11 @@ public class TorsoDamageReciever : MonoBehaviour, IDamageReciever
 
     public HealthController HealthController { get; set; }
 
-    public void RecieveDamage(float dmg)
+    public void RecieveDamage(DamageInfo damageInfo)
     {
         Debug.Log("Torso dmg");
-        HealthController.ApplyDamage(dmg * 1f);
+        damageInfo.fDamage *= 1f;
+        HealthController.ApplyDamage(damageInfo);
     }
 
     // Use this for initialization

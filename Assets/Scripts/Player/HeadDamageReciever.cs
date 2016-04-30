@@ -5,10 +5,12 @@ public class HeadDamageReciever : MonoBehaviour, IDamageReciever
 {
     public HealthController HealthController { get; set; }
 
-    public void RecieveDamage(float dmg)
+    public void RecieveDamage(DamageInfo damageInfo)
     {
         Debug.Log("Head Dmg");
-        HealthController.ApplyDamage(dmg * 2f);
+        damageInfo.bHeadshot = true;
+        damageInfo.fDamage *= 2f;
+        HealthController.ApplyDamage(damageInfo);
     }
 
 	// Use this for initialization

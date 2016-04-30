@@ -6,6 +6,7 @@ public class HealthController : MonoBehaviour
     private float m_health = 100f;
 
     DeathController deathController;
+    DamageInfo lastDamageTaken;
 
     public float Health
     {
@@ -35,15 +36,17 @@ public class HealthController : MonoBehaviour
     {
         ConnectAllDamageRecievers();
 	}
+
 	void Update ()
     {
-        if (Input.GetKeyDown("d")) m_health -= 10; // For health pickup debugging purposes.
-        if (m_health <= 0) deathController.Die();
+        if (m_health <= 0) deathController.Die(lastDamageTaken);
 	}
-
-    public void ApplyDamage(float dmg)
+    
+    public void ApplyDamage(DamageInfo damageInfo)
     {
-        m_health -= dmg;
+        Debug.Log("Damage from: " + damageInfo.senderName + " with: " + damageInfo.sourceName);
+        m_health -= damageInfo.fDamage;
+        lastDamageTaken = damageInfo;
     }
 
     // No we are not using negative damage for healing.

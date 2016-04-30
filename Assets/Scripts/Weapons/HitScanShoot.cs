@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
         
-public class HitScanShoot : MonoBehaviour, ICanShoot
+public class HitScanShoot : MonoBehaviour, ICanShoot, IDamageSender
 {
     public float m_fRange = 0;
     public float m_fTimeToDrawRay = 0;
@@ -23,6 +23,18 @@ public class HitScanShoot : MonoBehaviour, ICanShoot
     // Used to track ammo of weapon
     AmmoComponent ammoComp;
 
+    // Used for information that is send to damage reciever 
+    // about the sender and the weapon used.
+    GameObject m_sourceWeapon;
+    public GameObject SourceWeapon
+    {
+        get { return m_sourceWeapon; }
+        set
+        {
+            m_sourceWeapon = value;
+        }
+    }
+
     public void Start()
     {
         rayRenderer = GetComponent<LineRenderer>();
@@ -36,6 +48,8 @@ public class HitScanShoot : MonoBehaviour, ICanShoot
         }
 
         ammoComp = GetComponent<AmmoComponent>();
+
+        m_sourceWeapon = gameObject;
     }
 
     public void Update()
@@ -76,8 +90,10 @@ public class HitScanShoot : MonoBehaviour, ICanShoot
             // Draw the ray to the point of collision
             rayRenderer.SetPosition(1, collisionInfo.point);
 
+            DamageInfo dmgInfo = new DamageInfo(m_sourceWeapon, 50f);
+
             // Careful, this is expensive as it uses reflection
-            collisionInfo.collider.gameObject.SendMessage("RecieveDamage", 50f, SendMessageOptions.DontRequireReceiver);
+            collisionInfo.collider.gameObject.SendMessage("RecieveDamage", dmgInfo, SendMessageOptions.DontRequireReceiver);
         }
         else
         {

@@ -95,7 +95,9 @@ public class BouncePistol : MonoBehaviour, ICanShoot
 
                 //pooled.Instance.transform.rotation = Quaternion.LookRotation(fwd); //m_parentCamera.rotation;
                 //pooled.Instance.transform.localRotation = Quaternion.Euler(90, 0, 0);
-                
+
+                pooled.Instance.GetComponent<IDamageSender>().SourceWeapon = gameObject;
+
                 // This may be a big slowdown and should be optimised later.
                 Rigidbody instanceRB = pooled.Instance.GetComponent<Rigidbody>();
                 instanceRB.velocity = fwd * m_fInherentProjectileVel * m_projectileSpeedMul;

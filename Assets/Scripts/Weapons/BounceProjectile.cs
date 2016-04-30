@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class BounceProjectile : MonoBehaviour
+public class BounceProjectile : MonoBehaviour, IDamageSender
 {
     public float m_dmg;
     public float m_speed = 1f;
@@ -9,6 +9,20 @@ public class BounceProjectile : MonoBehaviour
     int m_currentBounces;
     
     Rigidbody m_body;
+
+    // Used for information that is send to damage reciever 
+    // about the sender and the weapon used.
+    GameObject m_sourceWeapon;
+    public GameObject SourceWeapon
+    {
+        get { return m_sourceWeapon; }
+        set
+        {
+            m_sourceWeapon = value;
+        }
+    }
+
+    DamageInfo m_damageInfo;
 
     void Start() {}
 
@@ -31,7 +45,8 @@ public class BounceProjectile : MonoBehaviour
 
     void OnCollisionExit(Collision collision)
     {
-        collision.collider.gameObject.SendMessageUpwards("RecieveDamage", m_dmg, SendMessageOptions.DontRequireReceiver);
+        DamageInfo dmgInfo = new DamageInfo(SourceWeapon, m_dmg);
+        collision.collider.gameObject.SendMessageUpwards("RecieveDamage", dmgInfo, SendMessageOptions.DontRequireReceiver);
 
         if (collision.collider.gameObject.tag == "Player")
         {

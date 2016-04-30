@@ -10,6 +10,7 @@ public class DeathController : MonoBehaviour
 {
     GravityHandler m_gravHandler;
     HealthController m_health;
+    Rigidbody m_body;
 
     PlayerSpawnController m_spawnController;
 
@@ -20,6 +21,7 @@ public class DeathController : MonoBehaviour
         m_spawnController = FindObjectOfType<PlayerSpawnController>();
         m_gravHandler = GetComponent<GravityHandler>();
         m_health = GetComponent<HealthController>();
+        m_body = GetComponent<Rigidbody>();
     }
     
     public void Respawn(Vector3 position, Quaternion rotation, Vector3 gravity)
@@ -42,10 +44,15 @@ public class DeathController : MonoBehaviour
 
         transform.position = position;
         transform.rotation = rotation;
+
+        m_body.velocity = Vector3.zero;
+        m_body.angularVelocity = Vector3.zero;
     }
 
-    public void Die()
+    public void Die(DamageInfo damageKilledPlayer)
     {
+        Debug.Log("Killed by: " + damageKilledPlayer.senderName + " with: " + damageKilledPlayer.sourceName);
+
         foreach (Transform tf in gameObject.transform)
         {
             GameObject child = tf.gameObject;
