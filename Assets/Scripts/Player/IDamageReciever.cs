@@ -9,8 +9,10 @@
 
 public struct DamageInfo
 {
-    public DamageInfo(GameObject sender, float damage, bool headshot = false)
+    public DamageInfo(GameObject _sender, float damage, bool headshot = false)
     {
+        sender = _sender;
+
         // Player name.
         senderName = sender.transform.parent.gameObject.name;
         // Weapon name.
@@ -24,6 +26,7 @@ public struct DamageInfo
     public string sourceName;
     public bool bHeadshot;
     public float fDamage;
+    public GameObject sender;
 }
 
 interface IDamageReciever
