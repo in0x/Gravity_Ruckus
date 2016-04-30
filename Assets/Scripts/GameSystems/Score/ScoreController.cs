@@ -17,7 +17,7 @@ class Score
         m_kills++;
     }
 
-    public void LoseKill()
+    public void DetractKill()
     {
         m_kills--;
     }
@@ -25,6 +25,11 @@ class Score
     public void AddDeath()
     {
         m_deaths++;
+    }
+
+    public override string ToString()
+    {
+        return "Kills: " + m_kills + " Deaths: " + m_deaths;
     }
 }
 
@@ -39,11 +44,13 @@ public class ScoreController : MonoBehaviour
 	void Start ()
     {
         m_scoreTable = new Dictionary<GameObject, Score>();
+        m_deathControllers = new List<DeathController>();
 
         foreach (Object obj in FindObjectsOfType<DeathController>())
         {
             var controller = obj as DeathController;
             m_deathControllers.Add(controller);
+            controller.m_scoreController = this;
 
             m_scoreTable.Add(controller.gameObject, new Score());
         }
@@ -51,11 +58,32 @@ public class ScoreController : MonoBehaviour
 	
 	void Update ()
     {
-	
-	}
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            foreach (var kvp in m_scoreTable)
+            {
+                Debug.Log(kvp.Key.name + " " + kvp.Value);
+            }
+        }
+    }
 
     public void ProcessKill(GameObject sender, DamageInfo killInfo)
     {
-        var bla = m_scoreTable[sender];
+        // Player who died.
+        m_scoreTable[sender].AddDeath();
+
+        // If killed by other player, add one kill for 
+        // them, otherwise detract one from player who died.
+        if (m_scoreTable.ContainsKey(killInfo.sender))
+        {
+            // Killed by other player.
+            m_scoreTable[killInfo.sender].AddKill();
+        }
+        else
+        {
+            // Killed by environment.
+            m_scoreTable[sender].DetractKill();
+        }
+        
     }
 }

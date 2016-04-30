@@ -9,14 +9,21 @@
 
 public struct DamageInfo
 {
-    public DamageInfo(GameObject _sender, float damage, bool headshot = false)
+    public DamageInfo(GameObject _sender, float damage, bool headshot = false, bool killedByPlayer = true)
     {
-        sender = _sender;
+        if (killedByPlayer)
+        {
+            sender = _sender.transform.parent.gameObject;
+        }
+        else
+        {
+            sender = _sender;
+        }
 
         // Player name.
-        senderName = sender.transform.parent.gameObject.name;
+        senderName = _sender.transform.parent.gameObject.name;
         // Weapon name.
-        sourceName = sender.name;
+        sourceName = _sender.name;
 
         fDamage = damage;
         bHeadshot = headshot;

@@ -12,6 +12,9 @@ public class DeathController : MonoBehaviour
     HealthController m_health;
     Rigidbody m_body;
 
+    // Set by ScoreController on Startup
+    public ScoreController m_scoreController;
+
     PlayerSpawnController m_spawnController;
 
     string lastWeaponUsed;
@@ -66,5 +69,6 @@ public class DeathController : MonoBehaviour
         }
 
         m_spawnController.RegisterAsDead(this.gameObject);
+        m_scoreController.ProcessKill(gameObject, damageKilledPlayer);
     }
 }
