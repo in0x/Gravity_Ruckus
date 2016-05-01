@@ -1,51 +1,58 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+public enum RotationType
+{
+    y,
+    z
+}
+
 public class ScreenTransition : MonoBehaviour, ITransitioner
 {
     public GameObject m_nextElement;
-
     public GameObject m_screenToSwitch;
-    public Camera m_camera;
+    public RotationType rotType;
+
+    Camera m_camera;
 
     IPadGUIElement m_next;
     IPadGUIElement m_self;
 
-    Vector3 fwd;
-    Vector3 newFwd;
-    Quaternion rot;
     Quaternion newRot;
+
+    float m_animSpeed = 0.05f;
 
     void Start()
     {
         m_self = GetComponent<IPadGUIElement>();
         m_next = m_nextElement.GetComponent<IPadGUIElement>();
+        m_camera = FindObjectOfType<Camera>();
 
-        fwd = m_camera.transform.forward;
-        newFwd = m_screenToSwitch.transform.position - m_camera.transform.position;
-        rot = Quaternion.FromToRotation(fwd.normalized, newFwd.normalized);
+        Vector3 fwd = m_camera.transform.forward;
+       
+        Vector3 newFwd = m_screenToSwitch.transform.position - m_camera.transform.position;
+        Quaternion rot = Quaternion.FromToRotation(fwd.normalized, newFwd.normalized);
         newRot = m_camera.transform.rotation * rot;
+
+        if (rotType == RotationType.z)
+        {
+            newRot = m_camera.transform.rotation * Quaternion.Euler(Vector3.Angle(fwd, newFwd), 0, 0);
+        } 
     }
 
     public Transition Execute()
     {
         return delegate
         {
-            if (m_self.m_active)
-            {
-                m_self.Deactive();
-                m_next.Activate();
-            }
-            
-            float speed = 0.1f;
-
             while (m_camera.transform.rotation != newRot)
             {
-                m_camera.transform.rotation = Quaternion.Slerp(rot, newRot, Time.time * speed);
+                m_camera.transform.rotation = Quaternion.Slerp(m_camera.transform.rotation, newRot, m_animSpeed);
                 return null;
             }
-            //m_camera.transform.rotation *= rot; 
-            
+
+            m_self.Deactive();
+            m_next.Activate();
+
             return m_next;
         };
     }
