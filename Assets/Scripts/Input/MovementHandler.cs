@@ -52,11 +52,11 @@ public class MovementHandler : MonoBehaviour, IInputObserver
         }
     }
     
-    public void MoveInput(Vector3 move, Vector3 rote, bool wantsToJump = false)
+    public void MoveInput(Vector3 move, Vector3 rot, bool wantsToJump = false)
     {
         m_posInput = move;
-        m_xRotInput = rote.x;
-        m_yRotInput = rote.y;
+        m_xRotInput = rot.x;
+        m_yRotInput = rot.y;
 
         if (wantsToJump)
         {
