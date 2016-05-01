@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
     public void StartGame()
     {
-        Application.LoadLevel("level_proto");
+        SceneManager.LoadScene("level_proto");
     }
 }

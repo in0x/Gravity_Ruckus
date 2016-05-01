@@ -4,16 +4,16 @@
     "Jump": "LeftTrigger",
     "LookHor": "RightStickX",
     "LookVert": "RightStickY",
-    "MoveHor": "LeftStickX",
-    "MoveVert": "LeftStickY",
+    "StickHor": "LeftStickX",
+    "StickVert": "LeftStickY",
     "Shoot": "RightTrigger"
   },
   "DPad":
   {
-      "GravityDown": "Down",
-      "GravityLeft": "Left",
-      "GravityRight": "Right",
-      "GravityUp": "Up"
+      "DDown": "Down",
+      "DLeft": "Left",
+      "DRight": "Right",
+      "DUp": "Up"
   },
   "Buttons":
   {
