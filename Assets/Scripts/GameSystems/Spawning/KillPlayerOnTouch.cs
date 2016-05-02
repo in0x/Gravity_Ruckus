@@ -5,6 +5,12 @@ public class KillPlayerOnTouch : MonoBehaviour
     // since both legs touch the floor and trigger a collision.
     GameObject lastCollision;
 
+    void Update()
+    {
+        // Let's hope Update doesnt run between two OnCollisionEnters.
+        lastCollision = null;
+    }
+
     void OnCollisionEnter(Collision collision)
     {
         if (lastCollision == collision.collider.gameObject.transform.parent.gameObject)
