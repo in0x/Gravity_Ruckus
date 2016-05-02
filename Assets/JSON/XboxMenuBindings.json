@@ -23,8 +23,8 @@
       "LookClick": "RightStick",
       "MoveClick": "LeftStick",
       "Start": "Start",
-      "WeaponSwitchNext": "RightBumper",
-      "WeaponSwitchPrev": "LeftBumper",
+      "RightBumper": "RightBumper",
+      "LeftBumper": "LeftBumper",
       "X": "X",
       "Y": "Y"
   }

@@ -90,7 +90,7 @@ public class GameStartMenu : IPadGUIElement
                 return false;
             }));
 
-            selectedField.SetControllerNumber(-1);
+            selectedField.SetControllerNumber(0);
             selectedField.Deactivate();
             activatedControllers.Remove(id);
         }
@@ -99,6 +99,7 @@ public class GameStartMenu : IPadGUIElement
     public override void Activate()
     {
         m_active = true;
+        MatchProperties.playerControllerIDs = new int[]{ 0,0,0,0 };
     }
 
     public override void Deactivate()

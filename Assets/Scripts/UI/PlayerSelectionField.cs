@@ -15,9 +15,13 @@ public class PlayerSelectionField : IPadGUIElement
     public int m_padNumber;
     public PlayerColor m_color;
 
+    public Sprite inactiveImg;
+    public Sprite activeImg;
+
     MenuInputController m_inputController;
     Button m_button;
-    
+
+
     protected override void Start()
     {
         base.Start();
@@ -46,23 +50,61 @@ public class PlayerSelectionField : IPadGUIElement
         {
             if (m_inputController.GetButtonDown("ButtonClick")) ready();
 
-            else if (m_inputController.GetDPad("DRight") || m_inputController.GetAxis("StickHor") > 0)
+            else if (m_inputController.GetButtonDown("RightBumper"))
             {
+                int col = (((int)m_color) + 1);
+                if (col == 5) col = 0;
 
+                m_color = (PlayerColor)col;
+                setButtonColor();
             }
-            else if (m_inputController.GetDPad("DLeft") || m_inputController.GetAxis("StickHor") < 0)
+            else if (m_inputController.GetButtonDown("LeftBumper"))
             {
+                int col = (((int)m_color) - 1);
+                if (col == -1) col = 4;
 
+                m_color = (PlayerColor)col;
+                setButtonColor();
             }
+
         }
     }
-    
+
+    void setButtonColor()
+    {
+        switch (m_color)
+        {
+            case PlayerColor.blue:
+                m_button.image.color = new Color(0, 0, 1, 0.7843137254901f);
+                break;
+
+            case PlayerColor.green:
+                m_button.image.color = new Color(0, 1, 0, 0.7843137254901f);
+                break;
+
+            case PlayerColor.hotpink:
+                m_button.image.color = new Color(1, 0.0784f, 0.576f, 0.7843137254901f);
+                break;
+
+            case PlayerColor.red:
+                m_button.image.color = new Color(1, 0, 0, 0.7843137254901f);
+                break;
+
+            default:
+                break;
+        }
+    }
 
     public override void Activate()
     {
         Color curColor = m_button.image.color;
         m_button.image.color = new Color(curColor.r, curColor.g, curColor.b, 0.7843137254901f);
         Debug.Log("PlayerSelectionField activated");
+
+        m_button.image.sprite = activeImg;
+        setButtonColor();
+
+        m_active = true;
     }
 
     public override void Deactivate()
@@ -70,5 +112,10 @@ public class PlayerSelectionField : IPadGUIElement
         Color curColor = m_button.image.color;
         m_button.image.color = new Color(curColor.r, curColor.g, curColor.b, 0.5f);
         Debug.Log("PlayerSelectionField deactivated");
+
+        m_button.image.sprite = inactiveImg;
+        m_button.image.color = new Color(1, 1, 1, 0.7843137254901f);
+
+        m_active = false;
     }
 }
