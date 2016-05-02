@@ -12,6 +12,17 @@ class Score
     int m_kills = 0;
     int m_deaths = 0;
 
+    public int Kills
+    {
+        get { return m_kills; }
+        private set { }
+    }
+    public int Deaths
+    {
+        get { return m_deaths; }
+        private set { }
+    }
+
     public void AddKill()
     {
         m_kills++;
@@ -33,15 +44,31 @@ class Score
     }
 }
 
+/*\
+|*| Used to return a players stats without
+|*| exposing the actual Score Objects 
+\*/
+public struct Stats
+{
+    public Stats(int _kills, int _deaths)
+    {
+        kills = _kills;
+        deaths = _deaths;
+    }
+
+    public int kills;
+    public int deaths;
+}
+
 public class ScoreController : MonoBehaviour
 {
     // Key: Player, Value: Their Score
     Dictionary<GameObject, Score> m_scoreTable;
-    
+
     // Holds all player's DeathControllers.
     List<DeathController> m_deathControllers;
 
-	void Start ()
+    void Start()
     {
         m_scoreTable = new Dictionary<GameObject, Score>();
         m_deathControllers = new List<DeathController>();
@@ -55,8 +82,8 @@ public class ScoreController : MonoBehaviour
             m_scoreTable.Add(controller.gameObject, new Score());
         }
     }
-	
-	void Update ()
+
+    void Update()
     {
         if (Input.GetKeyDown(KeyCode.S))
         {
@@ -65,6 +92,19 @@ public class ScoreController : MonoBehaviour
                 Debug.Log(kvp.Key.name + " " + kvp.Value);
             }
         }
+    }
+
+    // Returns a struct containing copies of the values
+    // stored by the according score object.
+    public Stats GetStats(GameObject player)
+    {
+        if (m_scoreTable.ContainsKey(player))
+        {
+            var curScore = m_scoreTable[player];
+            return new Stats(curScore.Kills, curScore.Deaths);
+
+        }
+        return new Stats();
     }
 
     public void ProcessKill(GameObject sender, DamageInfo killInfo)

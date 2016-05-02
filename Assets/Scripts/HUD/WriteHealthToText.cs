@@ -5,22 +5,20 @@ using System.Collections;
 public class WriteHealthToText : MonoBehaviour
 {
     public GameObject player;
+    public Text text;
 
     ShootOnClick weaponController;
     HealthController health;
-    Text text;
     string playerName;
 
-	void Start ()
+	void Start()
     {
         health = player.GetComponent<HealthController>();
         playerName = player.name;
 
         weaponController = player.GetComponent<ShootOnClick>();
-
-        text = GetComponent<Text>();
 	}
-	void Update ()
+	void Update()
     {
         int curAmmo, maxAmmo;
         weaponController.GetCurrentAmmoCount(out curAmmo, out maxAmmo);
