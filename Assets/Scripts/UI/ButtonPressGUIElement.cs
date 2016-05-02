@@ -30,14 +30,14 @@ public class ButtonPressGUIElement : IPadGUIElement
     public override void Activate()
     {
         Color curColor = button.image.color;
-        button.image.color = new Color(curColor.r, curColor.g, curColor.b, 1f);
+        button.image.color = new Color(curColor.r, curColor.g, curColor.b, 0.7843137254901f);
         m_active = true;
     }
 
     public override void Deactive()
     {
         Color curColor = button.image.color;
-        button.image.color = new Color(curColor.r, curColor.g, curColor.b, 0.7843137254901f);
+        button.image.color = new Color(curColor.r, curColor.g, curColor.b, 0.5f);
         m_active = false;
     }
 }
