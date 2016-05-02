@@ -77,7 +77,7 @@ public class MeleeWeapon : MonoBehaviour, ICanShoot
             else
                 effectiveVelocity = Vector3.zero;
             //using squaredmagnitude because its faster and makes high velocity even more rewarding
-            collisionInfo.collider.gameObject.SendMessage("RecieveDamage", m_fixedDamage + effectiveVelocity.sqrMagnitude*m_VelocityMultiplier, SendMessageOptions.DontRequireReceiver);
+            collisionInfo.collider.gameObject.SendMessage("RecieveDamage", new DamageInfo(gameObject, m_fixedDamage + effectiveVelocity.sqrMagnitude*m_VelocityMultiplier), SendMessageOptions.DontRequireReceiver);
         }
         else
         {
