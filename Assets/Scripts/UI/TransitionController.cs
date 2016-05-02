@@ -29,13 +29,11 @@ public class TransitionController : MonoBehaviour
         {
             lastTransition = m_currentGUIElement.GoLeft();
             m_currentGUIElement = lastTransition();
-            
         }
         else if (inputController.GetDPad("DUp") || inputController.GetAxis("StickVert") > 0)
         {
             lastTransition = m_currentGUIElement.GoUp();
-            m_currentGUIElement = lastTransition();
-            
+            m_currentGUIElement = lastTransition();          
         }
         else if (inputController.GetDPad("DDown") || inputController.GetAxis("StickVert") < 0)
         {

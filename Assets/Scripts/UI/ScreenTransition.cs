@@ -50,7 +50,7 @@ public class ScreenTransition : MonoBehaviour, ITransitioner
                 return null;
             }
 
-            m_self.Deactive();
+            m_self.Deactivate();
             m_next.Activate();
 
             return m_next;

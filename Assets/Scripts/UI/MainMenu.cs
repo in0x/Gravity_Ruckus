@@ -3,8 +3,9 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {
-    public void StartGame()
+    public void QuickStartGame()
     {
+        MatchProperties.customGame = false;
         SceneManager.LoadScene("level_proto");
     }
 }

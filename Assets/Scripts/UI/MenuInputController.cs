@@ -65,6 +65,16 @@ public class MenuInputController: MonoBehaviour
         controllerID = (XboxController)playerNumber;
     }
 
+    public void SetPlayerNumber(int num)
+    {
+        controllerID = (XboxController)num;
+    }
+
+    public int GetPlayerNumber()
+    {
+        return (int)controllerID;
+    }
+
     public float GetAxis(string name)
     {
         return XCI.GetAxis(axisBindings[name], controllerID);
@@ -73,6 +83,11 @@ public class MenuInputController: MonoBehaviour
     public bool GetButtonDown(string name)
     {
         return XCI.GetButtonDown(buttonBindings[name], controllerID);
+    }
+
+    public bool GetButtonDownWithID(string name, XboxController id)
+    {
+        return XCI.GetButtonDown(buttonBindings[name], id);
     }
 
     public bool GetDPad(string name)

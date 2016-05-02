@@ -27,7 +27,7 @@ public class IPadGUIElement : MonoBehaviour
 
     public virtual void Activate(){}
 
-    public virtual void Deactive() {}
+    public virtual void Deactivate() {}
 
     public Transition GoLeft()
     { 

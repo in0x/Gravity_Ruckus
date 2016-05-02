@@ -34,7 +34,7 @@ public class ButtonPressGUIElement : IPadGUIElement
         m_active = true;
     }
 
-    public override void Deactive()
+    public override void Deactivate()
     {
         Color curColor = button.image.color;
         button.image.color = new Color(curColor.r, curColor.g, curColor.b, 0.5f);

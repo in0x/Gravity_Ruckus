@@ -17,7 +17,7 @@ public class ButtonTransition : MonoBehaviour, ITransitioner
     {
         return delegate
         {
-            m_self.Deactive();
+            m_self.Deactivate();
             m_next.Activate();
             return m_next;
         };
