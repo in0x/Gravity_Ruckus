@@ -56,21 +56,39 @@ public class ShootOnClick : MonoBehaviour, IInputObserver
 
         WeaponSwitch();
 	}
-
+    
     void WeaponSwitch()
     {
         if (PlayerInputRef.GetButtonDown("WeaponSwitchPrev"))
         {
-            currentWeapon.Current.Disable();
-            currentWeapon.MoveBack();
-            currentWeapon.Current.Enable();
+            IterateWeapons(false);
         }
         else if (PlayerInputRef.GetButtonDown("WeaponSwitchNext"))
         {
-            currentWeapon.Current.Disable();
-            currentWeapon.MoveNext();
-            currentWeapon.Current.Enable();
+            IterateWeapons(true);
         }
+    }
+
+    void IterateWeapons(bool forward)
+    {
+        var currentWep = currentWeapon.Current;
+        
+        Action move;
+        if (forward)
+        {
+            move = currentWeapon.MoveNext;
+        }
+        else move = currentWeapon.MoveBack;
+         
+        currentWeapon.Current.Disable();
+        move();
+
+        while (!currentWeapon.Current.Available && currentWep != currentWeapon.Current)
+        {
+            move();  
+        }     
+
+        currentWeapon.Current.Enable();
     }
 
     public void GetCurrentAmmoCount(out int currentAmmo, out int maxAmmo)

@@ -14,10 +14,12 @@ public class GameStartMenu : IPadGUIElement
     public PlayerSelectionField bottomleft;
     public PlayerSelectionField bottomright;
 
+    public string m_sceneToLoad;
+
     List<PlayerSelectionField> playerFields;
     List<int> activatedControllers;
     CircularListIterator<PlayerSelectionField> iter;
-
+    
     protected override void Start()
     {
         base.Start();
@@ -57,7 +59,7 @@ public class GameStartMenu : IPadGUIElement
                 MatchProperties.playerColors[2] = bottomleft.m_color;
                 MatchProperties.playerColors[3] = bottomright.m_color;
                
-                SceneManager.LoadScene("level_proto");
+                SceneManager.LoadScene(m_sceneToLoad);
             }
         }
     }

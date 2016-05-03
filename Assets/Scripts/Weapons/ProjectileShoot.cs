@@ -26,9 +26,16 @@ public class ProjectileShoot : MonoBehaviour, ICanShoot
     public float Cooldown
     {
         get { return m_cooldown; }
-        set{}
+        set {}
     }
-    
+
+    bool m_available;
+    public bool Available
+    {
+        get { return m_available; }
+        set { m_available = value; }
+    }
+
     void Start()
     {
         // Find the transform of the parents camera component.

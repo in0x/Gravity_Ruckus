@@ -28,6 +28,13 @@ public class BouncePistol : MonoBehaviour, ICanShoot
         set { }
     }
 
+    bool m_available;
+    public bool Available
+    {
+        get { return true; }
+        set { m_available = value; }
+    }
+
     void Start()
     {
         // Find the transform of the parents camera component.

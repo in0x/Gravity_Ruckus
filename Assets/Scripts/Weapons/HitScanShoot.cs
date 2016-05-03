@@ -35,6 +35,13 @@ public class HitScanShoot : MonoBehaviour, ICanShoot, IDamageSender
         }
     }
 
+    bool m_available;
+    public bool Available
+    {
+        get { return m_available; }
+        set { m_available = value; }
+    }
+
     public void Start()
     {
         rayRenderer = GetComponent<LineRenderer>();

@@ -6,6 +6,6 @@ public class MainMenu : MonoBehaviour
     public void QuickStartGame()
     {
         MatchProperties.customGame = false;
-        SceneManager.LoadScene("level_proto");
+        SceneManager.LoadScene("wimmer_scene");
     }
 }

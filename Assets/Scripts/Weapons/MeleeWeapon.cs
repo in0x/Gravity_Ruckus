@@ -16,6 +16,13 @@ public class MeleeWeapon : MonoBehaviour, ICanShoot
         set { }
     }
 
+    bool m_available;
+    public bool Available
+    {
+        get { return true; }
+        set { m_available = value; }
+    }
+
     float m_TimeSinceShot = 0;
 
     LineRenderer rayRenderer;

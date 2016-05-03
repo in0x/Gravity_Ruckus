@@ -26,6 +26,13 @@ public class GravityLauncher : MonoBehaviour, ICanShoot, IGravityObserver
         set { }
     }
 
+    bool m_available;
+    public bool Available
+    {
+        get { return m_available; }
+        set { m_available = value; }
+    }
+
     AmmoComponent ammoComp;
 
     void Start()
