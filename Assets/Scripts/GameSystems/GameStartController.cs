@@ -10,10 +10,15 @@ public class GameStartController : MonoBehaviour
 
     void Start ()
     {
+        if (!MatchProperties.customGame)
+        {
+            MatchProperties.playerControllerIDs = new int[] { 1, 2, 3, 4 };
+        }
+
         ConfigurePlayer(0, player0);
         ConfigurePlayer(1, player1);
         ConfigurePlayer(2, player2);
-        ConfigurePlayer(3, player3);
+        ConfigurePlayer(3, player3);       
     }
 
     void ConfigurePlayer(int idx, GameObject player)

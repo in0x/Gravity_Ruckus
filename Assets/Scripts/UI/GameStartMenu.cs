@@ -56,8 +56,7 @@ public class GameStartMenu : IPadGUIElement
                 MatchProperties.playerColors[1] = topright.m_color;
                 MatchProperties.playerColors[2] = bottomleft.m_color;
                 MatchProperties.playerColors[3] = bottomright.m_color;
-                MatchProperties.customGame = true;
-
+               
                 SceneManager.LoadScene("level_proto");
             }
         }
@@ -100,11 +99,13 @@ public class GameStartMenu : IPadGUIElement
     {
         m_active = true;
         MatchProperties.playerControllerIDs = new int[]{ 0,0,0,0 };
+        MatchProperties.customGame = true;
     }
 
     public override void Deactivate()
     {
         m_active = false;
+        MatchProperties.customGame = false;
     }
 
 }
