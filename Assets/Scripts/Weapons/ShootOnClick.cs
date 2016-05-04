@@ -91,6 +91,11 @@ public class ShootOnClick : MonoBehaviour, IInputObserver
         currentWeapon.Current.Enable();
     }
 
+    public void DisableAllWeapons()
+    {
+        foreach (var weapon in m_weapons) weapon.Disable();
+    }
+
     public void GetCurrentAmmoCount(out int currentAmmo, out int maxAmmo)
     {
         currentWeapon.Current.GetAmmoState(out currentAmmo, out maxAmmo);

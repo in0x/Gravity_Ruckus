@@ -11,6 +11,7 @@ public class DeathController : MonoBehaviour
     GravityHandler m_gravHandler;
     HealthController m_health;
     Rigidbody m_body;
+    ShootOnClick m_weapons;
 
     // Set by ScoreController on Startup
     public ScoreController m_scoreController;
@@ -25,6 +26,7 @@ public class DeathController : MonoBehaviour
         m_gravHandler = GetComponent<GravityHandler>();
         m_health = GetComponent<HealthController>();
         m_body = GetComponent<Rigidbody>();
+        m_weapons = GetComponent<ShootOnClick>();
     }
     
     public void Respawn(Vector3 position, Quaternion rotation, Vector3 gravity)
@@ -68,6 +70,8 @@ public class DeathController : MonoBehaviour
             child.SetActive(false);                     
         }
 
+        m_weapons.DisableAllWeapons();
+       
         m_spawnController.RegisterAsDead(this.gameObject);
         m_scoreController.ProcessKill(gameObject, damageKilledPlayer);
     }
