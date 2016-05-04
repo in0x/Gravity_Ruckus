@@ -93,7 +93,11 @@ public class ShootOnClick : MonoBehaviour, IInputObserver
 
     public void DisableAllWeapons()
     {
-        foreach (var weapon in m_weapons) weapon.Disable();
+        foreach (var weapon in m_weapons)
+        {
+            weapon.Disable();
+            weapon.Available = false;
+        }
     }
 
     public void GetCurrentAmmoCount(out int currentAmmo, out int maxAmmo)
@@ -111,6 +115,14 @@ public class ShootOnClick : MonoBehaviour, IInputObserver
             (currentWeapon.Current as ICanShoot).Shoot();
 
             m_isOnCD = true;
+        }
+    }
+
+    public void ResetWeaponsRespawn()
+    {
+        while(currentWeapon.Current != m_weapons[0])
+        {
+            currentWeapon++;
         }
     }
 }

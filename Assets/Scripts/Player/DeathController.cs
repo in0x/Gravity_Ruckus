@@ -35,14 +35,18 @@ public class DeathController : MonoBehaviour
         {
             GameObject child = tf.gameObject;
 
-            if (child.tag == "Weapon")
+            //if (child.tag == "Weapon")
+            if(child.tag == "Weapon" && child.name != "BouncePistol")
             {
                 // Skip all other weapons, otherwise every weapon would be active
-                if (child.name != lastWeaponUsed) continue;
+                //if (child.name != lastWeaponUsed) continue;
+                continue;
             }
 
             child.SetActive(true);
         }
+
+        m_weapons.ResetWeaponsRespawn();
 
         m_gravHandler.Gravity = gravity;
         m_health.Refill();
