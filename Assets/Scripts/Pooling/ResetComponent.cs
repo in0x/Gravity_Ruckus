@@ -20,8 +20,11 @@ public class ResetComponent : MonoBehaviour
     {
         gameObject.transform.position = new Vector3();
         gameObject.transform.rotation = Quaternion.identity;
-   
-        rigidBody.velocity = Vector3.zero;
-        rigidBody.angularVelocity = Vector3.zero;
+
+        if (rigidBody != null)
+        {
+            rigidBody.velocity = Vector3.zero;
+            rigidBody.angularVelocity = Vector3.zero;
+        }
     }
 }

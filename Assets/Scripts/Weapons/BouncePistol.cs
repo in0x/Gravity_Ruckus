@@ -7,7 +7,7 @@ public class BouncePistol : MonoBehaviour, ICanShoot
     public GameObject m_projectilePrefab;
     public float m_fInherentProjectileVel = 300;
     public float m_cooldown = 0.5f;
-    public int m_ammoUsedOnShot = 9;
+    public int m_ammoUsedOnShot = 1;
 
     float m_projectileSpeedMul;
 
