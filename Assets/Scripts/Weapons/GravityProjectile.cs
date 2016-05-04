@@ -55,12 +55,19 @@ public class GravityProjectile : MonoBehaviour, IDamageSender
         {
             // Also expensive
             Rigidbody rb = hit.GetComponent<Rigidbody>();
+            Debug.Log("Collider name " + hit.gameObject.name);
 
-            if (rb != null)
-            {
-                rb.gameObject.SendMessageUpwards("RecieveDamage", splashInfo, SendMessageOptions.DontRequireReceiver);
-                rb.AddExplosionForce(m_fExplPower, explosionPos, m_fExplRadius, 3.0F);
-            }
+            //hit.gameObject.SendMessageUpwards("RecieveDamage", splashInfo, SendMessageOptions.DontRequireReceiver);
+            var dmgReciever = hit.gameObject.GetComponent<IDamageReciever>();
+            
+            if (dmgReciever != null) dmgReciever.RecieveDamage(splashInfo);
+
+            //if (rb != null)
+            //{
+            //    Debug.Log("Send splashdamage to object " + rb.gameObject.name);
+            //    rb.gameObject.SendMessageUpwards("RecieveDamage", splashInfo, SendMessageOptions.DontRequireReceiver);
+            //    rb.AddExplosionForce(m_fExplPower, explosionPos, m_fExplRadius, 3.0F);
+            //}
         }
 
         gameObject.SetActive(false);
