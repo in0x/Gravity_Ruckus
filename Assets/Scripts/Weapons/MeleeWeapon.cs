@@ -32,7 +32,7 @@ public class MeleeWeapon : MonoBehaviour, ICanShoot
     public void Start()
     {
         rayRenderer = GetComponent<LineRenderer>();
-        rayRenderer.SetWidth(0.1f, 0.1f);
+        rayRenderer.SetWidth(0.1f, 25f);
         rayRenderer.enabled = false;
 
         // Find the transform of the parents camera component
@@ -71,7 +71,8 @@ public class MeleeWeapon : MonoBehaviour, ICanShoot
         rayRenderer.SetPosition(0, origin);
 
         // Raycast into the scene
-        if (Physics.Raycast(parentCamera.transform.position, fwd, out collisionInfo, m_fRange, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
+        if (Physics.SphereCast(parentCamera.transform.position, 25, fwd, out collisionInfo, m_fRange, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
+        //   if (Physics.Raycast(parentCamera.transform.position, fwd, out collisionInfo, m_fRange, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
         {
             // Draw the ray to the point of collision
             rayRenderer.SetPosition(1, collisionInfo.point);
@@ -92,7 +93,7 @@ public class MeleeWeapon : MonoBehaviour, ICanShoot
             rayRenderer.SetPosition(1, ray.GetPoint(m_fRange));
         }
 
-        rayRenderer.enabled = true;
+        //rayRenderer.enabled = true;
     }
 
     public void Enable()

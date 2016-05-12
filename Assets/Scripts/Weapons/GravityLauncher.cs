@@ -6,7 +6,7 @@ public class GravityLauncher : MonoBehaviour, ICanShoot, IGravityObserver
 {
     // Prefab of the projectile to be launched.
     public GameObject m_projectilePrefab;
-    float m_fInherentProjectileVel = 500;
+    float m_fInherentProjectileVel = 200;
     public int m_ammoUsedOnShot = 1;
 
     [SerializeField]
