@@ -6,7 +6,7 @@ public class GravityLauncher : MonoBehaviour, ICanShoot, IGravityObserver
 {
     // Prefab of the projectile to be launched.
     public GameObject m_projectilePrefab;
-    float m_fInherentProjectileVel = 500;
+    float m_fInherentProjectileVel = 200;
     public int m_ammoUsedOnShot = 1;
 
     [SerializeField]
@@ -14,7 +14,7 @@ public class GravityLauncher : MonoBehaviour, ICanShoot, IGravityObserver
 
     Transform m_parentCamera;
     CapsuleCollider m_parentCollider;
-    private SphereCollider m_projectileCollider;
+    SphereCollider m_projectileCollider;
 
     // List to keep track of owned projectiles.
     List<PooledGameObject> m_shotProjectiles = new List<PooledGameObject>();
@@ -89,12 +89,11 @@ public class GravityLauncher : MonoBehaviour, ICanShoot, IGravityObserver
         m_shotProjectiles.Add(pooled);
 
         var projectile = pooled.Instance;
-        projectile.transform.position = origin;
         projectile.transform.rotation = m_parentCamera.rotation;
+        projectile.transform.position = origin;
 
         //Vector3 projectile_vel = m_fInherentProjectileVel * fwd;// + transform.parent.GetComponent<Rigidbody>().velocity);
-        Debug.Log(transform.root.gameObject.name);
-        Vector3 projectile_vel = fwd * m_fInherentProjectileVel + transform.root.gameObject.GetComponent<Rigidbody>().velocity;
+        Vector3 projectile_vel = fwd * m_fInherentProjectileVel; // + transform.root.gameObject.GetComponent<Rigidbody>().velocity;
 
 
         projectile.GetComponent<Rigidbody>().velocity = projectile_vel;

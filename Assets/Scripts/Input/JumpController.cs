@@ -12,7 +12,7 @@ public class JumpController : MonoBehaviour
             return m_isJumping; 
         }
 
-        private set { m_isJumping = value; }
+        set { m_isJumping = value; }
     }
 
     public bool canJump()
@@ -28,6 +28,16 @@ public class JumpController : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.gameObject.tag == "LevelGeometry") m_isJumping = false;
+        if (m_isJumping)
+        {
+            foreach (ContactPoint contact in collision.contacts)
+            {
+                if (contact.thisCollider.CompareTag("LegCollider"))
+                {
+                    m_isJumping = false;
+                }
+            }
+        }
+        //if (collision.collider.gameObject.tag == "LevelGeometry") m_isJumping = false;
     }
 }

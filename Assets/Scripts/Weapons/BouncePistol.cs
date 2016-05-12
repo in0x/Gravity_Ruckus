@@ -111,7 +111,7 @@ public class BouncePistol : MonoBehaviour, ICanShoot
 
                 pooled.Instance.transform.rotation = Quaternion.Euler(90, 0, 0) * Quaternion.LookRotation(instanceRB.velocity);
 
-                pooled.Instance.transform.position = origin + new Vector3(x * m_projectileCollider.radius * 2, y * m_projectileCollider.radius * 2, 0);
+                pooled.Instance.transform.position = origin + new Vector3(x * m_projectileCollider.radius * 3.5f, y * m_projectileCollider.radius * 3.5f, 0);
             }
         }
     }
