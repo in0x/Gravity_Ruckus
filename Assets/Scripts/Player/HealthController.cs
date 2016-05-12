@@ -4,9 +4,11 @@ using System.Collections;
 public class HealthController : MonoBehaviour
 {
     private float m_health = 100f;
+    private float m_maxHealth = 100f;
 
     DeathController deathController;
     DamageInfo lastDamageTaken;
+    ScreenDamageEffect screenEffect;
 
     public float Health
     {
@@ -30,6 +32,7 @@ public class HealthController : MonoBehaviour
         }
 
         deathController = GetComponent<DeathController>();
+        screenEffect = GetComponentInChildren<ScreenDamageEffect>();
     }
 
     void Start ()
@@ -47,21 +50,23 @@ public class HealthController : MonoBehaviour
         Debug.Log("Damage from: " + damageInfo.senderName + " with: " + damageInfo.sourceName);
         m_health -= damageInfo.fDamage;
         lastDamageTaken = damageInfo;
+
+        screenEffect.Activate((float)m_health / (float)m_maxHealth);
     }
 
     // No we are not using negative damage for healing.
     public bool Heal(float hp)
     {
-        if (m_health == 100) return false;
+        if (m_health == m_maxHealth) return false;
 
         m_health += hp;
-        if (m_health > 100) m_health = 100;
+        if (m_health > m_maxHealth) m_health = m_maxHealth;
 
         return true;
     }
 
     public void Refill()
     {
-        m_health = 100;
+        m_health = m_maxHealth;
     }
 }
