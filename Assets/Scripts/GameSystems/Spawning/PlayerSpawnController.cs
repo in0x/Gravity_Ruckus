@@ -9,6 +9,10 @@ using System.Collections.Generic;
 public class PlayerSpawnController : MonoBehaviour
 {
     public GameObject spawnPointGroup;
+    public UnityEngine.GameObject player1;
+    public UnityEngine.GameObject player2;
+    public UnityEngine.GameObject player3;
+    public UnityEngine.GameObject player4;
 
     List<GameObject> activePlayers = new List<GameObject>();
     List<GameObject> deadPlayers = new List<GameObject>();
@@ -19,10 +23,17 @@ public class PlayerSpawnController : MonoBehaviour
     void Start()
     {
         // Find all player gameobjects in the scene and add them to the spawn list.
-        foreach (Object obj in FindObjectsOfType<HealthController>())
-        {
-            activePlayers.Add((obj as HealthController).gameObject);
-        }
+
+        //var players = FindObjectsOfType(typeof (HealthController)) as HealthController[];
+        //foreach (Object obj in FindObjectsOfType<HealthController>())   
+        //{
+        //    activePlayers.Add((obj as HealthController).gameObject);
+        //}
+
+        activePlayers.Add(player1);
+        activePlayers.Add(player2);
+        activePlayers.Add(player3);
+        activePlayers.Add(player4);
 
         foreach (SpawnPoint spawn in spawnPointGroup.GetComponentsInChildren<SpawnPoint>())
         {
