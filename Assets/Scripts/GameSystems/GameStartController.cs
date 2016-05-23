@@ -18,7 +18,9 @@ public class GameStartController : MonoBehaviour
         ConfigurePlayer(0, player0);
         ConfigurePlayer(1, player1);
         ConfigurePlayer(2, player2);
-        ConfigurePlayer(3, player3);       
+        ConfigurePlayer(3, player3);
+
+        Time.timeScale = 1f;    
     }
 
     void ConfigurePlayer(int idx, GameObject player)
