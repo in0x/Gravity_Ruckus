@@ -105,13 +105,24 @@ public class BouncePistol : MonoBehaviour, ICanShoot
 
                 pooled.Instance.GetComponent<IDamageSender>().SourceWeapon = gameObject;
 
+                Vector3 position;
+                Vector3 spherePos;
+
+                do
+                {
+                    spherePos = Random.onUnitSphere;
+                    position = origin + spherePos*5;
+                } while (Vector3.Dot(fwd.normalized, spherePos)<= 0.98);
+                Debug.Log("fwd: "+fwd.normalized+" spherepos "+spherePos+" dot "+(Vector3.Dot(fwd.normalized, spherePos)));
                 // This may be a big slowdown and should be optimised later.
                 Rigidbody instanceRB = pooled.Instance.GetComponent<Rigidbody>();
-                instanceRB.velocity = fwd * m_fInherentProjectileVel * m_projectileSpeedMul;
-
-                pooled.Instance.transform.rotation = Quaternion.Euler(90, 0, 0) * Quaternion.LookRotation(instanceRB.velocity);
-
-                pooled.Instance.transform.position = origin + new Vector3(x * m_projectileCollider.radius * 3.5f, y * m_projectileCollider.radius * 3.5f, 0);
+                //instanceRB.velocity = fwd * m_fInherentProjectileVel * m_projectileSpeedMul;
+                instanceRB.velocity = spherePos * m_fInherentProjectileVel * m_projectileSpeedMul;
+                //Vector3 fwd_inverse = new Vector3(1-Mathf.Abs(fwd_cpy.x), 1 - Mathf.Abs(fwd_cpy.y), 1 - Mathf.Abs(fwd_cpy.z));
+                //pooled.Instance.transform.position = origin + new Vector3(x * m_projectileCollider.radius * 3.5f, y * m_projectileCollider.radius * 3.5f, x*y * m_projectileCollider.radius * 3.5f);
+                pooled.Instance.transform.position = position;
+                //pooled.Instance.transform.rotation = Quaternion.LookRotation(instanceRB.velocity) * Quaternion.Euler(90, 0, 0);
+                pooled.Instance.transform.rotation = Quaternion.LookRotation(instanceRB.velocity) * Quaternion.Euler(90, 0, 0);
             }
         }
     }
