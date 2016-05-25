@@ -4,10 +4,10 @@ using System.Collections;
 
 public enum PlayerColor
 {
-    red,
-    green, 
-    blue, 
-    hotpink
+    red = 0,
+    green = 1, 
+    blue = 2, 
+    hotpink = 3
 }
 
 public class PlayerSelectionField : IPadGUIElement
