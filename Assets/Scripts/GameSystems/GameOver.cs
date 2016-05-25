@@ -27,6 +27,9 @@ public class GameOver : MonoBehaviour
     {
         m_fTimeSinceEnd += Time.deltaTime * 2f;
 
+        // This is a quick hack to prevent other cameras turning back on due to the spawning system.
+        foreach (GameObject canvas in m_canvasesGos) canvas.SetActive(false);
+
         if (m_fTimeSinceEnd >= m_TimeBeforeLoadMenu)
         {
             SceneManager.LoadScene(m_MenuSceneName);

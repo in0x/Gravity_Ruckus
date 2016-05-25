@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
-using System.Linq;
-using System.Collections.Generic;
+using UnityEngine.UI;
+using System.Collections.Generic; 
 
 /*\
 |*| This class is responsible for controlling when players respawn
@@ -9,27 +9,21 @@ using System.Collections.Generic;
 public class PlayerSpawnController : MonoBehaviour
 {
     public GameObject spawnPointGroup;
-    public UnityEngine.GameObject player1;
-    public UnityEngine.GameObject player2;
-    public UnityEngine.GameObject player3;
-    public UnityEngine.GameObject player4;
+    public GameObject player1;
+    public GameObject player2;
+    public GameObject player3;
+    public GameObject player4;
+
+    public float timeToRespawn = 5f;
 
     List<GameObject> activePlayers = new List<GameObject>();
     List<GameObject> deadPlayers = new List<GameObject>();
     List<SpawnPoint> spawnPoints = new List<SpawnPoint>();
-
+   
     System.Random rand = new System.Random();
 
     void Start()
     {
-        // Find all player gameobjects in the scene and add them to the spawn list.
-
-        //var players = FindObjectsOfType(typeof (HealthController)) as HealthController[];
-        //foreach (Object obj in FindObjectsOfType<HealthController>())   
-        //{
-        //    activePlayers.Add((obj as HealthController).gameObject);
-        //}
-
         activePlayers.Add(player1);
         activePlayers.Add(player2);
         activePlayers.Add(player3);
