@@ -1,13 +1,14 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
+using System.Collections.Generic;
 
 public class GameOverText : MonoBehaviour
 {
-    //MatchProperties
     public GameObject NameText;
     public GameObject KillText;
     public GameObject DeathText;
+
+    public int numberOfThisPlayer = -1;
 
     Text[] texts;
 
@@ -18,10 +19,15 @@ public class GameOverText : MonoBehaviour
         texts[1] = KillText.GetComponent<Text>();
         texts[2] = DeathText.GetComponent<Text>();
 
-        foreach (string name in GameOverInformation.names)
+        string[] names = GameOverInformation.names;
+        for (int i = 0; i < GameOverInformation.names.Length; i++)
         {
-            string idx = name.Remove(0, 6);
-            Debug.Log(idx);
+            string name = names[i];
+            if (System.Convert.ToInt32(name.Remove(0, 6)) == numberOfThisPlayer)
+            {
+                texts[0].text = names[i];
+            }
+
         }
     }
 
