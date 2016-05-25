@@ -99,7 +99,6 @@ public class ScoreController : MonoBehaviour
                 List<Stats> stats = new List<Stats>();
                 foreach (var score in m_scoreTable) stats.Add(new Stats(score.Value.Kills, score.Value.Deaths, score.Key));
                 stats.Sort((stat1, stat2) => stat1.kills.CompareTo(stat2.kills));
-
                 m_gameOverSystem.GetComponent<GameOver>().EndGame(stats);
             } 
         }

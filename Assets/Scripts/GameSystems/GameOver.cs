@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class GameOver : MonoBehaviour
 {
-    public string m_MenuSceneName = "final_menu";
+    public string m_MenuSceneName = "";
     public float m_TimeBeforeLoadMenu = 10f;
 
     float m_fTimeSinceEnd = 0f;
@@ -45,6 +45,14 @@ public class GameOver : MonoBehaviour
                 camera.rect = new Rect(0f,0f,1f,1f);
             }
             else camera.gameObject.transform.parent.gameObject.SetActive(false);
+        }
+
+        // Reverse the order since the ScoreController does not sort the list properly for some reason
+        for (int i = 0; i < 4; i++)
+        {
+            GameOverInformation.kills[3 - i] = playerStats[i].kills;
+            GameOverInformation.deaths[3 - i] = playerStats[i].deaths;
+            GameOverInformation.names[3 - i] = playerStats[i].player.name;
         }
     }
 }
