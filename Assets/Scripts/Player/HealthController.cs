@@ -42,7 +42,11 @@ public class HealthController : MonoBehaviour
 
 	void Update ()
     {
-        if (m_health <= 0) deathController.Die(lastDamageTaken);
+        if (m_health <= 0)
+        {
+            Refill();
+            deathController.Die(lastDamageTaken);
+        }
 	}
     
     public void ApplyDamage(DamageInfo damageInfo)

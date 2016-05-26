@@ -39,6 +39,7 @@ public class RespawnTimer : MonoBehaviour
 
     void OnEnable()
     {
+        if (m_text == null) m_text = GetComponent<Text>();
         m_readyToSpawn = false;
         m_timeSinceDeath = 0f;
         m_text.text = "Respawning in: " + m_timeToRespawn.ToString();

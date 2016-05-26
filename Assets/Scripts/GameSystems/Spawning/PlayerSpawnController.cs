@@ -2,7 +2,6 @@
 using UnityEngine.UI;
 using System.Collections.Generic;
 
-
 /*\
 |*| This class is responsible for controlling when players respawn
 |*| aswell as selecting their respawn points.
@@ -14,14 +13,12 @@ public class PlayerSpawnController : MonoBehaviour
     public GameObject player2;
     public GameObject player3;
     public GameObject player4;
-
-    public float timeToRespawn = 5f;
-
+    
     List<GameObject> activePlayers = new List<GameObject>();
     List<GameObject> deadPlayers = new List<GameObject>();
     List<SpawnPoint> spawnPoints = new List<SpawnPoint>();
     Dictionary<string, RespawnTimer> respawnTimers;
-   
+
     System.Random rand = new System.Random();
 
     void Start()
@@ -37,10 +34,7 @@ public class PlayerSpawnController : MonoBehaviour
         for (int i = 0; i < timers.Length; i++)
         {
             respawnTimers.Add(activePlayers[i].name, timers[i]);
-
-            /*
-                TODO : Position Timers correctly in cavases, activate on death, use to check if player can respawn yet 
-            */
+            timers[i].gameObject.SetActive(false);
         }
 
         foreach (SpawnPoint spawn in spawnPointGroup.GetComponentsInChildren<SpawnPoint>())
@@ -55,7 +49,13 @@ public class PlayerSpawnController : MonoBehaviour
     {
         if (deadPlayers.Count == 0) return;
 
-        foreach (var player in deadPlayers.ToArray()) Spawn(player);
+        foreach (var player in deadPlayers)
+        {
+            if (respawnTimers[player.name].ReadyToSpawn)
+            {
+                Spawn(player);
+            }
+        }
     }
 
     // Move player from active to inactive list.
@@ -65,7 +65,8 @@ public class PlayerSpawnController : MonoBehaviour
         {
             activePlayers.Remove(player);
             deadPlayers.Add(player);
-        }     
+            respawnTimers[player.name].gameObject.SetActive(true);
+        }
     }
 
     // Select a random respawn point, parse the information for the player's 
@@ -77,7 +78,7 @@ public class PlayerSpawnController : MonoBehaviour
         SpawnPoint spawn = spawnPoints[idx];
 
         player.GetComponent<DeathController>().Respawn(spawn.GetPosition(), spawn.GetRotation(), spawn.GetGravity());
- 
+
         deadPlayers.Remove(player);
         activePlayers.Add(player);
     }
