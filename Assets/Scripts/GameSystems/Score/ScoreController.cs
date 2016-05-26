@@ -72,6 +72,7 @@ public class ScoreController : MonoBehaviour
     List<DeathController> m_deathControllers;
 
     public GameObject m_gameOverSystem;
+    public int m_killsToWin = 1;
 
     void Start()
     {
@@ -92,7 +93,7 @@ public class ScoreController : MonoBehaviour
     {
         foreach (var kvp in m_scoreTable)
         {
-            if (kvp.Value.Kills != 0)
+            if (kvp.Value.Kills >= m_killsToWin)
             {
                 m_gameOverSystem.SetActive(true);
 
