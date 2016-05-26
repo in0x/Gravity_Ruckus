@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class GravityHandler : MonoBehaviour, IInputObserver
 {
-    public PlayerInput PlayerInputRef { get; set; }
+    public PlayerInput m_playerInputRef { get; set; }
     private Vector3 gravity;
     private Rigidbody rb;
     private Transform cam;
@@ -45,25 +45,25 @@ public class GravityHandler : MonoBehaviour, IInputObserver
 	    //if (PlayerInputRef.GetAxis("GravityVert")>0.1)
         Vector3 newGravity = Vector3.zero;
         Vector3 switchVector = Vector3.zero;
-        if (PlayerInputRef.GetDPad("GravityUp"))
+        if (m_playerInputRef.GetDPad("GravityUp"))
 	    {
             newGravity = ReduceVector3(transform.forward) *gravity_mult;
             switchVector = new Vector3(-90, 0, 0);
 	    }
         //else if (PlayerInputRef.GetAxis("GravityVert") < -0.1)
-        else if (PlayerInputRef.GetDPad("GravityDown"))
+        else if (m_playerInputRef.GetDPad("GravityDown"))
         {
             newGravity = ReduceVector3(-transform.forward) * gravity_mult;
             switchVector = new Vector3(90, 0, 0);
         }
         //else if (PlayerInputRef.GetAxis("GravityHor") > 0.1)
-        else if (PlayerInputRef.GetDPad("GravityRight"))
+        else if (m_playerInputRef.GetDPad("GravityRight"))
         {
             newGravity = ReduceVector3(transform.right) * gravity_mult;
             switchVector = new Vector3(0, 0, 90);
         }
         //else if (PlayerInputRef.GetAxis("GravityHor") < -0.1)
-        else if (PlayerInputRef.GetDPad("GravityLeft"))
+        else if (m_playerInputRef.GetDPad("GravityLeft"))
         {
             newGravity = ReduceVector3(-transform.right) * gravity_mult;
             switchVector = new Vector3(0, 0, -90);

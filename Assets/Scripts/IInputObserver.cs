@@ -3,5 +3,5 @@ using System.Collections;
 
 public interface IInputObserver
 {
-       PlayerInput PlayerInputRef { get; set; }
+       PlayerInput m_playerInputRef { get; set; }
 }

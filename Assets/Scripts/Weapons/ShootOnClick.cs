@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public class ShootOnClick : MonoBehaviour, IInputObserver
 {
-    public PlayerInput PlayerInputRef { get; set; }
+    public PlayerInput m_playerInputRef { get; set; }
     
     List<ICanShoot> m_weapons;
     CircularListIterator<ICanShoot> currentWeapon;
@@ -48,7 +48,7 @@ public class ShootOnClick : MonoBehaviour, IInputObserver
 
         if (!m_isOnCD)
         {
-            if (PlayerInputRef.GetAxis("Shoot")>0.1)
+            if (m_playerInputRef.GetAxis("Shoot")>0.1)
             {
                 m_isShooting = true;
             }
@@ -59,11 +59,11 @@ public class ShootOnClick : MonoBehaviour, IInputObserver
     
     void WeaponSwitch()
     {
-        if (PlayerInputRef.GetButtonDown("WeaponSwitchPrev"))
+        if (m_playerInputRef.GetButtonDown("WeaponSwitchPrev"))
         {
             IterateWeapons(false);
         }
-        else if (PlayerInputRef.GetButtonDown("WeaponSwitchNext"))
+        else if (m_playerInputRef.GetButtonDown("WeaponSwitchNext"))
         {
             IterateWeapons(true);
         }

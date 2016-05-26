@@ -21,7 +21,7 @@ public class PlayerInput : MonoBehaviour
         // Set reference to self for polling in all InputObservers
         foreach (var obs in GetComponents<IInputObserver>())
         {
-            obs.PlayerInputRef = this;
+            obs.m_playerInputRef = this;
         }
 
         axisBindings = new Dictionary<string, XboxAxis>();
