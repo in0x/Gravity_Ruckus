@@ -23,7 +23,7 @@ public class BlobProjectile : MonoBehaviour, IDamageSender {
         if (m_body == null) m_body = GetComponent<Rigidbody>();
         m_fCurrentFlightTimer = m_fFlightTimer;
         m_fCurrentDecayTimer = m_fDecayTimer;
-        m_body.angularVelocity = new Vector3(Random.value,Random.value,Random.value)*5;
+        m_body.angularVelocity = Random.insideUnitSphere * 5;
     }
 
     void FixedUpdate()

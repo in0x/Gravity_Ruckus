@@ -24,12 +24,6 @@ public class GravityProjectile : MonoBehaviour, IDamageSender
 
     Rigidbody m_rigidBody;
 
-    void Start()
-    {
-        m_rigidBody = GetComponent<Rigidbody>();
-        m_rigidBody.velocity *= m_speed;
-    }
-
     public void GravitySwitch(Vector3 gravity)
     {
         m_rigidBody.velocity = gravity*m_fSwitchingSpeed;
@@ -49,12 +43,18 @@ public class GravityProjectile : MonoBehaviour, IDamageSender
         foreach (Collider hit in colliders)
         {
             Rigidbody rb = hit.GetComponent<Rigidbody>();
-            Debug.Log("Collider name " + hit.gameObject.name);
+            Debug.Log("Collider name " + hit.gameObject.name + m_rigidBody.velocity);
 
             IDamageReciever dmgReciever = hit.gameObject.GetComponent<IDamageReciever>();
             
             if (dmgReciever != null) dmgReciever.RecieveDamage(splashInfo);
         }
         gameObject.SetActive(false);
+    }
+
+    void OnEnable()
+    {
+        if(m_rigidBody == null) m_rigidBody = GetComponent<Rigidbody>();
+        m_rigidBody.velocity *= m_speed;
     }
 }
