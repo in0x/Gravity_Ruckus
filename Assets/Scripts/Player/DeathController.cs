@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 /*\
 |*| This class is responsible for organising player deaths and respawns.
@@ -8,17 +7,15 @@ using System.Collections;
 \*/
 public class DeathController : MonoBehaviour
 {
-    GravityHandler m_gravHandler;
-    HealthController m_health;
-    Rigidbody m_body;
-    ShootOnClick m_weapons;
-
     // Set by ScoreController on Startup
     public ScoreController m_scoreController;
 
+    GravityHandler m_gravHandler;
+    HealthController m_health;
+    Rigidbody m_body;
+    ShootOnClick m_weapons;   
     PlayerSpawnController m_spawnController;
-
-    string lastWeaponUsed;
+    string m_lastWeaponUsedStr;
 
     void Start()
     {
@@ -34,12 +31,9 @@ public class DeathController : MonoBehaviour
         foreach (Transform tf in gameObject.transform)
         {
             GameObject child = tf.gameObject;
-
-            //if (child.tag == "Weapon")
-            if(child.tag == "Weapon" && child.name != "BouncePistol")
+            
+            if (child.tag == "Weapon" && child.name != "BouncePistol")
             {
-                // Skip all other weapons, otherwise every weapon would be active
-                //if (child.name != lastWeaponUsed) continue;
                 continue;
             }
 
@@ -60,23 +54,20 @@ public class DeathController : MonoBehaviour
 
     public void Die(DamageInfo damageKilledPlayer)
     {
-        Debug.Log("Killed by: " + damageKilledPlayer.senderName + " with: " + damageKilledPlayer.sourceName);
-
         foreach (Transform tf in gameObject.transform)
         {
             GameObject child = tf.gameObject;
 
             if (child.tag == "Weapon")
             {
-                if (child.active) lastWeaponUsed = child.name;
+                if (child.activeSelf) m_lastWeaponUsedStr = child.name;
             }
 
             child.SetActive(false);                     
         }
 
         m_weapons.DisableAllWeapons();
-       
-        m_spawnController.RegisterAsDead(this.gameObject);
+        m_spawnController.RegisterAsDead(gameObject);
         m_scoreController.ProcessKill(gameObject, damageKilledPlayer);
     }
 }

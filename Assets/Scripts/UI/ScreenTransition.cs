@@ -1,26 +1,21 @@
 ﻿using UnityEngine;
-using System.Collections;
 
-public enum RotationType
-{
-    y,
-    z
-}
+public enum RotationType { y, z }
 
 public class ScreenTransition : MonoBehaviour, ITransitioner
 {
     public GameObject m_nextElement;
     public GameObject m_screenToSwitch;
-    public RotationType rotType;
+    public RotationType m_rotType;
 
     Camera m_camera;
 
     IPadGUIElement m_next;
     IPadGUIElement m_self;
 
-    Quaternion newRot;
+    Quaternion m_quatNewRot;
 
-    float m_animSpeed = 0.05f;
+    float m_fAnimSpeed = 0.05f;
 
     void Start()
     {
@@ -32,11 +27,11 @@ public class ScreenTransition : MonoBehaviour, ITransitioner
        
         Vector3 newFwd = m_screenToSwitch.transform.position - m_camera.transform.position;
         Quaternion rot = Quaternion.FromToRotation(fwd.normalized, newFwd.normalized);
-        newRot = m_camera.transform.rotation * rot;
+        m_quatNewRot = m_camera.transform.rotation * rot;
 
-        if (rotType == RotationType.z)
+        if (m_rotType == RotationType.z)
         {
-            newRot = m_camera.transform.rotation * Quaternion.Euler(Vector3.Angle(fwd, newFwd), 0, 0);
+            m_quatNewRot = m_camera.transform.rotation * Quaternion.Euler(Vector3.Angle(fwd, newFwd), 0, 0);
         } 
     }
 
@@ -44,9 +39,9 @@ public class ScreenTransition : MonoBehaviour, ITransitioner
     {
         return delegate
         {
-            while (m_camera.transform.rotation != newRot)
+            while (m_camera.transform.rotation != m_quatNewRot)
             {
-                m_camera.transform.rotation = Quaternion.Slerp(m_camera.transform.rotation, newRot, m_animSpeed);
+                m_camera.transform.rotation = Quaternion.Slerp(m_camera.transform.rotation, m_quatNewRot, m_fAnimSpeed);
                 return null;
             }
 

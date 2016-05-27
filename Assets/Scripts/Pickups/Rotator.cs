@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class Rotator : MonoBehaviour
 {
-    public Vector3 rotation;
+    public Vector3 m_rotation;
     void Update ()
     {
-        transform.Rotate(rotation * Time.deltaTime);
+        transform.Rotate(m_rotation * Time.deltaTime);
     }
 }

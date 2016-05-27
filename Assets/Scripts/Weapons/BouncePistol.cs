@@ -10,6 +10,7 @@ public class BouncePistol : MonoBehaviour, ICanShoot
     public int m_ammoUsedOnShot = 1;
 
     float m_projectileSpeedMul;
+    bool m_available;
 
     Transform m_parentCamera;
     CapsuleCollider m_parentCollider;
@@ -20,15 +21,14 @@ public class BouncePistol : MonoBehaviour, ICanShoot
     ObjectPoolManager m_poolManager;
 
     // Used to track ammo of weapon
-    AmmoComponent ammoComp;
+    AmmoComponent m_ammoComp;
 
     public float Cooldown
     {
         get { return m_cooldown; }
         set { }
     }
-
-    bool m_available;
+    
     public bool Available
     {
         get { return true; }
@@ -48,14 +48,11 @@ public class BouncePistol : MonoBehaviour, ICanShoot
         m_poolManager = ObjectPoolManager.Get();
         m_shotProjectiles = new List<PooledGameObject>();
         m_projectileSpeedMul = m_projectilePrefab.GetComponent<BounceProjectile>().m_speed;
-        ammoComp = GetComponent<AmmoComponent>();
+        m_ammoComp = GetComponent<AmmoComponent>();
     }
 
     void Update()
     {
-        // Projectiles deactivate themselves when they are ready to be released
-        // -> Release all projectiles that are inactive and remove them from
-        // the list of active projectiles.
         m_shotProjectiles.RemoveAll((pooledObject =>
         {
             if (pooledObject.Instance.activeSelf == false)
@@ -76,14 +73,9 @@ public class BouncePistol : MonoBehaviour, ICanShoot
 
     public void Shoot()
     {
-        if (ammoComp.UseAmmo(m_ammoUsedOnShot) == 0)
-        {
-            Debug.Log("Out of ammo");
-            return;
-        };
-
+        if (m_ammoComp.UseAmmo(m_ammoUsedOnShot) == 0) return;
+        
         Vector3 origin = m_parentCamera.transform.position;
-
         Vector3 fwd = m_parentCamera.transform.forward;
 
         // Calculate an origin to launch the projectile from that 
@@ -96,11 +88,7 @@ public class BouncePistol : MonoBehaviour, ICanShoot
         for (int x = 0; x < 9; x++)
         {
                 var pooled = m_poolManager.Request(m_projectilePrefab);
-                m_shotProjectiles.Add(pooled);
-
-                //pooled.Instance.transform.rotation = Quaternion.LookRotation(fwd); //m_parentCamera.rotation;
-                //pooled.Instance.transform.localRotation = Quaternion.Euler(90, 0, 0);
-
+                m_shotProjectiles.Add(pooled);              
                 pooled.Instance.GetComponent<IDamageSender>().SourceWeapon = gameObject;
                 pooled.Instance.GetComponent<HomingComponent>().shooter = transform.parent.gameObject;
 

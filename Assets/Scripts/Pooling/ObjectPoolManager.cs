@@ -15,7 +15,7 @@ public class ObjectPoolManager
 {
     Dictionary<GameObject, ObjectPool> m_objectPools;
 
-    static ObjectPoolManager instance;
+    static ObjectPoolManager s_instance;
     
     // Ctor, reads the JSON setup file and creates a pool for each prefab
     // defined in it.
@@ -50,22 +50,22 @@ public class ObjectPoolManager
         
     }
 
-    // Returns the singleton instance of ObjectPoolManager
-    public static ObjectPoolManager Get()
-    {
-        if (instance == null)
-        {
-            instance = new ObjectPoolManager();
-        }
-
-        return instance;
-    }
-
     // Initializes a new ObjectPoolManager, recreating all ObjectPools
     // This is needed, because Unity kills all Gameobjects on scene exit
     public static void Reset()
     {
-        instance = new ObjectPoolManager();
+        s_instance = new ObjectPoolManager();
+    }
+
+    // Returns the singleton instance of ObjectPoolManager
+    public static ObjectPoolManager Get()
+    {
+        if (s_instance == null)
+        {
+            s_instance = new ObjectPoolManager();
+        }
+
+        return s_instance;
     }
 
     ObjectPool GetPool(GameObject prefab)

@@ -1,7 +1,4 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-
-public interface ITransitioner
+﻿public interface ITransitioner
 {
     Transition Execute();
 }

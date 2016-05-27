@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
-        
+
 public class MeleeWeapon : MonoBehaviour, ICanShoot
 {
     public float m_fRange = 0;
@@ -25,35 +24,33 @@ public class MeleeWeapon : MonoBehaviour, ICanShoot
 
     float m_TimeSinceShot = 0;
 
-    LineRenderer rayRenderer;
-    Transform parentCamera;
-    Rigidbody parentBody;
+    LineRenderer m_rayRenderer;
+    Transform m_parentCamera;
+    Rigidbody m_parentBody;
 
     public void Start()
     {
-        rayRenderer = GetComponent<LineRenderer>();
-        rayRenderer.SetWidth(0.1f, 25f);
-        rayRenderer.enabled = false;
+        m_rayRenderer = GetComponent<LineRenderer>();
+        m_rayRenderer.SetWidth(0.1f, 25f);
+        m_rayRenderer.enabled = false;
 
         // Find the transform of the parents camera component
         foreach (Transform child in transform.parent.transform)
         {
-            if (child.tag == "MainCamera") parentCamera = child;
+            if (child.tag == "MainCamera") m_parentCamera = child;
         }
-
-        parentBody = GetComponentInParent<Rigidbody>();
+        m_parentBody = GetComponentInParent<Rigidbody>();
     }
 
     public void Update()
     {
-        // Check if ray has exceeded time to live
-        if (rayRenderer.enabled)
+        if (m_rayRenderer.enabled)
         {
             m_TimeSinceShot += Time.deltaTime;
 
             if (m_TimeSinceShot > m_fTimeToDrawRay)
             {
-                rayRenderer.enabled = false;
+                m_rayRenderer.enabled = false;
                 m_TimeSinceShot = 0;
             }
         }
@@ -61,39 +58,33 @@ public class MeleeWeapon : MonoBehaviour, ICanShoot
 
     public void Shoot()
     {
-        // Get origin of shooter and look direction via camera transform
-        Vector3 origin = parentCamera.transform.position;
-        Vector3 fwd = parentCamera.transform.forward;
+        Vector3 origin = m_parentCamera.transform.position;
+        Vector3 fwd = m_parentCamera.transform.forward;
         Ray ray = new Ray(origin, fwd);
 
         RaycastHit collisionInfo;
 
-        rayRenderer.SetPosition(0, origin);
-
-        // Raycast into the scene
-        if (Physics.SphereCast(parentCamera.transform.position, 25, fwd, out collisionInfo, m_fRange, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
-        //   if (Physics.Raycast(parentCamera.transform.position, fwd, out collisionInfo, m_fRange, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
+        m_rayRenderer.SetPosition(0, origin);
+        
+        if (Physics.SphereCast(m_parentCamera.transform.position, 25, fwd, out collisionInfo, m_fRange, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
         {
-            // Draw the ray to the point of collision
-            rayRenderer.SetPosition(1, collisionInfo.point);
-
-            // Careful, this is expensive as it uses reflection 
-            //Project velocity onto view vector
+            m_rayRenderer.SetPosition(1, collisionInfo.point);
             Vector3 effectiveVelocity;
-            if (Vector3.Angle(parentBody.velocity, fwd) < 90)
-                effectiveVelocity = Vector3.Project(parentBody.velocity, fwd);
+
+            if (Vector3.Angle(m_parentBody.velocity, fwd) < 90)
+            {
+                effectiveVelocity = Vector3.Project(m_parentBody.velocity, fwd);
+            }
             else
+            {
                 effectiveVelocity = Vector3.zero;
-            //using squaredmagnitude because its faster and makes high velocity even more rewarding
+            }
             collisionInfo.collider.gameObject.SendMessage("RecieveDamage", new DamageInfo(gameObject, m_fixedDamage + effectiveVelocity.sqrMagnitude*m_VelocityMultiplier), SendMessageOptions.DontRequireReceiver);
         }
         else
         {
-            // If no hit, draw the point until max range
-            rayRenderer.SetPosition(1, ray.GetPoint(m_fRange));
+            m_rayRenderer.SetPosition(1, ray.GetPoint(m_fRange));
         }
-
-        //rayRenderer.enabled = true;
     }
 
     public void Enable()

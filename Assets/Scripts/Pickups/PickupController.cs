@@ -8,31 +8,31 @@ using System.Collections.Generic;
 \*/
 public class PickupController : MonoBehaviour
 {
-    public GameObject pickUpGo;
-    List<ActionOnPickUpComponent> deactivated;
+    public GameObject m_pickUpGo;
+    List<ActionOnPickUpComponent> m_deactivated;
 
     void Start()
     {
-        deactivated = new List<ActionOnPickUpComponent>();
+        m_deactivated = new List<ActionOnPickUpComponent>();
 
         // Add reference to self to each pickup so they can notify the controller when they have been
         // picked up.
-        foreach (ActionOnPickUpComponent pickup in pickUpGo.GetComponentsInChildren<ActionOnPickUpComponent>())
+        foreach (ActionOnPickUpComponent pickup in m_pickUpGo.GetComponentsInChildren<ActionOnPickUpComponent>())
         {
-            pickup.pickUpController = this;
+            pickup.m_pickUpController = this;
         }
     }
 
     void Update()
     {
-        for (int idx = 0; idx < deactivated.Count; idx++)
+        for (int idx = 0; idx < m_deactivated.Count; idx++)
         {
-            if (deactivated[idx].TryReactivate()) deactivated.Remove(deactivated[idx]);
+            if (m_deactivated[idx].TryReactivate()) m_deactivated.Remove(m_deactivated[idx]);
         }
     }
 
     public void AddDeactivated(ActionOnPickUpComponent pickUp)
     {
-        deactivated.Add(pickUp);
+        m_deactivated.Add(pickUp);
     }
 }

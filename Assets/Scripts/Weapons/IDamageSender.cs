@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 /*\
 |*| Should be implemented by all projectiles, used as  
@@ -8,7 +7,5 @@ using System.Collections;
 \*/
 public interface IDamageSender
 {
-    // Used for information that is send to damage reciever 
-    // about the sender and the weapon used.
     GameObject SourceWeapon { get; set; }
 }

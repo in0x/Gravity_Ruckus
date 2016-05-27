@@ -49,14 +49,3 @@ public class IPadGUIElement : MonoBehaviour
         return m_downTrans.Execute();
     }
 }
-
-/*
-    void Update();
-    void Activate();
-    void Deactive();
-
-    Transition GoLeft();
-    Transition GoRight();
-    Transition GoUp();
-    Transition GoDown(); 
-*/

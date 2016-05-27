@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using UnityEngine.SceneManagement;
+﻿using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 using XboxCtrlrInput;
 using System.Linq;
@@ -9,30 +8,30 @@ public class GameStartMenu : IPadGUIElement
     public MenuInputController m_globalInputController;
 
     // These are the fields for selecting player settings like character color or name
-    public PlayerSelectionField topleft;
-    public PlayerSelectionField topright;
-    public PlayerSelectionField bottomleft;
-    public PlayerSelectionField bottomright;
+    public PlayerSelectionField m_topleft;
+    public PlayerSelectionField m_topright;
+    public PlayerSelectionField m_bottomleft;
+    public PlayerSelectionField m_bottomright;
 
     public string m_sceneToLoad;
 
-    List<PlayerSelectionField> playerFields;
-    List<int> activatedControllers;
-    CircularListIterator<PlayerSelectionField> iter;
+    List<PlayerSelectionField> m_playerFields;
+    List<int> m_activatedControllers;
+    CircularListIterator<PlayerSelectionField> m_iter;
     
     protected override void Start()
     {
         base.Start();
 
-        playerFields = new List<PlayerSelectionField>();
-        activatedControllers = new List<int>();
+        m_playerFields = new List<PlayerSelectionField>();
+        m_activatedControllers = new List<int>();
             
-        playerFields.Add(topleft);
-        playerFields.Add(topright);
-        playerFields.Add(bottomleft);
-        playerFields.Add(bottomright);
+        m_playerFields.Add(m_topleft);
+        m_playerFields.Add(m_topright);
+        m_playerFields.Add(m_bottomleft);
+        m_playerFields.Add(m_bottomright);
 
-        iter = new CircularListIterator<PlayerSelectionField>(playerFields);
+        m_iter = new CircularListIterator<PlayerSelectionField>(m_playerFields);
     }
 
     protected override void Update()
@@ -42,22 +41,22 @@ public class GameStartMenu : IPadGUIElement
             // Foreach controller ID check if the player has signed on
             foreach (int id in Enumerable.Range(1, 4))
             {
-                if (!activatedControllers.Contains(id)) CheckForSignIn(id);
+                if (!m_activatedControllers.Contains(id)) CheckForSignIn(id);
                 else CheckForSignOut(id);
             }
             
             if (m_globalInputController.GetButtonDown("Start"))
             {
                 /* Set global game parameters and start game */
-                for (int i = 0; i < activatedControllers.Count; i++)
+                for (int i = 0; i < m_activatedControllers.Count; i++)
                 {
-                    MatchProperties.playerControllerIDs[i] = activatedControllers[i];
+                    MatchProperties.playerControllerIDs[i] = m_activatedControllers[i];
                 }
 
-                MatchProperties.playerColors[0] = topleft.m_color;
-                MatchProperties.playerColors[1] = topright.m_color;
-                MatchProperties.playerColors[2] = bottomleft.m_color;
-                MatchProperties.playerColors[3] = bottomright.m_color;
+                MatchProperties.playerColors[0] = m_topleft.m_color;
+                MatchProperties.playerColors[1] = m_topright.m_color;
+                MatchProperties.playerColors[2] = m_bottomleft.m_color;
+                MatchProperties.playerColors[3] = m_bottomright.m_color;
                
                 SceneManager.LoadScene(m_sceneToLoad);
             }
@@ -68,32 +67,28 @@ public class GameStartMenu : IPadGUIElement
     {
         if (m_globalInputController.GetButtonDownWithID("ButtonClick", (XboxController)id))
         {
-            if (iter.Current.m_active == false)
+            if (m_iter.Current.m_active == false)
             {
-                iter.Current.SetControllerNumber(id);
-                iter.Current.Activate();
-                iter++;
-                activatedControllers.Add(id);
+                m_iter.Current.SetControllerNumber(id);
+                m_iter.Current.Activate();
+                m_iter++;
+                m_activatedControllers.Add(id);
             }
         }
     }
-
-    /*
-        Needs to be tested with multiple controllers.
-    */
-
+    
     void CheckForSignOut(int id)
     {
         if (m_globalInputController.GetButtonDownWithID("Cancel", (XboxController)id))
         {
-            var selectedField = playerFields.Find((field => {
+            var selectedField = m_playerFields.Find((field => {
                 if (field.GetControllerNumber() == id) return true;
                 return false;
             }));
 
             selectedField.SetControllerNumber(0);
             selectedField.Deactivate();
-            activatedControllers.Remove(id);
+            m_activatedControllers.Remove(id);
         }
     }
 

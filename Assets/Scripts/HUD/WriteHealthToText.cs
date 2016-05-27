@@ -1,28 +1,27 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 public class WriteHealthToText : MonoBehaviour
 {
-    public GameObject player;
-    public Text text;
+    public GameObject m_player;
+    public Text m_text;
 
-    ShootOnClick weaponController;
-    HealthController health;
-    string playerName;
+    ShootOnClick m_weaponController;
+    HealthController m_health;
+    string m_playerName;
 
 	void Start()
     {
-        health = player.GetComponent<HealthController>();
-        playerName = player.name;
+        m_health = m_player.GetComponent<HealthController>();
+        m_playerName = m_player.name;
 
-        weaponController = player.GetComponent<ShootOnClick>();
+        m_weaponController = m_player.GetComponent<ShootOnClick>();
 	}
 	void Update()
     {
         int curAmmo, maxAmmo;
-        weaponController.GetCurrentAmmoCount(out curAmmo, out maxAmmo);
+        m_weaponController.GetCurrentAmmoCount(out curAmmo, out maxAmmo);
 
-        text.text = "HP: " + health.Health.ToString() + " Ammo: " + curAmmo + "/" + maxAmmo;
+        m_text.text = "HP: " + m_health.Health.ToString() + " Ammo: " + curAmmo + "/" + maxAmmo;
 	}
 }

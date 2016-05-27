@@ -1,13 +1,12 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections;
 
 public enum PlayerColor
 {
-    red,
-    green, 
-    blue, 
-    hotpink
+    red = 0,
+    green = 1, 
+    blue = 2, 
+    hotpink = 3
 }
 
 public class PlayerSelectionField : IPadGUIElement
@@ -15,8 +14,8 @@ public class PlayerSelectionField : IPadGUIElement
     public int m_padNumber;
     public PlayerColor m_color;
 
-    public Sprite inactiveImg;
-    public Sprite activeImg;
+    public Sprite m_inactiveImg;
+    public Sprite m_activeImg;
 
     MenuInputController m_inputController;
     Button m_button;
@@ -39,18 +38,11 @@ public class PlayerSelectionField : IPadGUIElement
         return m_inputController.GetPlayerNumber();
     }
 
-    public void ready()
-    {
-        Debug.Log("PlayerSelectionField ready");
-    }
-
     protected override void Update()
     {
         if (m_active)
         {
-            if (m_inputController.GetButtonDown("ButtonClick")) ready();
-
-            else if (m_inputController.GetButtonDown("RightBumper"))
+            if (m_inputController.GetButtonDown("RightBumper"))
             {
                 int col = (((int)m_color) + 1);
                 if (col == 5) col = 0;
@@ -101,7 +93,7 @@ public class PlayerSelectionField : IPadGUIElement
         m_button.image.color = new Color(curColor.r, curColor.g, curColor.b, 0.7843137254901f);
         Debug.Log("PlayerSelectionField activated");
 
-        m_button.image.sprite = activeImg;
+        m_button.image.sprite = m_activeImg;
         setButtonColor();
 
         m_active = true;
@@ -113,7 +105,7 @@ public class PlayerSelectionField : IPadGUIElement
         m_button.image.color = new Color(curColor.r, curColor.g, curColor.b, 0.5f);
         Debug.Log("PlayerSelectionField deactivated");
 
-        m_button.image.sprite = inactiveImg;
+        m_button.image.sprite = m_inactiveImg;
         m_button.image.color = new Color(1, 1, 1, 0.7843137254901f);
 
         m_active = false;

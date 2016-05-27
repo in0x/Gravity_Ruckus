@@ -13,6 +13,8 @@ public class BounceProjectile : MonoBehaviour, IDamageSender
     // Used for information that is send to damage reciever 
     // about the sender and the weapon used.
     GameObject m_sourceWeapon;
+    DamageInfo m_damageInfo;
+
     public GameObject SourceWeapon
     {
         get { return m_sourceWeapon; }
@@ -21,20 +23,12 @@ public class BounceProjectile : MonoBehaviour, IDamageSender
             m_sourceWeapon = value;
         }
     }
-
-    DamageInfo m_damageInfo;
-
+    
     void Start() {}
 
     void OnEnable()
     {
         if (m_body == null) m_body = GetComponent<Rigidbody>();
-
-        /*
-            Note that the speed multiplier is currently being added by the gun that fires the projectile,
-            as multiplying it here would just mean it being overwritten when the gun sets the projectiles
-            velocity. A solution would be to move bullet velocity and speed mult into the same object.
-        */
         m_currentBounces = m_bounces;
     }
 

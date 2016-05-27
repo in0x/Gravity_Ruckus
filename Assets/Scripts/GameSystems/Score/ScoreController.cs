@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
+using System.Linq;
 
 /*\ 
 |*| Holds all data related to a players score.
@@ -50,14 +51,16 @@ class Score
 \*/
 public struct Stats
 {
-    public Stats(int _kills, int _deaths)
+    public Stats(int _kills, int _deaths, GameObject _player)
     {
         kills = _kills;
         deaths = _deaths;
+        player = _player;
     }
 
     public int kills;
     public int deaths;
+    public GameObject player;
 }
 
 public class ScoreController : MonoBehaviour
@@ -67,6 +70,9 @@ public class ScoreController : MonoBehaviour
 
     // Holds all player's DeathControllers.
     List<DeathController> m_deathControllers;
+
+    public GameObject m_gameOverSystem;
+    public int m_killsToWin = 1;
 
     void Start()
     {
@@ -85,12 +91,20 @@ public class ScoreController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.S))
+        foreach (var kvp in m_scoreTable)
         {
-            foreach (var kvp in m_scoreTable)
+            if (kvp.Value.Kills >= m_killsToWin)
             {
-                Debug.Log(kvp.Key.name + " " + kvp.Value);
-            }
+                m_gameOverSystem.SetActive(true);
+
+                List<Stats> stats = new List<Stats>();
+                foreach (var score in m_scoreTable)
+                {
+                    stats.Add(new Stats(score.Value.Kills, score.Value.Deaths, score.Key));
+                }
+                stats.Sort((stat1, stat2) => stat1.kills.CompareTo(stat2.kills));
+                m_gameOverSystem.GetComponent<GameOver>().EndGame(stats);
+            } 
         }
     }
 
@@ -101,7 +115,7 @@ public class ScoreController : MonoBehaviour
         if (m_scoreTable.ContainsKey(player))
         {
             var curScore = m_scoreTable[player];
-            return new Stats(curScore.Kills, curScore.Deaths);
+            return new Stats(curScore.Kills, curScore.Deaths, player);
 
         }
         return new Stats();

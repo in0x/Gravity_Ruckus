@@ -4,9 +4,9 @@ public class AmmoComponent : MonoBehaviour
 {
     // Maximum capacity.
     public int m_maxAmmo;
-
     // Currently availible capacity.
     int m_currentAmmo;
+
     public int CurrentAmmo
     {
         get

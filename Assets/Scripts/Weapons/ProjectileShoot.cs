@@ -12,6 +12,8 @@ public class ProjectileShoot : MonoBehaviour, ICanShoot
     [SerializeField]
     float m_cooldown = 0.5f;
 
+    bool m_available;
+
     Transform m_parentCamera;
     CapsuleCollider m_parentCollider;
     private SphereCollider m_projectileCollider;
@@ -21,15 +23,14 @@ public class ProjectileShoot : MonoBehaviour, ICanShoot
     ObjectPoolManager m_poolManager;
 
     // Used to track ammo of weapon
-    AmmoComponent ammoComp;
+    AmmoComponent m_ammoComp;
 
     public float Cooldown
     {
         get { return m_cooldown; }
         set {}
     }
-
-    bool m_available;
+    
     public bool Available
     {
         get { return m_available; }
@@ -38,7 +39,6 @@ public class ProjectileShoot : MonoBehaviour, ICanShoot
 
     void Start()
     {
-        // Find the transform of the parents camera component.
         foreach (Transform child in transform.parent.transform)
         {
             if (child.tag == "MainCamera") m_parentCamera = child;
@@ -49,14 +49,11 @@ public class ProjectileShoot : MonoBehaviour, ICanShoot
         m_poolManager = ObjectPoolManager.Get();
         m_shotProjectiles = new List<PooledGameObject>();
 
-        ammoComp = GetComponent<AmmoComponent>();
+        m_ammoComp = GetComponent<AmmoComponent>();
     }
 
     void Update()
     {
-        // Projectiles deactivate themselves when they are ready to be released
-        // -> Release all projectiles that are inactive and remove them from
-        // the list of active projectiles.
         m_shotProjectiles.RemoveAll((pooledObject => 
         {
             if (pooledObject.Instance.activeSelf == false)
@@ -70,7 +67,7 @@ public class ProjectileShoot : MonoBehaviour, ICanShoot
 
     public void Shoot()
     {
-        if (ammoComp.UseAmmo(m_ammoUsedOnShot) == 0)
+        if (m_ammoComp.UseAmmo(m_ammoUsedOnShot) == 0)
         {
             Debug.Log("Out of ammo");
             return;
@@ -85,8 +82,7 @@ public class ProjectileShoot : MonoBehaviour, ICanShoot
         Vector3 fwd_cpy = fwd.normalized;
         fwd_cpy *= (m_parentCollider.height / 2 + (m_projectileCollider.radius / 2));
         origin += fwd_cpy;
-
-        // Acquire a pooled projectile and add it to tracking list.
+        
         var pooled = m_poolManager.Request(m_projectilePrefab);
         m_shotProjectiles.Add(pooled);
 
@@ -94,7 +90,7 @@ public class ProjectileShoot : MonoBehaviour, ICanShoot
         projectile.transform.position = origin;
         projectile.transform.rotation = m_parentCamera.rotation;
 
-        Vector3 projectile_vel = fwd * m_fInherentProjectileVel; //+ transform.parent.GetComponent<Rigidbody>().velocity;
+        Vector3 projectile_vel = fwd * m_fInherentProjectileVel; 
 
         projectile.GetComponent<Rigidbody>().velocity = projectile_vel;
         projectile.GetComponent<IDamageSender>().SourceWeapon = gameObject;

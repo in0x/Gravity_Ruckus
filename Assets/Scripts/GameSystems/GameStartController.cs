@@ -18,7 +18,9 @@ public class GameStartController : MonoBehaviour
         ConfigurePlayer(0, player0);
         ConfigurePlayer(1, player1);
         ConfigurePlayer(2, player2);
-        ConfigurePlayer(3, player3);       
+        ConfigurePlayer(3, player3);
+
+        Time.timeScale = 1f;    
     }
 
     void ConfigurePlayer(int idx, GameObject player)
@@ -26,7 +28,7 @@ public class GameStartController : MonoBehaviour
         if (MatchProperties.playerControllerIDs[idx] != 0)
         {
             player.SetActive(true);
-            player.GetComponentInChildren<PlayerInput>().playerNumber = MatchProperties.playerControllerIDs[idx];
+            player.GetComponentInChildren<PlayerInput>().m_playerNumber = MatchProperties.playerControllerIDs[idx];
 
             switch (MatchProperties.playerColors[idx])
             {

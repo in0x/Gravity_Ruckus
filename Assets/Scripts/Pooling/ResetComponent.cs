@@ -9,11 +9,11 @@
 \*/
 public class ResetComponent : MonoBehaviour
 {
-    Rigidbody rigidBody;
+    Rigidbody m_rigidBody;
 
     void Start()
     {
-        rigidBody = GetComponent<Rigidbody>();
+        m_rigidBody = GetComponent<Rigidbody>();
     }
 
     public virtual void Reset()
@@ -21,10 +21,10 @@ public class ResetComponent : MonoBehaviour
         gameObject.transform.position = new Vector3();
         gameObject.transform.rotation = Quaternion.identity;
 
-        if (rigidBody != null)
+        if (m_rigidBody != null)
         {
-            rigidBody.velocity = Vector3.zero;
-            rigidBody.angularVelocity = Vector3.zero;
+            m_rigidBody.velocity = Vector3.zero;
+            m_rigidBody.angularVelocity = Vector3.zero;
         }
     }
 }

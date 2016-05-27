@@ -1,22 +1,19 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class WeaponRotator : MonoBehaviour
 {
-    Transform cameraTransform;
+    Transform m_cameraTransform;
 
 	void Start ()
     {
-        // Is this real life.
         foreach (Transform child in transform.parent.transform.parent.transform) 
         {
-            if (child.tag == "MainCamera") cameraTransform = child;
-        }
-        
+            if (child.tag == "MainCamera") m_cameraTransform = child;
+        }   
     }
 	
 	void Update ()
     {
-        transform.rotation = cameraTransform.rotation;
+        transform.rotation = m_cameraTransform.rotation;
 	}
 }

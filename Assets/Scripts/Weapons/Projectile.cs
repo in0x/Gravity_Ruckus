@@ -1,17 +1,16 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class Projectile : MonoBehaviour, IDamageSender
 {
-    public float speed;
+    public float m_speed;
 
-    public float impactDmg = 35f;
-    public float splashDmg = 10f;
+    public float m_impactDmg = 35f;
+    public float m_splashDmg = 10f;
 
     public float m_fExplRadius = 5.0f;
     public float m_fExplPower = 1000.0f;
 
-    Rigidbody body;
+    Rigidbody m_body;
 
     // Used for information that is send to damage reciever 
     // about the sender and the weapon used.
@@ -19,16 +18,13 @@ public class Projectile : MonoBehaviour, IDamageSender
     public GameObject SourceWeapon
     {
         get { return m_sourceWeapon; }
-        set
-        {
-            m_sourceWeapon = value;
-        }
+        set { m_sourceWeapon = value; }
     }
 
     void Start()
     {
-        body = GetComponent<Rigidbody>();
-        body.velocity *= speed;
+        m_body = GetComponent<Rigidbody>();
+        m_body.velocity *= m_speed;
 	}
     
     void OnCollisionEnter(Collision collision)
@@ -38,14 +34,14 @@ public class Projectile : MonoBehaviour, IDamageSender
         // Also expensive
         Collider[] colliders = Physics.OverlapSphere(explosionPos, m_fExplRadius);
 
-        DamageInfo impactInfo = new DamageInfo(SourceWeapon, impactDmg);
+        DamageInfo impactInfo = new DamageInfo(SourceWeapon, m_impactDmg);
 
         // Careful, this is expensive as it uses reflection
         // This, will however only trigger on colliders that also have IDamageRecievers in their hierarchy level, meaning that
         // the players main capsule collider will not be affected
         collision.collider.gameObject.SendMessageUpwards("RecieveDamage", impactInfo, SendMessageOptions.DontRequireReceiver);
         
-        DamageInfo splashInfo = new DamageInfo(SourceWeapon, splashDmg);
+        DamageInfo splashInfo = new DamageInfo(SourceWeapon, m_splashDmg);
 
         foreach (Collider hit in colliders)
         {
