@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class EmptyTransition : MonoBehaviour, ITransitioner
 {
@@ -7,7 +6,6 @@ public class EmptyTransition : MonoBehaviour, ITransitioner
 
     void Start()
     {
-
         m_self = GetComponent<IPadGUIElement>();
     }
 

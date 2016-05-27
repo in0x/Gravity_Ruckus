@@ -1,5 +1,4 @@
-﻿using UnityEngine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 // This is a custom iterator that has the capability of going back. 
 // It also wraps back to 0 after going over the end of the list.

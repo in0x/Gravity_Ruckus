@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class MovementHandler : MonoBehaviour, IInputObserver
 {
@@ -23,8 +22,7 @@ public class MovementHandler : MonoBehaviour, IInputObserver
         m_RigidBody = GetComponent<Rigidbody>();
         m_jumpController = GetComponent<JumpController>();
         m_aimAssist = GetComponent<AimAssist>();
-
-        // Find the transform of the parents camera component
+        
         foreach (Transform child in gameObject.transform)
         {
             if (child.tag == "MainCamera") m_cam = child;
@@ -61,7 +59,7 @@ public class MovementHandler : MonoBehaviour, IInputObserver
 
         if (wantsToJump)
         {
-            if (m_jumpController.canJump())
+            if (m_jumpController.CanJump())
             {
                 m_posInput.y += m_fJumpHeight;
             }
@@ -77,15 +75,15 @@ public class MovementHandler : MonoBehaviour, IInputObserver
         transform.localRotation *= Quaternion.Euler(0, m_xRotInput * m_xLookMul, 0);
         Quaternion quat = Quaternion.Euler(m_yRotInput * m_yLookMul, 0, 0);
 
-        if (m_cam.localRotation.eulerAngles.x > 80 && m_cam.localRotation.eulerAngles.x < 180 && quat.x < 0) // > 60 && < 180 && < 0
+        if (m_cam.localRotation.eulerAngles.x > 80 && m_cam.localRotation.eulerAngles.x < 180 && quat.x < 0) 
         {
             m_cam.localRotation *= quat;
         }
-        else if (m_cam.localRotation.eulerAngles.x < 275 && m_cam.localRotation.eulerAngles.x > 180 && quat.x > 0) // < 300 && > 180 && > 0
+        else if (m_cam.localRotation.eulerAngles.x < 275 && m_cam.localRotation.eulerAngles.x > 180 && quat.x > 0) 
         {
             m_cam.localRotation *= quat;
         }
-        else if (m_cam.localRotation.eulerAngles.x < 80 || m_cam.localRotation.eulerAngles.x > 275) // < 60 || > 300
+        else if (m_cam.localRotation.eulerAngles.x < 80 || m_cam.localRotation.eulerAngles.x > 275) 
         {
             m_cam.localRotation *= quat;
         }

@@ -1,6 +1,5 @@
 ﻿using UnityEngine;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 public class ShootOnClick : MonoBehaviour, IInputObserver
@@ -8,10 +7,10 @@ public class ShootOnClick : MonoBehaviour, IInputObserver
     public PlayerInput m_playerInputRef { get; set; }
     
     List<ICanShoot> m_weapons;
-    CircularListIterator<ICanShoot> currentWeapon;
+    CircularListIterator<ICanShoot> m_currentWeapon;
 
     bool m_isShooting = false;
-    const int left = 0;
+    const int m_left = 0;
 
     float m_CDtime = 0;
     bool m_isOnCD = false;
@@ -30,8 +29,8 @@ public class ShootOnClick : MonoBehaviour, IInputObserver
 
         foreach (var weapon in m_weapons) weapon.Disable();   
         
-        currentWeapon = new CircularListIterator<ICanShoot>(m_weapons);
-        currentWeapon.Current.Enable();
+        m_currentWeapon = new CircularListIterator<ICanShoot>(m_weapons);
+        m_currentWeapon.Current.Enable();
     }
 
     void Update()
@@ -39,7 +38,7 @@ public class ShootOnClick : MonoBehaviour, IInputObserver
         if (m_isOnCD)
         {
             m_CDtime += Time.deltaTime;
-            if (m_CDtime >= currentWeapon.Current.Cooldown)
+            if (m_CDtime >= m_currentWeapon.Current.Cooldown)
             {
                 m_isOnCD = false;
                 m_CDtime = 0;
@@ -48,7 +47,7 @@ public class ShootOnClick : MonoBehaviour, IInputObserver
 
         if (!m_isOnCD)
         {
-            if (m_playerInputRef.GetAxis("Shoot")>0.1)
+            if (m_playerInputRef.GetAxis("Shoot") > 0.1)
             {
                 m_isShooting = true;
             }
@@ -71,24 +70,24 @@ public class ShootOnClick : MonoBehaviour, IInputObserver
 
     void IterateWeapons(bool forward)
     {
-        var currentWep = currentWeapon.Current;
+        var currentWep = m_currentWeapon.Current;
         
         Action move;
         if (forward)
         {
-            move = currentWeapon.MoveNext;
+            move = m_currentWeapon.MoveNext;
         }
-        else move = currentWeapon.MoveBack;
+        else move = m_currentWeapon.MoveBack;
          
-        currentWeapon.Current.Disable();
+        m_currentWeapon.Current.Disable();
         move();
 
-        while (!currentWeapon.Current.Available && currentWep != currentWeapon.Current)
+        while (!m_currentWeapon.Current.Available && currentWep != m_currentWeapon.Current)
         {
             move();  
         }     
 
-        currentWeapon.Current.Enable();
+        m_currentWeapon.Current.Enable();
     }
 
     public void DisableAllWeapons()
@@ -102,7 +101,7 @@ public class ShootOnClick : MonoBehaviour, IInputObserver
 
     public void GetCurrentAmmoCount(out int currentAmmo, out int maxAmmo)
     {
-        currentWeapon.Current.GetAmmoState(out currentAmmo, out maxAmmo);
+        m_currentWeapon.Current.GetAmmoState(out currentAmmo, out maxAmmo);
     }
 
     void FixedUpdate()
@@ -110,19 +109,16 @@ public class ShootOnClick : MonoBehaviour, IInputObserver
         if (m_isShooting)
         {
             m_isShooting = false;
-            
-            // Neat.
-            (currentWeapon.Current as ICanShoot).Shoot();
-
+            (m_currentWeapon.Current as ICanShoot).Shoot();
             m_isOnCD = true;
         }
     }
 
     public void ResetWeaponsRespawn()
     {
-        while(currentWeapon.Current != m_weapons[0])
+        while(m_currentWeapon.Current != m_weapons[0])
         {
-            currentWeapon++;
+            m_currentWeapon++;
         }
     }
 }

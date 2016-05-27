@@ -6,6 +6,7 @@ public static class MatchProperties
     public static bool customGame = false;
     //public static int[] playerControllerIDs = new int[4];
     public static int[] playerControllerIDs = { 1, 2, 3, 4 };
+
     public static PlayerColor[] playerColors = { PlayerColor.blue, PlayerColor.green, PlayerColor.hotpink, PlayerColor.red };
 
     // Use PlayerColor enums casted to int for indexing (red, green, blue, pink)

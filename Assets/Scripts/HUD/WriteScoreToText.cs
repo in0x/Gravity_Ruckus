@@ -3,19 +3,18 @@ using UnityEngine.UI;
 
 public class WriteScoreToText : MonoBehaviour
 {
-    public Text text;
-    public GameObject player;
+    public Text m_text;
+    public GameObject m_player;
 
-    ScoreController scoreControl;
+    ScoreController m_scoreController;
 
     void Start()
     {
-        scoreControl = FindObjectOfType<ScoreController>();
+        m_scoreController = FindObjectOfType<ScoreController>();
     }
     void Update()
     {
-        Stats playerStats = scoreControl.GetStats(player);
-
-        text.text = "Frags: " + playerStats.kills;
+        Stats playerStats = m_scoreController.GetStats(m_player);
+        m_text.text = "Frags: " + playerStats.kills;
     }
 }

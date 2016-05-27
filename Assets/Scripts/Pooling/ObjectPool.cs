@@ -50,7 +50,6 @@ public class ObjectPool
         while (iter.Current.InUse)
         {
             iter++;
-
             if (iter.Current == current) return null;
         }
 

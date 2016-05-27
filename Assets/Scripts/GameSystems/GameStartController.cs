@@ -28,7 +28,7 @@ public class GameStartController : MonoBehaviour
         if (MatchProperties.playerControllerIDs[idx] != 0)
         {
             player.SetActive(true);
-            player.GetComponentInChildren<PlayerInput>().playerNumber = MatchProperties.playerControllerIDs[idx];
+            player.GetComponentInChildren<PlayerInput>().m_playerNumber = MatchProperties.playerControllerIDs[idx];
 
             switch (MatchProperties.playerColors[idx])
             {

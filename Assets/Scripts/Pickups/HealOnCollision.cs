@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class HealOnCollision : ActionOnPickUpComponent
 {
@@ -11,7 +10,7 @@ public class HealOnCollision : ActionOnPickUpComponent
 
         if (pickedUp)
         {
-            pickUpController.AddDeactivated(this);
+            m_pickUpController.AddDeactivated(this);
             gameObject.SetActive(false);
         }
     }   

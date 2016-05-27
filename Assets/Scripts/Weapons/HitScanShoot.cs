@@ -17,11 +17,9 @@ public class HitScanShoot : MonoBehaviour, ICanShoot, IDamageSender
 
     float m_TimeSinceShot = 0;
 
-    LineRenderer rayRenderer;
-    Transform parentCamera;
-
-    // Used to track ammo of weapon
-    AmmoComponent ammoComp;
+    LineRenderer m_rayRenderer;
+    Transform m_parentCamera;
+    AmmoComponent m_ammoComp;
 
     // Used for information that is send to damage reciever 
     // about the sender and the weapon used.
@@ -44,31 +42,28 @@ public class HitScanShoot : MonoBehaviour, ICanShoot, IDamageSender
 
     public void Start()
     {
-        rayRenderer = GetComponent<LineRenderer>();
-        rayRenderer.SetWidth(0.1f, 0.1f);
-        rayRenderer.enabled = false;
-
-        // Find the transform of the parents camera component
+        m_rayRenderer = GetComponent<LineRenderer>();
+        m_rayRenderer.SetWidth(0.1f, 0.1f);
+        m_rayRenderer.enabled = false;
+        
         foreach (Transform child in transform.parent.transform)
         {
-            if (child.tag == "MainCamera") parentCamera = child;
+            if (child.tag == "MainCamera") m_parentCamera = child;
         }
 
-        ammoComp = GetComponent<AmmoComponent>();
-
+        m_ammoComp = GetComponent<AmmoComponent>();
         m_sourceWeapon = gameObject;
     }
 
     public void Update()
     {
-        // Check if ray has exceeded time to live
-        if (rayRenderer.enabled)
+        if (m_rayRenderer.enabled)
         {
             m_TimeSinceShot += Time.deltaTime;
 
             if (m_TimeSinceShot > m_fTimeToDrawRay)
             {
-                rayRenderer.enabled = false;
+                m_rayRenderer.enabled = false;
                 m_TimeSinceShot = 0;
             }
         }
@@ -76,39 +71,27 @@ public class HitScanShoot : MonoBehaviour, ICanShoot, IDamageSender
 
     public void Shoot()
     {
-        if (ammoComp.UseAmmo(m_ammoUsedOnShot) == 0)
-        {
-            Debug.Log("Out of ammo");
-            return;
-        };
-
+        if (m_ammoComp.UseAmmo(m_ammoUsedOnShot) == 0) return;
+        
         // Get origin of shooter and look direction via camera transform
-        Vector3 origin = parentCamera.transform.position;
-        Vector3 fwd = parentCamera.transform.forward;
+        Vector3 origin = m_parentCamera.transform.position;
+        Vector3 fwd = m_parentCamera.transform.forward;
         Ray ray = new Ray(origin, fwd);
 
         RaycastHit collisionInfo;
-
-        rayRenderer.SetPosition(0, origin);
-
-        // Raycast into the scene
-        if (Physics.Raycast(parentCamera.transform.position, fwd, out collisionInfo, m_fRange, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
+        m_rayRenderer.SetPosition(0, origin);
+        
+        if (Physics.Raycast(m_parentCamera.transform.position, fwd, out collisionInfo, m_fRange, Physics.DefaultRaycastLayers, QueryTriggerInteraction.Ignore))
         {
-            // Draw the ray to the point of collision
-            rayRenderer.SetPosition(1, collisionInfo.point);
-
+            m_rayRenderer.SetPosition(1, collisionInfo.point);
             DamageInfo dmgInfo = new DamageInfo(m_sourceWeapon, 50f);
-
-            // Careful, this is expensive as it uses reflection
             collisionInfo.collider.gameObject.SendMessage("RecieveDamage", dmgInfo, SendMessageOptions.DontRequireReceiver);
         }
         else
         {
-            // If no hit, draw the point until max range
-            rayRenderer.SetPosition(1, ray.GetPoint(m_fRange));
+            m_rayRenderer.SetPosition(1, ray.GetPoint(m_fRange));
         }
-
-        rayRenderer.enabled = true;
+        m_rayRenderer.enabled = true;
     }
 
     public void GetAmmoState(out int currentAmmo, out int maxAmmo)

@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class SpawnPoint : MonoBehaviour
 {
-    [SerializeField]
-    private Vector3 gravity;
+    public Vector3 gravity;
     
     void Start()
     {

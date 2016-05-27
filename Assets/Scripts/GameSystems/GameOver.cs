@@ -53,9 +53,9 @@ public class GameOver : MonoBehaviour
         // Reverse the order since the ScoreController does not sort the list properly for some reason
         for (int i = 0; i < 4; i++)
         {
-            GameOverInformation.kills[3 - i] = playerStats[i].kills;
-            GameOverInformation.deaths[3 - i] = playerStats[i].deaths;
-            GameOverInformation.names[3 - i] = playerStats[i].player.name;
+            GameOverInformation.killsArr[3 - i] = playerStats[i].kills;
+            GameOverInformation.deathsArr[3 - i] = playerStats[i].deaths;
+            GameOverInformation.namesArr[3 - i] = playerStats[i].player.name;
         }
     }
 }

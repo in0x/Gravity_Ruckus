@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using UnityEngine.UI;
 using System.Collections.Generic;
 
 /*\
@@ -14,32 +13,32 @@ public class PlayerSpawnController : MonoBehaviour
     public GameObject player3;
     public GameObject player4;
     
-    List<GameObject> activePlayers = new List<GameObject>();
-    List<GameObject> deadPlayers = new List<GameObject>();
-    List<SpawnPoint> spawnPoints = new List<SpawnPoint>();
-    Dictionary<string, RespawnTimer> respawnTimers;
+    List<GameObject> m_activePlayers = new List<GameObject>();
+    List<GameObject> m_deadPlayers = new List<GameObject>();
+    List<SpawnPoint> m_spawnPoints = new List<SpawnPoint>();
+    Dictionary<string, RespawnTimer> m_respawnTimers;
 
     System.Random rand = new System.Random();
 
     void Start()
     {
-        activePlayers.Add(player1);
-        activePlayers.Add(player2);
-        activePlayers.Add(player3);
-        activePlayers.Add(player4);
+        m_activePlayers.Add(player1);
+        m_activePlayers.Add(player2);
+        m_activePlayers.Add(player3);
+        m_activePlayers.Add(player4);
 
-        respawnTimers = new Dictionary<string, RespawnTimer>(activePlayers.Count);
+        m_respawnTimers = new Dictionary<string, RespawnTimer>(m_activePlayers.Count);
         RespawnTimer[] timers = FindObjectsOfType<RespawnTimer>();
 
         for (int i = 0; i < timers.Length; i++)
         {
-            respawnTimers.Add(activePlayers[i].name, timers[i]);
+            m_respawnTimers.Add(m_activePlayers[i].name, timers[i]);
             timers[i].gameObject.SetActive(false);
         }
 
         foreach (SpawnPoint spawn in spawnPointGroup.GetComponentsInChildren<SpawnPoint>())
         {
-            spawnPoints.Add(spawn);
+            m_spawnPoints.Add(spawn);
             spawn.gameObject.SetActive(false);
         }
     }
@@ -47,13 +46,13 @@ public class PlayerSpawnController : MonoBehaviour
     // Check if there are any inactive players, if yes, respawn them.
     void Update()
     {
-        if (deadPlayers.Count == 0) return;
+        if (m_deadPlayers.Count == 0) return;
 
-        foreach (var player in deadPlayers)
+        for (int i = 0; i < m_deadPlayers.Count; i++)
         {
-            if (respawnTimers[player.name].ReadyToSpawn)
+            if (m_respawnTimers[m_deadPlayers[i].name].ReadyToSpawn)
             {
-                Spawn(player);
+                Spawn(m_deadPlayers[i]);
             }
         }
     }
@@ -61,11 +60,11 @@ public class PlayerSpawnController : MonoBehaviour
     // Move player from active to inactive list.
     public void RegisterAsDead(GameObject player)
     {
-        if (activePlayers.IndexOf(player) != -1)
+        if (m_activePlayers.IndexOf(player) != -1)
         {
-            activePlayers.Remove(player);
-            deadPlayers.Add(player);
-            respawnTimers[player.name].gameObject.SetActive(true);
+            m_activePlayers.Remove(player);
+            m_deadPlayers.Add(player);
+            m_respawnTimers[player.name].gameObject.SetActive(true);
         }
     }
 
@@ -73,14 +72,14 @@ public class PlayerSpawnController : MonoBehaviour
     // DeathController and move them from the inactive to the active list.
     void Spawn(GameObject player)
     {
-        int idx = rand.Next(spawnPoints.Count);
+        int idx = rand.Next(m_spawnPoints.Count);
 
-        SpawnPoint spawn = spawnPoints[idx];
+        SpawnPoint spawn = m_spawnPoints[idx];
 
         player.GetComponent<DeathController>().Respawn(spawn.GetPosition(), spawn.GetRotation(), spawn.GetGravity());
 
-        deadPlayers.Remove(player);
-        activePlayers.Add(player);
+        m_deadPlayers.Remove(player);
+        m_activePlayers.Add(player);
     }
 
 }

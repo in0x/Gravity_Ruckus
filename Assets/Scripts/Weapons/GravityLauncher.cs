@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Linq;
 using System.Collections.Generic;
 
 public class GravityLauncher : MonoBehaviour, ICanShoot, IGravityObserver
@@ -37,7 +36,6 @@ public class GravityLauncher : MonoBehaviour, ICanShoot, IGravityObserver
 
     void Start()
     {
-        // Find the transform of the parents camera component.
         foreach (Transform child in transform.parent.transform)
         {
             if (child.tag == "MainCamera") m_parentCamera = child;
@@ -52,12 +50,9 @@ public class GravityLauncher : MonoBehaviour, ICanShoot, IGravityObserver
 
     void Update()
     {
-        // Projectiles deactivate themselves when they are ready to be released
-        // -> Release all projectiles that are inactive and remove them from
-        // the list of active projectiles.
         m_shotProjectiles.RemoveAll((pooledObject =>
         {
-            if (pooledObject.Instance.active == false)
+            if (pooledObject.Instance.activeSelf == false)
             {
                 pooledObject.Release();
                 return true;
@@ -68,11 +63,7 @@ public class GravityLauncher : MonoBehaviour, ICanShoot, IGravityObserver
 
     public void Shoot()
     {
-        if (ammoComp.UseAmmo(m_ammoUsedOnShot) == 0)
-        {
-            Debug.Log("Out of ammo");
-            return;
-        };
+        if (ammoComp.UseAmmo(m_ammoUsedOnShot) == 0) return;
 
         Vector3 origin = m_parentCamera.transform.position;
 
@@ -91,11 +82,9 @@ public class GravityLauncher : MonoBehaviour, ICanShoot, IGravityObserver
         var projectile = pooled.Instance;
         projectile.transform.rotation = m_parentCamera.rotation;
         projectile.transform.position = origin;
-
-        //Vector3 projectile_vel = m_fInherentProjectileVel * fwd;// + transform.parent.GetComponent<Rigidbody>().velocity);
-        Vector3 projectile_vel = fwd * m_fInherentProjectileVel; // + transform.root.gameObject.GetComponent<Rigidbody>().velocity;
-
-
+        
+        Vector3 projectile_vel = fwd * m_fInherentProjectileVel; 
+        
         projectile.GetComponent<Rigidbody>().velocity = projectile_vel;
         projectile.GetComponent<IDamageSender>().SourceWeapon = gameObject;
     }

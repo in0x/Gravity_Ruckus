@@ -1,45 +1,38 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using System.Collections.Generic;
 
 public class GameOverText : MonoBehaviour
 {
-    public GameObject NameText;
-    public GameObject KillText;
-    public GameObject DeathText;
+    public GameObject m_nameTextGameObj;
+    public GameObject m_killTextGameObj;
+    public GameObject m_deathTextGameObj;
 
-    public int numberOfThisPlayer = -1;
+    public int m_numberOfThisPlayer = -1;
 
-    Text[] texts;
+    Text[] m_texts;
 
 	void Start ()
     {
-        texts = new Text[3];
-        texts[0] = NameText.GetComponent<Text>();
-        texts[1] = KillText.GetComponent<Text>();
-        texts[2] = DeathText.GetComponent<Text>();
+        m_texts = new Text[3];
+        m_texts[0] = m_nameTextGameObj.GetComponent<Text>();
+        m_texts[1] = m_killTextGameObj.GetComponent<Text>();
+        m_texts[2] = m_deathTextGameObj.GetComponent<Text>();
 
-        string[] names = GameOverInformation.names;
-        int[] kills = GameOverInformation.kills;
-        int[] deaths = GameOverInformation.deaths;
+        string[] names = GameOverInformation.namesArr;
+        int[] kills = GameOverInformation.killsArr;
+        int[] deaths = GameOverInformation.deathsArr;
 
-        for (int i = 0; i < GameOverInformation.names.Length; i++)
+        for (int i = 0; i < GameOverInformation.namesArr.Length; i++)
         {
             string name = names[i];
-            if (System.Convert.ToInt32(name.Remove(0, 6)) == numberOfThisPlayer)
+            if (System.Convert.ToInt32(name.Remove(0, 6)) == m_numberOfThisPlayer)
             {
-                texts[0].text = names[i];
-                texts[1].text = kills[i].ToString();
-                texts[2].text = deaths[i].ToString();
+                m_texts[0].text = names[i];
+                m_texts[1].text = kills[i].ToString();
+                m_texts[2].text = deaths[i].ToString();
 
-                foreach (Text text in texts) text.color = MatchProperties.colorValues[(int)MatchProperties.playerColors[3 - i]];
+                foreach (Text text in m_texts) text.color = MatchProperties.colorValues[(int)MatchProperties.playerColors[3 - i]];
             }
-
         }
     }
-
-    void Update ()
-    {
-	
-	}
 }

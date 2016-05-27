@@ -3,32 +3,30 @@
 [ExecuteInEditMode]
 public class ScreenDamageEffect : MonoBehaviour
 {
-    public float durationSeconds = 0.5f;
+    public float m_fDurationSeconds = 0.5f;
 
     private Material material;
 
-    int pixelWidth;
-    int pixelHeight;
+    int m_pixelWidth;
+    int m_pixelHeight;
 
-    float timeSinceActivate;
-    float intensity;
+    float m_fTimeSinceActivate;
+    float m_fIntensity;
 
-    bool active = false;
+    bool m_bActive = false;
 
     void Start()
     {
         Camera camera = GetComponent<Camera>();
-        pixelWidth = camera.pixelWidth;
-        pixelHeight = camera.pixelHeight;
+        m_pixelWidth = camera.pixelWidth;
+        m_pixelHeight = camera.pixelHeight;
     }
 
     public void Activate(float _intensity)
     {
-        active = true;
-
+        m_bActive = true;
         if (_intensity < 0) _intensity = 0;
-
-        intensity = _intensity;
+        m_fIntensity = _intensity;
     }
 
     // Creates a private material used to the effect
@@ -40,25 +38,25 @@ public class ScreenDamageEffect : MonoBehaviour
     // Postprocess the image
     void OnRenderImage(RenderTexture source, RenderTexture destination)
     {
-        if (!active) return;
+        if (!m_bActive) return;
 
-        timeSinceActivate += Time.deltaTime;
+        m_fTimeSinceActivate += Time.deltaTime;
 
-        if (timeSinceActivate >= durationSeconds)
+        if (m_fTimeSinceActivate >= m_fDurationSeconds)
         {
-            timeSinceActivate = 0f;
-            active = false;
+            m_fTimeSinceActivate = 0f;
+            m_bActive = false;
         }
 
-        if (intensity == 0)
+        if (m_fIntensity == 0)
         {
             Graphics.Blit(source, destination);
             return;
         }
 
-        material.SetFloat("_Intensity", intensity);
-        material.SetInt("_ScreenWidth", pixelWidth);
-        material.SetInt("_ScreenHeight", pixelHeight);
+        material.SetFloat("_Intensity", m_fIntensity);
+        material.SetInt("_ScreenWidth", m_pixelWidth);
+        material.SetInt("_ScreenHeight", m_pixelHeight);
         Graphics.Blit(source, destination, material);
     }
 }

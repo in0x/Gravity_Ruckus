@@ -1,12 +1,11 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class GravityProjectile : MonoBehaviour, IDamageSender
 {
-    public float speed;
+    public float m_speed;
 
-    public float impactDmg = 35f;
-    public float splashDmg = 10f;
+    public float m_impactDmg = 35f;
+    public float m_splashDmg = 10f;
 
     public float m_fExplRadius = 5.0f;
     public float m_fExplPower = 1000.0f;
@@ -23,53 +22,39 @@ public class GravityProjectile : MonoBehaviour, IDamageSender
         }
     }
 
-    Rigidbody body;
+    Rigidbody m_rigidBody;
 
     void Start()
     {
-        body = GetComponent<Rigidbody>();
-        body.velocity *= speed;
+        m_rigidBody = GetComponent<Rigidbody>();
+        m_rigidBody.velocity *= m_speed;
     }
 
     public void GravitySwitch(Vector3 gravity)
     {
-        body.velocity = gravity*m_fSwitchingSpeed;
+        m_rigidBody.velocity = gravity*m_fSwitchingSpeed;
     }
 
     void OnCollisionEnter(Collision collision)
     {
         Vector3 explosionPos = transform.position;
-
-        // Also expensive
+        
         Collider[] colliders = Physics.OverlapSphere(explosionPos, m_fExplRadius);
 
-        DamageInfo impactInfo = new DamageInfo(SourceWeapon, impactDmg);
-        // Careful, this is expensive as it uses reflection
-        // This, will however only trigger on colliders that also have IDamageRecievers in their hierarchy level, meaning that
-        // the players main capsule collider will not be affected
+        DamageInfo impactInfo = new DamageInfo(SourceWeapon, m_impactDmg);
         collision.collider.gameObject.SendMessageUpwards("RecieveDamage", impactInfo, SendMessageOptions.DontRequireReceiver);
 
-        DamageInfo splashInfo = new DamageInfo(SourceWeapon, splashDmg);
+        DamageInfo splashInfo = new DamageInfo(SourceWeapon, m_splashDmg);
 
         foreach (Collider hit in colliders)
         {
-            // Also expensive
             Rigidbody rb = hit.GetComponent<Rigidbody>();
             Debug.Log("Collider name " + hit.gameObject.name);
 
-            //hit.gameObject.SendMessageUpwards("RecieveDamage", splashInfo, SendMessageOptions.DontRequireReceiver);
-            var dmgReciever = hit.gameObject.GetComponent<IDamageReciever>();
+            IDamageReciever dmgReciever = hit.gameObject.GetComponent<IDamageReciever>();
             
             if (dmgReciever != null) dmgReciever.RecieveDamage(splashInfo);
-
-            //if (rb != null)
-            //{
-            //    Debug.Log("Send splashdamage to object " + rb.gameObject.name);
-            //    rb.gameObject.SendMessageUpwards("RecieveDamage", splashInfo, SendMessageOptions.DontRequireReceiver);
-            //    rb.AddExplosionForce(m_fExplPower, explosionPos, m_fExplRadius, 3.0F);
-            //}
         }
-
         gameObject.SetActive(false);
     }
 }
