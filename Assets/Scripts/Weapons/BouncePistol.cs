@@ -90,7 +90,7 @@ public class BouncePistol : MonoBehaviour, ICanShoot
                 var pooled = m_poolManager.Request(m_projectilePrefab);
                 m_shotProjectiles.Add(pooled);              
                 pooled.Instance.GetComponent<IDamageSender>().SourceWeapon = gameObject;
-                pooled.Instance.GetComponent<HomingComponent>().shooter = transform.parent.gameObject;
+                pooled.Instance.GetComponent<HomingComponent>().m_shooter = transform.parent.gameObject;
 
                 Vector3 position;
                 Vector3 spherePos;
@@ -100,8 +100,7 @@ public class BouncePistol : MonoBehaviour, ICanShoot
                     spherePos = Random.onUnitSphere;
                     position = origin + spherePos*5;
                 } while (Vector3.Dot(fwd.normalized, spherePos)<= 0.98);
-                //Debug.Log("fwd: "+fwd.normalized+" spherepos "+spherePos+" dot "+(Vector3.Dot(fwd.normalized, spherePos)));
-                // This may be a big slowdown and should be optimised later.
+
                 Rigidbody instanceRB = pooled.Instance.GetComponent<Rigidbody>();
                 instanceRB.velocity = spherePos * m_fInherentProjectileVel * m_projectileSpeedMul;
                 pooled.Instance.transform.position = position;

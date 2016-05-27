@@ -1,71 +1,66 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
-using UnityStandardAssets.Utility;
 
 public class HomingComponent : MonoBehaviour
 {
+    public float m_strength = 0.5f;
+    public float m_sphereSize = 100;
+    public float m_fTimer = 5;
+    public GameObject m_shooter;
 
-    public float Strength = 0.5f;
-    public float SphereSize = 100;
-    public float Timer = 5;
-
-    public GameObject shooter;
-
-    private float currentTimer;
-
-    //private List<GameObject> players;
-    private List<GameObject> chestColliders; 
-    private Rigidbody rb;
-
-	// Use this for initialization
+    float m_currentTimer;
+    List<GameObject> chestColliders; 
+    Rigidbody rb;
+    
 	void Start ()
 	{
         chestColliders = new List<GameObject>(GameObject.FindGameObjectsWithTag("ChestCollider"));
 	    rb = GetComponent<Rigidbody>();
 	}
 	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-
     void Awake()
     {
-        currentTimer = Timer;
+        m_currentTimer = m_fTimer;
     }
 
     void FixedUpdate()
     {
-        if (currentTimer > 0)
+        if (m_shooter == null) return;
+
+        if (m_currentTimer > 0)
         {
-            currentTimer--;
+            m_currentTimer--;
             return;
         }
+
         if (rb == null)
         {
             rb = GetComponent<Rigidbody>();
         }
+
         Vector3 position = transform.position;
         GameObject closestPlayer = null;
         float closestDistance = float.MaxValue;
+
         foreach (GameObject player in chestColliders)
         {
-            if (player.transform.root == shooter.transform)
+            if (player.transform.root == m_shooter.transform)
             {
                 continue;
             }
             float currentDistance = (position - player.transform.position).sqrMagnitude;
+
             if (currentDistance < closestDistance)
             {
                 closestPlayer = player;
                 closestDistance = currentDistance;
             }
         }
-        if (closestDistance < SphereSize)
+
+        if (closestDistance < m_sphereSize)
         {
             float speed = rb.velocity.magnitude;
-            rb.velocity = Vector3.Lerp(rb.velocity.normalized, (closestPlayer.transform.position - position).normalized, Strength).normalized;
+            rb.velocity = Vector3.Lerp(rb.velocity.normalized, (closestPlayer.transform.position - position).normalized, m_strength).normalized;
             rb.velocity *= speed;
         }
     }
