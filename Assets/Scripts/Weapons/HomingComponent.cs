@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 public class HomingComponent : MonoBehaviour
 {
-    public float m_strength = 0.5f;
-    public float m_sphereSize = 100;
+    public float m_strength = 0.3f;
+    public float m_sphereSize = 10000;
     public float m_fTimer = 5;
     public GameObject m_shooter;
 
@@ -62,6 +62,7 @@ public class HomingComponent : MonoBehaviour
             float speed = rb.velocity.magnitude;
             rb.velocity = Vector3.Lerp(rb.velocity.normalized, (closestPlayer.transform.position - position).normalized, m_strength).normalized;
             rb.velocity *= speed;
+            transform.rotation = Quaternion.LookRotation(rb.velocity) * Quaternion.Euler(90, 0, 0);
         }
     }
 }

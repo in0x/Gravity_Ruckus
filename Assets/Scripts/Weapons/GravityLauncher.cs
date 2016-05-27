@@ -87,6 +87,7 @@ public class GravityLauncher : MonoBehaviour, ICanShoot, IGravityObserver
         
         projectile.GetComponent<Rigidbody>().velocity = projectile_vel;
         projectile.GetComponent<IDamageSender>().SourceWeapon = gameObject;
+        projectile.GetComponent<HomingComponent>().m_shooter = transform.root.gameObject;
     }
     public void Enable()
     {

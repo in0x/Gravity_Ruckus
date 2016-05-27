@@ -28,9 +28,13 @@ public class PlayerSpawnController : MonoBehaviour
         m_activePlayers.Add(player4);
 
         m_respawnTimers = new Dictionary<string, RespawnTimer>(m_activePlayers.Count);
-        RespawnTimer[] timers = FindObjectsOfType<RespawnTimer>();
+        List<RespawnTimer> timers = new List<RespawnTimer>(FindObjectsOfType<RespawnTimer>());
 
-        for (int i = 0; i < timers.Length; i++)
+        timers.Sort((timer1, timer2) => {
+            return timer1.gameObject.transform.root.gameObject.name.CompareTo(timer2.gameObject.transform.root.gameObject.name);
+        });
+
+        for (int i = 0; i < timers.Count; i++)
         {
             m_respawnTimers.Add(m_activePlayers[i].name, timers[i]);
             timers[i].gameObject.SetActive(false);

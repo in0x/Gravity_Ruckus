@@ -23,10 +23,13 @@ public class GravityProjectile : MonoBehaviour, IDamageSender
     }
 
     Rigidbody m_rigidBody;
+    HomingComponent m_homingComponent;
 
     public void GravitySwitch(Vector3 gravity)
     {
         m_rigidBody.velocity = gravity*m_fSwitchingSpeed;
+        m_homingComponent.m_sphereSize = 1000000;
+        m_homingComponent.m_strength = 0.3f;
     }
 
     void OnCollisionEnter(Collision collision)
@@ -55,6 +58,9 @@ public class GravityProjectile : MonoBehaviour, IDamageSender
     void OnEnable()
     {
         if(m_rigidBody == null) m_rigidBody = GetComponent<Rigidbody>();
+        if (m_homingComponent == null) m_homingComponent = GetComponent<HomingComponent>();
+        m_homingComponent.m_strength = 0.3f;
+        m_homingComponent.m_sphereSize = 10000;
         m_rigidBody.velocity *= m_speed;
     }
 }

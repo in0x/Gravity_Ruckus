@@ -9,9 +9,9 @@ public static class MatchProperties
 
     public static PlayerColor[] playerColors = { PlayerColor.blue, PlayerColor.green, PlayerColor.hotpink, PlayerColor.red };
 
-    // Use PlayerColor enums casted to int for indexing (red, green, blue, pink)
-    public static Color[] colorValues = { new Color(1, 0, 0, 0.7843137254901f),
+    // Use PlayerColor enums casted to int for indexing (blue, green, pink, red)
+    public static Color[] colorValues = { new Color(0, 0, 1, 0.7843137254901f),
                                           new Color(0, 1, 0, 0.7843137254901f),
-                                          new Color(0, 0, 1, 0.7843137254901f),
-                                          new Color(1, 0.0784f, 0.576f, 0.7843137254901f) };
+                                          new Color(1, 0.0784f, 0.576f, 0.7843137254901f),
+                                          new Color(1, 0, 0, 0.7843137254901f) };
 }

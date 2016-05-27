@@ -31,7 +31,7 @@ public class GameOverText : MonoBehaviour
                 m_texts[1].text = kills[i].ToString();
                 m_texts[2].text = deaths[i].ToString();
 
-                foreach (Text text in m_texts) text.color = MatchProperties.colorValues[(int)MatchProperties.playerColors[3 - i]];
+                foreach (Text text in m_texts) text.color = MatchProperties.colorValues[m_numberOfThisPlayer];
             }
         }
     }

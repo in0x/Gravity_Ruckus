@@ -6,6 +6,6 @@ public class MainMenu : MonoBehaviour
     public void QuickStartGame()
     {
         MatchProperties.customGame = false;
-        SceneManager.LoadScene("final_level new_collliders");
+        SceneManager.LoadScene("complete_level");
     }
 }
