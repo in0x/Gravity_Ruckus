@@ -3,7 +3,8 @@
     [ "Prefab/SphereProjectile", 30 ],
     [ "Prefab/BounceProjectile", 180 ],
     [ "Prefab/GravityProjectile", 60],
-    [ "Prefab/BlobProjectile", 60]
+    [ "Prefab/BlobProjectile", 60 ],
+    [ "Prefab/UltimateProjectile", 4 ]
 	],
 
 	"Usage": [

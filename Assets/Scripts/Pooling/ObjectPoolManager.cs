@@ -61,6 +61,13 @@ public class ObjectPoolManager
         return instance;
     }
 
+    // Initializes a new ObjectPoolManager, recreating all ObjectPools
+    // This is needed, because Unity kills all Gameobjects on scene exit
+    public static void Reset()
+    {
+        instance = new ObjectPoolManager();
+    }
+
     ObjectPool GetPool(GameObject prefab)
     {
         ObjectPool pool;
