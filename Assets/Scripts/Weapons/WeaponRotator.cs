@@ -6,10 +6,7 @@ public class WeaponRotator : MonoBehaviour
 
 	void Start ()
     {
-        foreach (Transform child in transform.parent.transform.parent.transform) 
-        {
-            if (child.tag == "MainCamera") m_cameraTransform = child;
-        }   
+        m_cameraTransform = transform.root.gameObject.GetComponent<MovementHandler>().m_camera.transform;
     }
 	
 	void Update ()

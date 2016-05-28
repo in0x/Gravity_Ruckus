@@ -9,10 +9,12 @@ public class DeathController : MonoBehaviour
 {
     // Set by ScoreController on Startup
     public ScoreController m_scoreController;
+    public GameObject m_deathRoom;
 
     GravityHandler m_gravHandler;
     HealthController m_health;
     Rigidbody m_body;
+    ScreenDamageEffect m_cameraEffect;
     ShootOnClick m_weapons;   
     PlayerSpawnController m_spawnController;
     string m_lastWeaponUsedStr;
@@ -24,6 +26,7 @@ public class DeathController : MonoBehaviour
         m_health = GetComponent<HealthController>();
         m_body = GetComponent<Rigidbody>();
         m_weapons = GetComponent<ShootOnClick>();
+        m_cameraEffect = GetComponentInChildren<ScreenDamageEffect>();
     }
     
     public void Respawn(Vector3 position, Quaternion rotation, Vector3 gravity)
@@ -41,6 +44,7 @@ public class DeathController : MonoBehaviour
         }
 
         m_weapons.ResetWeaponsRespawn();
+        m_cameraEffect.ToggleBlack();
 
         m_gravHandler.Gravity = gravity;
         m_health.Refill();
@@ -62,12 +66,21 @@ public class DeathController : MonoBehaviour
             {
                 if (child.activeSelf) m_lastWeaponUsedStr = child.name;
             }
-
-            child.SetActive(false);                     
+            else if (child.tag == "MainCamera" || child.tag == "Model") 
+            {
+                continue;
+            }
+            child.SetActive(false);
         }
 
         m_weapons.DisableAllWeapons();
         m_spawnController.RegisterAsDead(gameObject);
         m_scoreController.ProcessKill(gameObject, damageKilledPlayer);
+        transform.position = new Vector3(-3055, 1172, -600);
+
+        m_body.velocity = Vector3.zero;
+        m_body.angularVelocity = Vector3.zero;
+
+        m_cameraEffect.ToggleBlack();
     }
 }

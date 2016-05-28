@@ -3,6 +3,7 @@
 public class MovementHandler : MonoBehaviour, IInputObserver
 {
     public PlayerInput m_playerInputRef { get; set; }
+    public GameObject m_camera;
     public float m_fJumpHeight = 10f;
     public float m_xLookMul = 1f;
     public float m_yLookMul = 1f;
@@ -22,11 +23,13 @@ public class MovementHandler : MonoBehaviour, IInputObserver
         m_RigidBody = GetComponent<Rigidbody>();
         m_jumpController = GetComponent<JumpController>();
         m_aimAssist = GetComponent<AimAssist>();
-        
-        foreach (Transform child in gameObject.transform)
-        {
-            if (child.tag == "MainCamera") m_cam = child;
-        }
+
+        m_cam = m_camera.transform;
+
+        //foreach (Transform child in gameObject.transform)
+        //{
+        //    if (child.tag == "MainCamera") m_cam = child;
+        //}
     }
 
     void FixedUpdate()

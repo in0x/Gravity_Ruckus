@@ -99,7 +99,7 @@ public class BouncePistol : MonoBehaviour, ICanShoot
                 {
                     spherePos = Random.onUnitSphere;
                     position = origin + spherePos*5;
-                } while (Vector3.Dot(fwd.normalized, spherePos)<= 0.98);
+                } while (Vector3.Dot(fwd.normalized, spherePos)<= 0.998);
 
                 Rigidbody instanceRB = pooled.Instance.GetComponent<Rigidbody>();
                 instanceRB.velocity = spherePos * m_fInherentProjectileVel * m_projectileSpeedMul;
