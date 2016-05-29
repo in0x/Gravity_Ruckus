@@ -22,6 +22,7 @@ public class ActionOnPickUpComponent : MonoBehaviour
         if (m_timeSincePick >= m_cooldown)
         {
             gameObject.SetActive(true);
+            m_timeSincePick = 0f;
             return true;
         }
         return false;
