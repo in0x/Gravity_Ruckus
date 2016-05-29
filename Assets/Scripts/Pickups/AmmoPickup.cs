@@ -4,6 +4,7 @@ public class AmmoPickup : ActionOnPickUpComponent
 {
     public GameObject m_weaponPrefab;
     public int m_ammoCount;
+
     protected override void DoAction(Collider collider)
     {
         // Find weapon prefab in players children and try to give ammo

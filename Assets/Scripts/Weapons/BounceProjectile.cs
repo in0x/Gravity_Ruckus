@@ -9,6 +9,7 @@ public class BounceProjectile : MonoBehaviour, IDamageSender
     int m_currentBounces;
     
     Rigidbody m_body;
+    TimeOut m_timer;
 
     // Used for information that is send to damage reciever 
     // about the sender and the weapon used.
@@ -30,11 +31,12 @@ public class BounceProjectile : MonoBehaviour, IDamageSender
     {
         if (m_body == null) m_body = GetComponent<Rigidbody>();
         m_currentBounces = m_bounces;
+        m_timer = new TimeOut(6000);
     }
 
     void Update()
     {
-        if (m_currentBounces <= 0) gameObject.SetActive(false);
+        if (m_currentBounces <= 0 || m_timer.Update()) gameObject.SetActive(false);
     }
 
     void OnCollisionExit(Collision collision)
