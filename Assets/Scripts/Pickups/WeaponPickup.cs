@@ -14,8 +14,8 @@ public class WeaponPickup : ActionOnPickUpComponent
                 var weapon = child.gameObject.GetComponent<ICanShoot>();
 
                 if (weapon.Available) return;
-
                 weapon.Available = true;
+             
                 m_pickUpController.AddDeactivated(this);
                 gameObject.SetActive(false);
 

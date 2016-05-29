@@ -83,10 +83,8 @@ public class UltimateProjectile : MonoBehaviour, IDamageSender
         if(m_fCurrentDelayTimer-- <= 0)
         foreach (Rigidbody playerBody in players)
         {
-            //Debug.Log("oy");
             Vector3 direction = transform.position - playerBody.transform.position;
 
-            //Debug.Log(direction+ " mag " + direction.sqrMagnitude);
             direction = (direction/direction.sqrMagnitude)*500000;
             playerBody.AddForce(direction);
         }

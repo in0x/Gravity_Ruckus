@@ -8,6 +8,7 @@ public class ShootOnClick : MonoBehaviour, IInputObserver
     
     List<ICanShoot> m_weapons;
     CircularListIterator<ICanShoot> m_currentWeapon;
+    BouncePistol m_startWeapon;
 
     bool m_isShooting = false;
     const int m_left = 0;
@@ -31,6 +32,8 @@ public class ShootOnClick : MonoBehaviour, IInputObserver
         
         m_currentWeapon = new CircularListIterator<ICanShoot>(m_weapons);
         m_currentWeapon.Current.Enable();
+
+        m_startWeapon = GetComponentInChildren<BouncePistol>();
     }
 
     void Update()
@@ -68,7 +71,7 @@ public class ShootOnClick : MonoBehaviour, IInputObserver
         }
     }
 
-    void IterateWeapons(bool forward)
+    public void IterateWeapons(bool forward)
     {
         var currentWep = m_currentWeapon.Current;
         
@@ -120,5 +123,7 @@ public class ShootOnClick : MonoBehaviour, IInputObserver
         {
             m_currentWeapon++;
         }
+
+        m_startWeapon.m_ammoComp.RefillComplete();
     }
 }

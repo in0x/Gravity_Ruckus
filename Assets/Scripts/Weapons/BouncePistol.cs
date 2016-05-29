@@ -21,7 +21,7 @@ public class BouncePistol : MonoBehaviour, ICanShoot
     ObjectPoolManager m_poolManager;
 
     // Used to track ammo of weapon
-    AmmoComponent m_ammoComp;
+    public AmmoComponent m_ammoComp;
 
     public float Cooldown
     {

@@ -128,7 +128,7 @@ public class ScoreController : MonoBehaviour
 
         // If killed by other player, add one kill for 
         // them, otherwise detract one from player who died.
-        if (m_scoreTable.ContainsKey(killInfo.sender))
+        if (m_scoreTable.ContainsKey(killInfo.sender) && sender != killInfo.sender)
         {
             // Killed by other player.
             m_scoreTable[killInfo.sender].AddKill();
